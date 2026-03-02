@@ -1,6 +1,13 @@
-# Claude Code 配置
+# Claude Workflow Kit
 
-这是项目的 Claude Code 配置目录，包含了自定义的命令、hooks 和提示词模板。
+一个强大的 Claude Code 工作流工具包，通过自定义 Hooks 和 Skills 扩展 Claude Code 的功能，提升开发效率。
+
+## 特性
+
+- **智能 Hooks** - 自动处理 Linear issue 引用、多方案生成等
+- **丰富的 Skills** - 提供 Git 状态、文件写入、Linear 集成等实用技能
+- **安全控制** - PreToolUse Hook 限制敏感命令执行
+- **开箱即用** - 基于 Bun 运行时，配置简单
 
 ## 前置要求
 
@@ -12,51 +19,11 @@
 curl -fsSL https://bun.sh/install | bash
 ```
 
-## 目录结构
-
-```
-.claude/
-├── commands/          # Slash Commands 定义
-├── hooks/             # UserPromptSubmit Hook 实现
-├── references/        # 提示词模板
-├── docs/              # 文档
-├── settings.json      # Claude Code 设置
-└── README.md          # 本文件
-```
-
-## 功能文档
-
-### [Slash Commands](./docs/Commands.md)
-
-通过 `/command` 快速调用预定义的提示词模板。
-
-支持的命令包括：
-- **翻译类**: `/zh`, `/en`
-- **代码类**: `/code`, `/comment`, `/debug`, `/refactor`, `/test`, `/review`, `/cleancode`
-- **文档类**: `/document`
-- **分析类**: `/analyze`, `/explain`, `/summarize`
-- **规划类**: `/plan`
-- **优化类**: `/improve`
-- **工具类**: `/repomix`
-
-[查看完整命令列表和使用说明 →](./docs/Commands.md)
-
-### [UserPromptSubmit Hook](./docs/UserPromptSubmit.md)
-
-增强提示词功能，支持：
-
-1. **命令快捷方式** - 使用 `:command` 格式快速展开提示词
-2. **Linear 集成** - 自动获取 Linear issue 详细信息
-3. **多方案生成** - 使用 `v(n)` 生成多个解决方案
-
-[查看 UserPromptSubmit 完整配置和使用说明 →](./docs/UserPromptSubmit.md)
-
 ## 快速开始
 
 ### 1. 安装依赖
 
 ```bash
-cd .claude
 bun install
 ```
 
@@ -64,42 +31,174 @@ bun install
 
 ```bash
 cp .env.template .env
-# 编辑 .env 文件，填入你的 LINEAR_API_KEY
+# 编辑 .env 文件，填入你的配置信息
 ```
+
+环境变量说明：
+- `LINEAR_API_KEY` - Linear API 密钥（可选，用于 Linear 集成功能）
+- `LINEAR_USER_EMAIL` - Linear 用户邮箱（可选）
+- `ANTHROPIC_BASE_URL` - Anthropic API 基础 URL（可选）
+- `ANTHROPIC_AUTH_TOKEN` - Anthropic 认证令牌（可选）
 
 ### 3. 开始使用
 
-配置完成后，所有功能即可使用：
+配置完成后，所有功能即可在 Claude Code 中使用。
 
-- 输入 `/` 查看可用的 Slash Commands
-- 在提示词末尾使用 `:command` 快捷方式
-- 使用 `linear(issue-id)` 或 `team(number)` 引用 Linear issue
-- 使用 `v(n)` 生成多个方案
+## 项目结构
 
-## 自定义配置
-
-### 添加自定义命令
-
-在 `commands/` 目录下创建新的 `.md` 文件：
-
-```markdown
----
-argument-hint: [参数提示]
----
-
-你的提示词模板
+```
+Claude-Workflow-Kit/
+├── hooks/                    # Hooks 实现
+│   ├── PreToolUse.ts        # 工具使用前的安全检查
+│   ├── UserPromptSubmit.ts  # 用户提示词提交处理
+│   ├── processors/          # 处理器模块
+│   │   ├── linearProcessor.ts    # Linear issue 引用处理
+│   │   └── variationProcessor.ts # 多方案生成处理
+│   └── config/              # 配置文件
+├── skills/                   # Skills 定义
+│   ├── file-write/          # 文件写入技能
+│   ├── git-status/          # Git 状态技能
+│   ├── linear-todo-issues/  # Linear 工单技能
+│   ├── linear-bot/          # Linear 机器人技能
+│   ├── timestamp/           # 时间戳技能
+│   ├── create-merge-request/# 创建 MR 技能
+│   ├── get-merge-requests/  # 获取 MR 技能
+│   ├── read-console/        # 读取控制台技能
+│   └── good-morning/        # 早安技能
+├── prompts/                  # 提示词模板
+├── docs/                     # 文档
+├── settings.json            # Claude Code 设置
+├── package.json             # 项目配置
+└── README.md                # 本文件
 ```
 
-### 修改 Hook 行为
+## 核心功能
 
-编辑 `hooks/processors/` 目录下的处理器文件来自定义行为。
+### Hooks
+
+#### PreToolUse Hook
+
+在工具执行前进行安全检查，防止敏感操作：
+
+- 拦截所有引用 `.env` 文件的命令
+- 仅允许执行 `bun run .claude/skills/*/scripts/*` 格式的脚本
+- 保护项目安全
+
+#### UserPromptSubmit Hook
+
+增强用户提示词功能，支持：
+
+**1. Linear 集成**
+
+快速引用 Linear issue 数据：
+
+```
+修复 linear(4t-1111) 中描述的 bug
+优化 4t(1111) 的性能问题
+```
+
+自动将 issue ID 替换为完整的 issue 信息（标题、描述、状态等）。
+
+**2. 多方案生成**
+
+生成多个不同的解决方案：
+
+```
+实现用户认证 v(3)
+```
+
+会生成 3 个不同的实现方案供选择。
+
+[查看 UserPromptSubmit 完整文档 →](./docs/UserPromptSubmit.md)
+
+### Skills
+
+#### file-write
+
+将内容写入指定文件，自动创建目录结构。
+
+```bash
+bun run .claude/skills/file-write/scripts/file-write.ts <file_path> <content>
+```
+
+#### git-status
+
+生成 Git 状态摘要文件，包含当前分支、未跟踪文件、已暂存文件等信息。
+
+#### linear-todo-issues
+
+从 Linear 获取指定用户的工单并生成摘要文件。
+
+#### timestamp
+
+生成标准格式的时间戳，用于文件命名等场景。
+
+#### create-merge-request
+
+创建 GitLab Merge Request。
+
+#### get-merge-requests
+
+获取 GitLab Merge Request 列表和详情。
+
+#### read-console
+
+读取控制台信息。
+
+#### good-morning
+
+早安技能，快速查看今日待办事项。
+
+## 配置说明
+
+### settings.json
+
+项目的 Claude Code 配置文件，包含：
+
+- **permissions** - 权限控制，允许/拒绝特定工具使用
+- **statusLine** - 状态栏配置
+- **hooks** - Hooks 配置
+
+### 添加自定义 Skill
+
+1. 在 `skills/` 目录下创建新的技能目录
+2. 创建 `SKILL.md` 文件定义技能元数据
+3. 在 `scripts/` 目录下实现技能逻辑
+4. 在 `settings.json` 中添加权限配置
+
+## 开发指南
+
+### 技术栈
+
+- **运行时**: Bun
+- **语言**: TypeScript
+- **SDK**: @anthropic-ai/claude-agent-sdk
+- **集成**: Linear API, GitLab API
+
+### 本地开发
+
+```bash
+# 安装依赖
+bun install
+
+# 运行测试
+bun test
+
+# 执行脚本
+bun run <script-path>
+```
 
 ## 贡献
 
-欢迎提交 Issue 和 Pull Request 来改进这些配置和功能。
+欢迎提交 Issue 和 Pull Request 来改进这个工具包。
 
 ## 相关链接
 
 - [Claude Code 官方文档](https://claude.com/claude-code)
+- [Claude Agent SDK](https://github.com/anthropics/anthropic-sdk-typescript)
 - [Linear API 文档](https://linear.app/developers/graphql)
 - [Bun 官方文档](https://bun.sh/docs)
+
+## 许可证
+
+MIT
