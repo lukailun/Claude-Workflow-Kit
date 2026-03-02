@@ -59,11 +59,9 @@ Claude-Workflow-Kit/
 │   ├── file-write/          # 文件写入技能
 │   ├── git-status/          # Git 状态技能
 │   ├── linear-todo-issues/  # Linear 工单技能
-│   ├── linear-bot/          # Linear 机器人技能
 │   ├── timestamp/           # 时间戳技能
 │   ├── create-merge-request/# 创建 MR 技能
 │   ├── get-merge-requests/  # 获取 MR 技能
-│   ├── read-console/        # 读取控制台技能
 │   └── good-morning/        # 早安技能
 ├── prompts/                  # 提示词模板
 ├── docs/                     # 文档
@@ -140,10 +138,6 @@ bun run .claude/skills/file-write/scripts/file-write.ts <file_path> <content>
 #### get-merge-requests
 
 获取 GitLab Merge Request 列表和详情。
-
-#### read-console
-
-读取控制台信息。
 
 #### good-morning
 
