@@ -1,0 +1,32 @@
+{
+    "permissions": {
+        "allow": [
+            "Skill(create-merge-request)",
+            "Skill(file-write)",
+            "Skill(get-merge-requests)",
+            "Skill(git-status)",
+            "Skill(good-morning)",
+            "Skill(linear-todo-issues)",
+            "Skill(timestamp)"
+        ],
+        "deny": ["Read(./.env)"]
+    },
+    "statusLine": {
+        "type": "command",
+        "command": "npx -y @owloops/claude-powerline@latest --style=powerline"
+    },
+    "hooks": {
+        "PreToolUse": [{
+          "hooks": [{
+            "type": "command",
+            "command": "bun run .claude/hooks/PreToolUse.ts"
+          }]
+        }],
+        "UserPromptSubmit": [{
+          "hooks": [{
+            "type": "command",
+            "command": "bun run .claude/hooks/UserPromptSubmit.ts"
+          }]
+        }]
+    }
+}
