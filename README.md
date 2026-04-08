@@ -72,8 +72,6 @@ Claude-Workflow-Kit/
 │   │   ├── create-feature-branch.ts
 │   │   └── merge-request.ts
 │   └── env/                        # 环境变量读取
-├── docs/                           # 文档
-│   └── UserPromptSubmit.md
 ├── settings.json                   # Claude Code 设置
 ├── package.json                    # 项目配置
 ├── .env.template                   # 环境变量模板
@@ -105,7 +103,6 @@ Claude-Workflow-Kit/
 在工具执行前进行安全检查：
 
 - 拦截所有引用 `.env` 文件的命令
-- 仅允许执行 `.claude/skills/*/scripts/` 目录下的脚本
 - 保护项目安全
 
 [查看 PreToolUse 完整文档 →](./docs/PreToolUse.md)
@@ -124,19 +121,6 @@ Claude-Workflow-Kit/
 - 支持 4 个 AI Provider：Anthropic Claude、火山引擎 Ark、MiniMax、智谱 Z.AI
 - 自动关联相关 Linear issues
 - 创建 GitLab Merge Request
-
-#### GitLab 集成脚本（`scripts/gitlab/`）
-
-- 创建各类分支（feature、hotfix、release、experimental）
-- 获取 MR 列表、详情、目标分支
-- 获取项目信息、当前分支、远端分支列表
-- 获取分支对比和提交记录
-
-#### Linear 集成脚本（`scripts/linear/`）
-
-- 获取用户工单列表
-- 获取 issue 详情
-- 更新 issue 状态
 
 ## 配置说明
 

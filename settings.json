@@ -1,14 +1,5 @@
 {
     "permissions": {
-        "allow": [
-            "Skill(create-merge-request)",
-            "Skill(file-write)",
-            "Skill(get-merge-requests)",
-            "Skill(git-status)",
-            "Skill(good-morning)",
-            "Skill(linear-todo-issues)",
-            "Skill(timestamp)"
-        ],
         "deny": ["Read(./.env)"]
     },
     "statusLine": {
