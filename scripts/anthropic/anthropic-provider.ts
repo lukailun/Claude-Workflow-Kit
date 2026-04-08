@@ -1,9 +1,7 @@
 import anthropicClient from './anthropic-client';
-import {
-  AIProvider,
-  AIRequestParams,
-  AIResponse,
-} from '../ai/types/ai-provider';
+import AIProvider from '../ai/types/ai-provider';
+import AIRequestParams from '../ai/types/ai-request-params';
+import AIResponse from '../ai/types/ai-response';
 
 class AnthropicProvider implements AIProvider {
   async generate(params: AIRequestParams): Promise<AIResponse> {
