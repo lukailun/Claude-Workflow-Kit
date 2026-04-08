@@ -1,6 +1,5 @@
 import { type UserPromptSubmitHookInput } from '@anthropic-ai/claude-agent-sdk';
 import { processLinearReference } from './processors/linearProcessor';
-import { processVariation } from './processors/variationProcessor';
 
 try {
   const input = (await Bun.stdin.json()) as UserPromptSubmitHookInput;
@@ -12,7 +11,6 @@ try {
 
   let processedPrompt = prompt;
   processedPrompt = await processLinearReference(processedPrompt);
-  processedPrompt = await processVariation(processedPrompt);
   console.log(processedPrompt);
 } catch (error) {
   console.error(

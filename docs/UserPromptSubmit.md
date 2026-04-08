@@ -1,12 +1,12 @@
 # UserPromptSubmit Hook
 
-用于增强提示词功能，支持命令快捷方式、Linear 集成和多方案生成。
+用于增强提示词功能，支持 Linear 集成和多方案生成。
 
 ## 配置步骤
 
 ### 1. 安装依赖
 
-在项目的 .claude 目录中安装依赖：
+在项目的 `.claude` 目录中安装依赖：
 
 ```bash
 cd .claude
@@ -57,24 +57,21 @@ bun install
 
 > **注意**: 此功能只在配置了 `LINEAR_API_KEY` 环境变量时启用。如果没有配置，Linear 引用将保持原样，不会进行处理。
 
-**使用方法**:
-
-支持两种格式：
+**支持三种格式：**
 
 * 完整格式：`linear(4t-1111)`
 * 简写格式：`4t(1111)`
+* 标准格式：`4T-7861`
 
 **示例**:
 
 ```
 修复 linear(4t-1111) 中描述的 bug
-```
-
-```
 优化 4t(1111) 的性能问题
+实现 4T-7861 的需求
 ```
 
-会自动将 `linear(4t-1111)` 和 `4t(1111)` 替换为对应 issue 的完整 JSON 数据，包括标题、描述、状态等信息。
+以上引用都会被自动替换为对应 issue 的完整 JSON 数据，包括标题、描述、状态等信息。
 
 > **提示**: 需要在 `.claude/.env` 中设置 `LINEAR_API_KEY`。
 
@@ -98,24 +95,24 @@ bun install
 **示例**:
 
 ```
-@src/UI/pages/Settings.tsx 4t(7781) :debug
+@src/UI/pages/Settings.tsx 4t(7781) v(2)
 ```
 
 这个命令会：
 1. 读取 `@src/UI/pages/Settings.tsx` 文件
 2. 获取 Linear issue `4t-7781` 的详细信息
-3. 使用调试分析的提示词模板
+3. 生成 2 个不同的解决方案
 
 **处理顺序**:
 
-1. **Linear 引用处理** - 替换 `linear(issueId)` 或 `4t(1111)` 为实际数据
+1. **Linear 引用处理** - 替换 `linear(issueId)`、`4t(1111)` 或 `4T-7861` 为实际数据
 2. **多方案处理** - 处理 `v(n)` 生成多个方案
 
 ## 技术实现
 
 UserPromptSubmit hook 的实现包含以下处理器：
 
-- **linearProcessor.ts** - 处理 Linear issue 引用
-- **variantProcessor.ts** - 处理多方案生成
+- **linearProcessor.ts** - 处理 Linear issue 引用（三种格式）
+- **variationProcessor.ts** - 处理多方案生成
 
 所有处理器按顺序执行，将用户输入的提示词转换为最终提交给 Claude 的内容。
