@@ -96,16 +96,12 @@ Claude-Workflow-Kit/
 
 自动将 issue 引用替换为完整的 issue 信息（标题、描述、状态等）。
 
-[查看 UserPromptSubmit 完整文档 →](./docs/UserPromptSubmit.md)
-
 #### PreToolUse Hook
 
 在工具执行前进行安全检查：
 
 - 拦截所有引用 `.env` 文件的命令
 - 保护项目安全
-
-[查看 PreToolUse 完整文档 →](./docs/PreToolUse.md)
 
 ### 工作流脚本
 
