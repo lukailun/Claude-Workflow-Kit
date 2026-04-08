@@ -132,13 +132,6 @@ Claude-Workflow-Kit/
 - **statusLine** - 状态栏配置（使用 claude-powerline）
 - **hooks** - PreToolUse 和 UserPromptSubmit Hook 配置
 
-### 添加自定义 Skill
-
-1. 在 `.claude/skills/` 目录下创建新的技能目录
-2. 创建 `SKILL.md` 文件定义技能元数据
-3. 在 `scripts/` 目录下实现技能逻辑
-4. 在 `settings.json` 中添加权限配置
-
 ## 开发指南
 
 ### 技术栈
