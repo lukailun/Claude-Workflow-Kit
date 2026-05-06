@@ -6,23 +6,16 @@
  * - 如果当前不是 release/hotfix 分支，目标分支为最新的 release 分支
  */
 
-import { $ } from 'bun';
+import { Branch, ReleaseBranch } from '../git/branch';
 import getCurrentBranch from './get-current-branch';
-import mainBranch from './main-branch';
-
-interface Branch {
-  full: string;
-  name: string;
-  major: number;
-  minor: number;
-  patch: number;
-}
+import mainBranch from '../git/main-branch';
+import getRemoteBranches from './get-remote-branches';
 
 /**
  * 获取 MR 目标分支
  * @returns 目标分支名称
  */
-async function getMergeRequestTargetBranch(): Promise<string> {
+async function getMergeRequestTargetBranch(): Promise<Branch> {
   const currentBranch = await getCurrentBranch();
   if (!currentBranch) {
     return mainBranch;
@@ -35,10 +28,9 @@ async function getMergeRequestTargetBranch(): Promise<string> {
     return mainBranch;
   }
 
-  const remoteBranches = (await $`git branch -r`.text())
-    .split('\n')
-    .map((b) => b.trim())
-    .filter((branch) => /^origin\/release\/\d+\.\d+\.\d+$/.test(branch));
+  const remoteBranches = (await getRemoteBranches()).filter((branch) =>
+    /^release\/\d+\.\d+\.\d+$/.test(branch)
+  );
 
   if (remoteBranches.length === 0) {
     return mainBranch;
@@ -46,17 +38,18 @@ async function getMergeRequestTargetBranch(): Promise<string> {
 
   const branches = remoteBranches
     .map((branch) => {
-      const match = branch.match(/^origin\/release\/(\d+)\.(\d+)\.(\d+)$/);
+      const match = branch.match(/^release\/(\d+)\.(\d+)\.(\d+)$/);
       if (!match) return null;
       return {
-        full: branch,
-        name: branch.replace('origin/', ''),
-        major: parseInt(match[1]),
-        minor: parseInt(match[2]),
-        patch: parseInt(match[3]),
-      } as Branch;
+        type: 'release',
+        fullName: branch,
+        segment: `${match[1]}.${match[2]}.${match[3]}`,
+        major: parseInt(match[1], 10),
+        minor: parseInt(match[2], 10),
+        patch: parseInt(match[3], 10),
+      } satisfies ReleaseBranch;
     })
-    .filter((b): b is Branch => b !== null);
+    .filter((b) => b !== null);
 
   const targetBranch = branches.sort((a, b) => {
     if (a.major !== b.major) return b.major - a.major;
@@ -67,7 +60,7 @@ async function getMergeRequestTargetBranch(): Promise<string> {
   if (!targetBranch) {
     return mainBranch;
   }
-  return targetBranch.name;
+  return targetBranch;
 }
 
 export default getMergeRequestTargetBranch;

@@ -4,9 +4,9 @@
  */
 
 import createBranch from './create-branch';
-import mainBranch from './main-branch';
+import mainBranch from '../git/main-branch';
 
-export async function createHotfixBranch(version: string) {
-  const branchName = `hotfix/${version}`;
-  await createBranch(mainBranch, branchName);
+export async function createHotfixBranch(segment: string) {
+  const branchName = `hotfix/${segment}`;
+  await createBranch(mainBranch.fullName, branchName);
 }

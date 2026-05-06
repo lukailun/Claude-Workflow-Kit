@@ -4,41 +4,37 @@
  * 功能：扫描远程分支，返回版本号最大的 release/x.y.z 分支
  */
 
+import { ReleaseBranch } from '../git/branch';
 import getRemoteBranches from './get-remote-branches';
-
-interface ReleaseBranch {
-  name: string;
-  major: number;
-  minor: number;
-  patch: number;
-}
 
 /**
  * 获取最新的远程 release 分支
- * @returns 最新 release 分支名称（不含 origin/ 前缀），无则返回 null
+ * @returns 最新 release 分支，无则返回 null
  */
-async function getLatestReleaseBranch(): Promise<string | null> {
+async function getLatestReleaseBranch(): Promise<ReleaseBranch | null> {
   const remoteBranches = await getRemoteBranches();
 
   const branches = remoteBranches
     .map((branch) => {
-      const match = branch.match(/^origin\/release\/(\d+)\.(\d+)\.(\d+)$/);
+      const match = branch.match(/^release\/(\d+)\.(\d+)\.(\d+)$/);
       if (!match) return null;
       return {
-        name: branch.replace('origin/', ''),
-        major: parseInt(match[1]),
-        minor: parseInt(match[2]),
-        patch: parseInt(match[3]),
-      } as ReleaseBranch;
+        type: 'release',
+        fullName: branch,
+        segment: `${match[1]}.${match[2]}.${match[3]}`,
+        major: parseInt(match[1], 10),
+        minor: parseInt(match[2], 10),
+        patch: parseInt(match[3], 10),
+      } satisfies ReleaseBranch;
     })
-    .filter((b): b is ReleaseBranch => b !== null)
+    .filter((b) => b !== null)
     .sort((a, b) => {
       if (a.major !== b.major) return b.major - a.major;
       if (a.minor !== b.minor) return b.minor - a.minor;
       return b.patch - a.patch;
     });
 
-  return branches[0]?.name ?? null;
+  return branches[0] ?? null;
 }
 
 export default getLatestReleaseBranch;

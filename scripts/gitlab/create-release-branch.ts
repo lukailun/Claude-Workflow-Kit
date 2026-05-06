@@ -4,9 +4,9 @@
  */
 
 import createBranch from './create-branch';
-import mainBranch from './main-branch';
+import mainBranch from '../git/main-branch';
 
-export async function createReleaseBranch(version: string) {
-  const branchName = `release/${version}`;
-  await createBranch(mainBranch, branchName);
+export async function createReleaseBranch(segment: string) {
+  const branchName = `release/${segment}`;
+  await createBranch(mainBranch.fullName, branchName);
 }

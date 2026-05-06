@@ -2,7 +2,7 @@
  * 更新 Linear Issue 状态
  *
  * 用法：
- *   updateLinearIssueState('4T-9192', 'developing')
+ *   updateLinearIssueState('4T-9192', 'Developing')
  */
 
 import linearClient from './linear-client';
@@ -11,7 +11,7 @@ import getLinearIssueTeamStates from './get-linear-issue-team-states';
 /**
  * 更新 Linear Issue 的状态
  * @param issueId Issue 的 identifier（如 '4T-9192'）
- * @param stateName 目标状态名称（如 'developing'）
+ * @param stateName 目标状态名称（如 'Developing'）
  */
 async function updateLinearIssueState(
   issueId: string,
@@ -27,7 +27,7 @@ async function updateLinearIssueState(
   // 2. 获取团队的工作流状态列表
   const states = await getLinearIssueTeamStates(issueId);
   const targetState = states.find(
-    (s) => s.name.toLowerCase() === stateName.toLowerCase()
+    (state) => state.name.toLowerCase() === stateName.toLowerCase()
   );
 
   if (!targetState) {

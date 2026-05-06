@@ -15,7 +15,7 @@ async function getCurrentProjectId(): Promise<number | undefined> {
   const remoteUrl = await $`git remote get-url origin`.text();
   const match = remoteUrl
     .trim()
-    .match(/(?:git@[^:]+:|https?:\/\/[^\/]+\/)(.+?)(?:\.git)?$/);
+    .match(/(?:git@[^:]+:|https?:\/\/[^/]+\/)(.+?)(?:\.git)?$/);
   if (!match) {
     return undefined;
   }

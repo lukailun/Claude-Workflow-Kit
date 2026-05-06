@@ -1,13 +1,15 @@
 /**
  * 通用分支创建方法
  *
- * 从指定源分支 checkout 并 pull，然后创建并推送新分支。
+ * 从指定源分支 checkout 并 pull，然后通过 GitLab API 创建并推送新分支。
  *
  * @param sourceBranch - 源分支名称
  * @param newBranch    - 要创建的新分支名称
  */
 
 import { $ } from 'bun';
+import gitlabClient from './gitlab-client';
+import getCurrentProjectId from './get-current-project-id';
 import getCurrentBranch from './get-current-branch';
 
 async function createBranch(sourceBranch: string, newBranch: string) {
@@ -20,9 +22,18 @@ async function createBranch(sourceBranch: string, newBranch: string) {
   }
   await $`git pull origin ${sourceBranch}`.quiet();
 
+  const projectId = await getCurrentProjectId();
+  if (!projectId) {
+    console.error('❌ 无法获取项目 ID');
+    process.exit(1);
+  }
+
   console.log(`🌿 创建分支: ${newBranch}`);
-  await $`git checkout -b ${newBranch}`.quiet();
-  await $`git push -u origin ${newBranch}`.quiet();
+  await gitlabClient.Branches.create(projectId, newBranch, sourceBranch);
+
+  // checkout 到新分支并设置上游追踪
+  await $`git fetch origin`.quiet();
+  await $`git checkout ${newBranch}`.quiet();
 
   console.log(`\n✅ 分支创建成功！`);
   console.log(`📌 分支: ${newBranch}`);

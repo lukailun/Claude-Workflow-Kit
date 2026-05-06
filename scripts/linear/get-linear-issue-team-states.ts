@@ -3,7 +3,7 @@
  */
 
 import { WorkflowState } from '@linear/sdk';
-import linearClient from './linear-client';
+import getLinearIssue from './get-linear-issue';
 
 /**
  * 通过 issue identifier 获取其所在团队的工作流状态列表
@@ -13,7 +13,7 @@ import linearClient from './linear-client';
 async function getLinearIssueTeamStates(
   issueId: string
 ): Promise<WorkflowState[]> {
-  const issue = await linearClient.issue(issueId);
+  const issue = await getLinearIssue(issueId);
   if (!issue) {
     throw new Error(`未找到 issue: ${issueId}`);
   }

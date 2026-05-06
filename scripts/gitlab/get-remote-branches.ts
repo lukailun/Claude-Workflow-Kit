@@ -2,18 +2,19 @@
  * 获取远程分支列表
  */
 
-import { $ } from 'bun';
+import gitlabClient from './gitlab-client';
+import getCurrentProjectId from './get-current-project-id';
 
 /**
  * 获取远程所有分支列表
- * @returns 远程分支名称数组（不含 origin/HEAD 指向）
+ * @returns 远程分支名称数组
  */
 async function getRemoteBranches(): Promise<string[]> {
-  const output = await $`git branch -r`.text();
-  return output
-    .split('\n')
-    .map((b) => b.trim())
-    .filter((b) => b.length > 0 && !b.includes('HEAD'));
+  const projectId = await getCurrentProjectId();
+  if (!projectId) return [];
+
+  const branches = await gitlabClient.Branches.all(projectId);
+  return branches.map((b) => b.name);
 }
 
 export default getRemoteBranches;

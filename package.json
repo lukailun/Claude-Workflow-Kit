@@ -7,13 +7,15 @@
     "@types/bun": "latest"
   },
   "peerDependencies": {
-    "typescript": "^6.0.2"
+    "typescript": "^6.0.3"
   },
   "dependencies": {
-    "@anthropic-ai/claude-agent-sdk": "^0.2.96",
-    "@anthropic-ai/sdk": "^0.85.0",
+    "@anthropic-ai/claude-agent-sdk": "^0.2.129",
+    "@anthropic-ai/sdk": "^0.94.0",
     "@gitbeaker/rest": "^43.8.0",
-    "@linear/sdk": "^81.0.0",
-    "dotenv": "^17.4.1"
+    "@linear/sdk": "^83.0.0",
+    "@sentry/api": "^0.141.0",
+    "dotenv": "^17.4.2",
+    "openai": "^6.36.0"
   }
 }
