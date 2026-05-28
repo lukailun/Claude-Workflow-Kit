@@ -1,11 +1,18 @@
 import { describe, test, expect, mock } from 'bun:test';
 
 // Mock modules
-const mockGetOwnerAndRepo = mock(() =>
-  Promise.resolve({ owner: 'myorg', repo: 'myrepo' })
+const mockGetOwner = mock(() =>
+  Promise.resolve('myorg')
 );
-mock.module('../get-owner-and-repo', () => ({
-  default: mockGetOwnerAndRepo,
+mock.module('../get-owner', () => ({
+  default: mockGetOwner,
+}));
+
+const mockGetRepo = mock(() =>
+  Promise.resolve('myrepo')
+);
+mock.module('../get-repo', () => ({
+  default: mockGetRepo,
 }));
 
 const mockPaginate = mock(() => Promise.resolve<unknown[]>([]));
@@ -54,7 +61,8 @@ describe('getLatestTag', () => {
   });
 
   test('无法获取仓库信息时返回 null', async () => {
-    mockGetOwnerAndRepo.mockResolvedValueOnce(undefined as unknown as { owner: string; repo: string });
+    mockGetOwner.mockResolvedValueOnce(undefined as unknown as string);
+    mockGetRepo.mockResolvedValueOnce(undefined as unknown as string);
 
     const result = await getLatestTag();
     expect(result).toBeNull();

@@ -3,18 +3,21 @@
  */
 
 import githubClient from './github-client';
-import getOwnerAndRepo from './get-owner-and-repo';
+import getOwner from './get-owner';
+import getRepo from './get-repo';
 
 /**
  * 获取远程所有分支列表
  * @returns 远程分支名称数组
  */
 async function getRemoteBranches(): Promise<string[]> {
-  const repoInfo = await getOwnerAndRepo();
-  if (!repoInfo) return [];
+  const owner = await getOwner();
+  const repo = await getRepo();
+  if (!owner || !repo) return [];
 
   const branches = await githubClient.paginate(githubClient.repos.listBranches, {
-    ...repoInfo,
+    owner,
+    repo,
     per_page: 100,
   });
   return branches.map((b) => b.name);

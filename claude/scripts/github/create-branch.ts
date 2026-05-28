@@ -9,7 +9,8 @@
 
 import { $ } from 'bun';
 import githubClient from './github-client';
-import getOwnerAndRepo from './get-owner-and-repo';
+import getOwner from './get-owner';
+import getRepo from './get-repo';
 import getCurrentBranch from '../git/get-current-branch';
 
 async function createBranch(sourceBranch: string, newBranch: string) {
@@ -22,21 +23,24 @@ async function createBranch(sourceBranch: string, newBranch: string) {
   }
   await $`git pull origin ${sourceBranch}`.quiet();
 
-  const repoInfo = await getOwnerAndRepo();
-  if (!repoInfo) {
+  const owner = await getOwner();
+  const repo = await getRepo();
+  if (!owner || !repo) {
     console.error('❌ 无法获取仓库信息');
     process.exit(1);
   }
 
   // 获取源分支的 SHA
   const { data: ref } = await githubClient.git.getRef({
-    ...repoInfo,
+    owner,
+    repo,
     ref: `heads/${sourceBranch}`,
   });
 
   console.log(`🌿 创建分支: ${newBranch}`);
   await githubClient.git.createRef({
-    ...repoInfo,
+    owner,
+    repo,
     ref: `refs/heads/${newBranch}`,
     sha: ref.object.sha,
   });

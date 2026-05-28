@@ -5,7 +5,8 @@
  */
 
 import githubClient from './github-client';
-import getOwnerAndRepo from './get-owner-and-repo';
+import getOwner from './get-owner';
+import getRepo from './get-repo';
 
 interface Tag {
   name: string;
@@ -19,11 +20,13 @@ interface Tag {
  * @returns 最新 tag，无则返回 null
  */
 async function getLatestTag(): Promise<Tag | null> {
-  const repoInfo = await getOwnerAndRepo();
-  if (!repoInfo) return null;
+  const owner = await getOwner();
+  const repo = await getRepo();
+  if (!owner || !repo) return null;
 
   const tags = await githubClient.paginate(githubClient.repos.listTags, {
-    ...repoInfo,
+    owner,
+    repo,
     per_page: 100,
   });
 

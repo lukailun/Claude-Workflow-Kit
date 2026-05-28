@@ -11,7 +11,8 @@
 import getCurrentBranch from '../git/get-current-branch';
 import getPullRequestTargetBranch from '../github/get-pull-request-target-branch';
 import mainBranch from '../git/main-branch';
-import getOwnerAndRepo from '../github/get-owner-and-repo';
+import getRepo from '../github/get-repo';
+import getOwner from '../github/get-owner';
 import generateMergeRequestContent from '../ai/generate-merge-request-content';
 import createPullRequest from '../github/create-pull-request';
 import getPullRequest from '../github/get-pull-request';
@@ -46,8 +47,8 @@ export async function createMergeRequestWorkflow(
   const targetBranch = await getPullRequestTargetBranch();
   console.log(`🎯 目标分支: ${targetBranch.fullName}\n`);
 
-  const repoInfo = await getOwnerAndRepo();
-  if (!repoInfo) {
+  const repo = await getRepo();
+  if (!repo) {
     throw new Error('无法获取仓库信息');
   }
 

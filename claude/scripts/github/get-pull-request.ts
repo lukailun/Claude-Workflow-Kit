@@ -3,7 +3,8 @@
  */
 
 import githubClient from './github-client';
-import getOwnerAndRepo from './get-owner-and-repo';
+import getOwner from './get-owner';
+import getRepo from './get-repo';
 
 interface Params {
   sourceBranch: string;
@@ -15,13 +16,15 @@ interface Params {
  * @returns 找到的 Pull Request，如果没有则返回 undefined
  */
 async function getPullRequest(params: Params) {
-  const repoInfo = await getOwnerAndRepo();
-  if (!repoInfo) return undefined;
+  const owner = await getOwner();
+  const repo = await getRepo();
+  if (!owner || !repo) return undefined;
 
   const { data: pullRequests } = await githubClient.pulls.list({
-    ...repoInfo,
+    owner,
+    repo,
     state: 'open',
-    head: `${repoInfo.owner}:${params.sourceBranch}`,
+    head: `${owner}:${params.sourceBranch}`,
     base: params.targetBranch,
   });
 

@@ -14,7 +14,8 @@
 import { $ } from 'bun';
 import githubClient from '../github/github-client';
 import getCurrentBranch from '../git/get-current-branch';
-import getOwnerAndRepo from '../github/get-owner-and-repo';
+import getOwner from '../github/get-owner';
+import getRepo from '../github/get-repo';
 import mainBranch from '../git/main-branch';
 
 async function gitMerge(source: string) {
@@ -37,8 +38,9 @@ async function publishReleaseWorkflow() {
   }
 
   const segment = currentBranch.replace('release/', '');
-  const repoInfo = await getOwnerAndRepo();
-  if (!repoInfo) {
+  const owner = await getOwner();
+  const repo = await getRepo();
+  if (!owner || !repo) {
     console.error('❌ 无法获取仓库信息');
     process.exit(1);
   }
@@ -46,7 +48,8 @@ async function publishReleaseWorkflow() {
   // 1. 创建 PR 合并到 main
   console.log(`\n📝 创建 PR: ${currentBranch} → ${mainBranch.fullName}`);
   const { data: pullRequest } = await githubClient.pulls.create({
-    ...repoInfo,
+    owner,
+    repo,
     head: currentBranch,
     base: mainBranch.fullName,
     title: `release: ${segment}`,
@@ -68,11 +71,13 @@ async function publishReleaseWorkflow() {
 
   // 获取 main 分支的 SHA
   const { data: mainRef } = await githubClient.git.getRef({
-    ...repoInfo,
+    owner,
+    repo,
     ref: `heads/${mainBranch.fullName}`,
   });
   await githubClient.git.createRef({
-    ...repoInfo,
+    owner,
+    repo,
     ref: `refs/tags/${tagName}`,
     sha: mainRef.object.sha,
   });
@@ -81,7 +86,8 @@ async function publishReleaseWorkflow() {
   // 4. 删除远程 release 分支
   console.log(`\n🗑️  删除远程分支: ${currentBranch}`);
   await githubClient.git.deleteRef({
-    ...repoInfo,
+    owner,
+    repo,
     ref: `heads/${currentBranch}`,
   });
   console.log(`✅ 分支 ${currentBranch} 已删除`);

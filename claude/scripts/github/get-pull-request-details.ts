@@ -3,7 +3,8 @@
  */
 
 import githubClient from './github-client';
-import getOwnerAndRepo from './get-owner-and-repo';
+import getOwner from './get-owner';
+import getRepo from './get-repo';
 
 interface Params {
   pullNumber: number;
@@ -15,13 +16,15 @@ interface Params {
  * @returns Pull Request 详情
  */
 async function getPullRequestDetails(params: Params) {
-  const repoInfo = await getOwnerAndRepo();
-  if (!repoInfo) {
+  const owner = await getOwner();
+  const repo = await getRepo();
+  if (!owner || !repo) {
     throw new Error('无法获取仓库信息');
   }
 
   const { data: pullRequest } = await githubClient.pulls.get({
-    ...repoInfo,
+    owner,
+    repo,
     pull_number: params.pullNumber,
   });
   return pullRequest;

@@ -1,10 +1,17 @@
 import { describe, test, expect, mock } from 'bun:test';
 
-const mockGetOwnerAndRepo = mock(() =>
-  Promise.resolve({ owner: 'myorg', repo: 'myrepo' })
+const mockGetOwner = mock(() =>
+  Promise.resolve('myorg')
 );
-mock.module('../get-owner-and-repo', () => ({
-  default: mockGetOwnerAndRepo,
+mock.module('../get-owner', () => ({
+  default: mockGetOwner,
+}));
+
+const mockGetRepo = mock(() =>
+  Promise.resolve('myrepo')
+);
+mock.module('../get-repo', () => ({
+  default: mockGetRepo,
 }));
 
 const mockMerge = mock(() => Promise.resolve({ data: {} }));
@@ -30,7 +37,8 @@ describe('enableAutoMerge', () => {
   });
 
   test('无法获取仓库信息时抛出错误', async () => {
-    mockGetOwnerAndRepo.mockResolvedValueOnce(undefined as unknown as { owner: string; repo: string });
+    mockGetOwner.mockResolvedValueOnce(undefined as unknown as string);
+    mockGetRepo.mockResolvedValueOnce(undefined as unknown as string);
 
     await expect(enableAutoMerge({ pullNumber: 1 })).rejects.toThrow(
       '无法获取仓库信息'

@@ -15,7 +15,8 @@
 import { $ } from 'bun';
 import githubClient from '../github/github-client';
 import getCurrentBranch from '../git/get-current-branch';
-import getOwnerAndRepo from '../github/get-owner-and-repo';
+import getOwner from '../github/get-owner';
+import getRepo from '../github/get-repo';
 import getLatestReleaseBranch from '../github/get-latest-release-branch';
 import mainBranch from '../git/main-branch';
 
@@ -39,8 +40,9 @@ async function publishHotfixWorkflow() {
   }
 
   const segment = currentBranch.replace('hotfix/', '');
-  const repoInfo = await getOwnerAndRepo();
-  if (!repoInfo) {
+  const owner = await getOwner();
+  const repo = await getRepo();
+  if (!owner || !repo) {
     console.error('❌ 无法获取仓库信息');
     process.exit(1);
   }
@@ -48,7 +50,8 @@ async function publishHotfixWorkflow() {
   // 1. 创建 PR 合并到 main
   console.log(`\n📝 创建 PR: ${currentBranch} → ${mainBranch.fullName}`);
   const { data: pullRequest } = await githubClient.pulls.create({
-    ...repoInfo,
+    owner,
+    repo,
     head: currentBranch,
     base: mainBranch.fullName,
     title: `hotfix: ${segment}`,
@@ -69,11 +72,13 @@ async function publishHotfixWorkflow() {
   console.log(`\n🏷️  创建 tag: ${tagName}`);
 
   const { data: mainRef } = await githubClient.git.getRef({
-    ...repoInfo,
+    owner,
+    repo,
     ref: `heads/${mainBranch.fullName}`,
   });
   await githubClient.git.createRef({
-    ...repoInfo,
+    owner,
+    repo,
     ref: `refs/tags/${tagName}`,
     sha: mainRef.object.sha,
   });
@@ -82,7 +87,8 @@ async function publishHotfixWorkflow() {
   // 4. 删除远程 hotfix 分支
   console.log(`\n🗑️  删除远程分支: ${currentBranch}`);
   await githubClient.git.deleteRef({
-    ...repoInfo,
+    owner,
+    repo,
     ref: `heads/${currentBranch}`,
   });
   console.log(`✅ 分支 ${currentBranch} 已删除`);
