@@ -9,7 +9,7 @@
  */
 
 import { createInterface } from 'readline';
-import { createExperimentalBranch } from '../gitlab/create-experimental-branch';
+import { createExperimentalBranch } from '../github/create-experimental-branch';
 
 function promptUser(question: string): Promise<string> {
   const readline = createInterface({

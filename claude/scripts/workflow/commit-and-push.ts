@@ -8,7 +8,7 @@
 
 import { $ } from 'bun';
 import { createInterface } from 'readline';
-import getCurrentBranch from '../gitlab/get-current-branch';
+import getCurrentBranch from '../git/get-current-branch';
 import getAIProvider, {
   AI,
   AI_PROVIDERS,

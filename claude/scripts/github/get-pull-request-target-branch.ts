@@ -1,5 +1,5 @@
 /**
- * GitLab 目标分支查询工具
+ * GitHub 目标分支查询工具
  *
  * 功能：根据当前分支自动确定目标分支
  * - 如果当前是 release 或 hotfix 分支，目标分支为 main
@@ -7,15 +7,15 @@
  */
 
 import { Branch, ReleaseBranch } from '../git/branch';
-import getCurrentBranch from './get-current-branch';
+import getCurrentBranch from '../git/get-current-branch';
 import mainBranch from '../git/main-branch';
 import getRemoteBranches from './get-remote-branches';
 
 /**
- * 获取 MR 目标分支
+ * 获取 PR 目标分支
  * @returns 目标分支名称
  */
-async function getMergeRequestTargetBranch(): Promise<Branch> {
+async function getPullRequestTargetBranch(): Promise<Branch> {
   const currentBranch = await getCurrentBranch();
   if (!currentBranch) {
     return mainBranch;
@@ -63,4 +63,4 @@ async function getMergeRequestTargetBranch(): Promise<Branch> {
   return targetBranch;
 }
 
-export default getMergeRequestTargetBranch;
+export default getPullRequestTargetBranch;

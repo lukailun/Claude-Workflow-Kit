@@ -4,8 +4,8 @@
  * 功能：获取项目 tag，返回版本号最大的 vx.x.x tag
  */
 
-import gitlabClient from './gitlab-client';
-import getCurrentProjectId from './get-current-project-id';
+import githubClient from './github-client';
+import getOwnerAndRepo from './get-owner-and-repo';
 
 interface Tag {
   name: string;
@@ -19,10 +19,13 @@ interface Tag {
  * @returns 最新 tag，无则返回 null
  */
 async function getLatestTag(): Promise<Tag | null> {
-  const projectId = await getCurrentProjectId();
-  if (!projectId) return null;
+  const repoInfo = await getOwnerAndRepo();
+  if (!repoInfo) return null;
 
-  const tags = await gitlabClient.Tags.all(projectId);
+  const tags = await githubClient.paginate(githubClient.repos.listTags, {
+    ...repoInfo,
+    per_page: 100,
+  });
 
   const parsed = tags
     .map((tag) => {

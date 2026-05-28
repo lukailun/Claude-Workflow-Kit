@@ -1,23 +1,22 @@
 /**
- * 创建 GitLab 合并请求的完整流程
+ * 创建 GitHub Pull Request 的完整流程
  *
  * 用法：
  *   tsx create-merge-request.ts                # 使用默认 AI provider（ark）
  *   tsx create-merge-request.ts --ai mimo      # 使用指定 AI provider
- *   tsx create-merge-request.ts --receipt      # 创建 MR 并显示分支收据
- *   tsx create-merge-request.ts --auto-merge   # 创建/更新 MR 并开启 pipeline 通过后自动合并
+ *   tsx create-merge-request.ts --receipt      # 创建 PR 并显示分支收据
+ *   tsx create-merge-request.ts --auto-merge   # 创建/更新 PR 并开启 CI 通过后自动合并
  */
 
-import { ExpandedMergeRequestSchema } from '@gitbeaker/rest';
-import getCurrentBranch from '../gitlab/get-current-branch';
-import getMergeRequestTargetBranch from '../gitlab/get-merge-request-target-branch';
+import getCurrentBranch from '../git/get-current-branch';
+import getPullRequestTargetBranch from '../github/get-pull-request-target-branch';
 import mainBranch from '../git/main-branch';
-import getCurrentProjectId from '../gitlab/get-current-project-id';
+import getOwnerAndRepo from '../github/get-owner-and-repo';
 import generateMergeRequestContent from '../ai/generate-merge-request-content';
-import createMergeRequest from '../gitlab/create-merge-request';
-import getMergeRequest from '../gitlab/get-merge-request';
-import updateMergeRequest from '../gitlab/update-merge-request';
-import enableAutoMerge from '../gitlab/enable-auto-merge';
+import createPullRequest from '../github/create-pull-request';
+import getPullRequest from '../github/get-pull-request';
+import updatePullRequest from '../github/update-pull-request';
+import enableAutoMerge from '../github/enable-auto-merge';
 import getAIProvider, {
   AI,
   AI_PROVIDERS,
@@ -39,32 +38,31 @@ export interface MergeRequestResult {
 export async function createMergeRequestWorkflow(
   options: MergeRequestOptions = {}
 ): Promise<MergeRequestResult> {
-  console.log('🚀 开始创建合并请求...\n');
+  console.log('🚀 开始创建 Pull Request...\n');
 
   const sourceBranch = await getCurrentBranch();
   console.log(`📍 当前分支: ${sourceBranch}`);
 
-  const targetBranch = await getMergeRequestTargetBranch();
+  const targetBranch = await getPullRequestTargetBranch();
   console.log(`🎯 目标分支: ${targetBranch.fullName}\n`);
 
-  const projectId = await getCurrentProjectId();
-  if (!projectId) {
-    throw new Error('无法获取项目 ID');
+  const repoInfo = await getOwnerAndRepo();
+  if (!repoInfo) {
+    throw new Error('无法获取仓库信息');
   }
 
   const isMergingToMainBranch = targetBranch.type === mainBranch.type;
-  console.log(`🤖 正在使用 ${options.ai ?? DEFAULT_AI} 生成 MR 内容...`);
+  console.log(`🤖 正在使用 ${options.ai ?? DEFAULT_AI} 生成 PR 内容...`);
   const provider = await getAIProvider(options.ai);
 
   const content = await generateMergeRequestContent({
     aiProvider: provider,
-    projectId,
     sourceBranch,
     targetBranch: targetBranch.fullName,
   });
 
   if (!content) {
-    throw new Error('无法生成 MR 内容');
+    throw new Error('无法生成 PR 内容');
   }
 
   console.log(`\n📝 标题: ${content.title}\n`);
@@ -75,35 +73,32 @@ export async function createMergeRequestWorkflow(
     );
   }
 
-  const existingMergeRequest = await getMergeRequest({
-    projectId,
+  const existingPullRequest = await getPullRequest({
     sourceBranch,
     targetBranch: targetBranch.fullName,
   });
 
-  let mergeRequest: ExpandedMergeRequestSchema | undefined;
-  if (existingMergeRequest) {
-    console.log(`📝 已有合并请求 !${existingMergeRequest.iid}，正在更新...`);
-    mergeRequest = await updateMergeRequest({
-      projectId,
-      mergeRequestId: existingMergeRequest.iid,
+  let pullRequest;
+  if (existingPullRequest) {
+    console.log(`📝 已有 Pull Request #${existingPullRequest.number}，正在更新...`);
+    pullRequest = await updatePullRequest({
+      pullNumber: existingPullRequest.number,
       content,
       squash: !isMergingToMainBranch,
     });
-    console.log(`\n✅ 合并请求更新成功！`);
+    console.log(`\n✅ Pull Request 更新成功！`);
   } else {
-    console.log('✨ 正在创建合并请求...');
-    mergeRequest = await createMergeRequest({
-      projectId,
+    console.log('✨ 正在创建 Pull Request...');
+    pullRequest = await createPullRequest({
       sourceBranch,
       targetBranch: targetBranch.fullName,
       content,
       squash: !isMergingToMainBranch,
     });
-    console.log(`\n✅ 合并请求创建成功！`);
+    console.log(`\n✅ Pull Request 创建成功！`);
   }
 
-  console.log(`🔗 ${mergeRequest.web_url}`);
+  console.log(`🔗 ${pullRequest.html_url}`);
 
   if (options.receipt) {
     const receipt = await buildBranchReceiptWorkflow(sourceBranch);
@@ -113,19 +108,18 @@ export async function createMergeRequestWorkflow(
     }
   }
 
-  if (mergeRequest && options.autoMerge) {
+  if (pullRequest && options.autoMerge) {
     try {
       await enableAutoMerge({
-        projectId,
-        mergeRequestId: mergeRequest.iid,
+        pullNumber: pullRequest.number,
       });
-      console.log('🤖 已开启 pipeline 通过后自动合并');
+      console.log('🤖 已开启 CI 通过后自动合并');
     } catch {
       console.log('⚠️ 自动合并开启失败，请手动设置');
     }
   }
 
-  return { url: mergeRequest.web_url };
+  return { url: pullRequest.html_url };
 }
 
 // CLI 入口

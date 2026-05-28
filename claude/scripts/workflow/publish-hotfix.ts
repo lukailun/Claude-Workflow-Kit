@@ -2,21 +2,21 @@
  * hotfix 开发完成后的发布流程
  *
  * 用法：
- *   tsx finish-hotfix-branch.ts
+ *   tsx publish-hotfix.ts
  *
  * 流程：
  *   1. 获取当前 hotfix 分支名
- *   2. 创建 MR 合并到 main
+ *   2. 创建 PR 合并到 main
  *   3. 合并后在 main 上打 tag（基于 hotfix 版本号）
  *   4. 删除远程 hotfix 分支
  *   5. 将 main 同步到最新的 release 分支
  */
 
 import { $ } from 'bun';
-import gitlabClient from '../gitlab/gitlab-client';
-import getCurrentBranch from '../gitlab/get-current-branch';
-import getCurrentProjectId from '../gitlab/get-current-project-id';
-import getLatestReleaseBranch from '../gitlab/get-latest-release-branch';
+import githubClient from '../github/github-client';
+import getCurrentBranch from '../git/get-current-branch';
+import getOwnerAndRepo from '../github/get-owner-and-repo';
+import getLatestReleaseBranch from '../github/get-latest-release-branch';
 import mainBranch from '../git/main-branch';
 
 async function gitMerge(source: string) {
@@ -39,25 +39,22 @@ async function publishHotfixWorkflow() {
   }
 
   const segment = currentBranch.replace('hotfix/', '');
-  const projectId = await getCurrentProjectId();
-  if (!projectId) {
-    console.error('❌ 无法获取项目 ID');
+  const repoInfo = await getOwnerAndRepo();
+  if (!repoInfo) {
+    console.error('❌ 无法获取仓库信息');
     process.exit(1);
   }
 
-  // 1. 创建 MR 合并到 main
-  console.log(`\n📝 创建 MR: ${currentBranch} → ${mainBranch.fullName}`);
-  const mergeRequest = await gitlabClient.MergeRequests.create(
-    projectId,
-    currentBranch,
-    mainBranch.fullName,
-    `hotfix: ${segment}`,
-    {
-      description: `合并 hotfix/${segment} 到 ${mainBranch.fullName}`,
-      removeSourceBranch: false,
-    }
-  );
-  console.log(`✅ MR 已创建: ${mergeRequest.web_url}`);
+  // 1. 创建 PR 合并到 main
+  console.log(`\n📝 创建 PR: ${currentBranch} → ${mainBranch.fullName}`);
+  const { data: pullRequest } = await githubClient.pulls.create({
+    ...repoInfo,
+    head: currentBranch,
+    base: mainBranch.fullName,
+    title: `hotfix: ${segment}`,
+    body: `合并 hotfix/${segment} 到 ${mainBranch.fullName}`,
+  });
+  console.log(`✅ PR 已创建: ${pullRequest.html_url}`);
 
   // 2. 本地合并 hotfix 到 main 并 force push
   console.log(`\n🔀 本地合并 ${currentBranch} 到 ${mainBranch.fullName}...`);
@@ -70,14 +67,24 @@ async function publishHotfixWorkflow() {
   // 3. 打 tag
   const tagName = `v${segment}`;
   console.log(`\n🏷️  创建 tag: ${tagName}`);
-  await gitlabClient.Tags.create(projectId, tagName, mainBranch.fullName, {
-    message: `Release ${tagName}`,
+
+  const { data: mainRef } = await githubClient.git.getRef({
+    ...repoInfo,
+    ref: `heads/${mainBranch.fullName}`,
+  });
+  await githubClient.git.createRef({
+    ...repoInfo,
+    ref: `refs/tags/${tagName}`,
+    sha: mainRef.object.sha,
   });
   console.log(`✅ tag ${tagName} 已创建`);
 
   // 4. 删除远程 hotfix 分支
   console.log(`\n🗑️  删除远程分支: ${currentBranch}`);
-  await gitlabClient.Branches.remove(projectId, currentBranch);
+  await githubClient.git.deleteRef({
+    ...repoInfo,
+    ref: `heads/${currentBranch}`,
+  });
   console.log(`✅ 分支 ${currentBranch} 已删除`);
 
   // 5. 将 main 同步到最新的 release 分支

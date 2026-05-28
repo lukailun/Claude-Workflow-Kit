@@ -1,16 +1,16 @@
 /**
  * 通用分支创建方法
  *
- * 从指定源分支 checkout 并 pull，然后通过 GitLab API 创建并推送新分支。
+ * 从指定源分支 checkout 并 pull，然后通过 GitHub API 创建并推送新分支。
  *
  * @param sourceBranch - 源分支名称
  * @param newBranch    - 要创建的新分支名称
  */
 
 import { $ } from 'bun';
-import gitlabClient from './gitlab-client';
-import getCurrentProjectId from './get-current-project-id';
-import getCurrentBranch from './get-current-branch';
+import githubClient from './github-client';
+import getOwnerAndRepo from './get-owner-and-repo';
+import getCurrentBranch from '../git/get-current-branch';
 
 async function createBranch(sourceBranch: string, newBranch: string) {
   console.log(`📍 基于 ${sourceBranch} 分支`);
@@ -22,14 +22,24 @@ async function createBranch(sourceBranch: string, newBranch: string) {
   }
   await $`git pull origin ${sourceBranch}`.quiet();
 
-  const projectId = await getCurrentProjectId();
-  if (!projectId) {
-    console.error('❌ 无法获取项目 ID');
+  const repoInfo = await getOwnerAndRepo();
+  if (!repoInfo) {
+    console.error('❌ 无法获取仓库信息');
     process.exit(1);
   }
 
+  // 获取源分支的 SHA
+  const { data: ref } = await githubClient.git.getRef({
+    ...repoInfo,
+    ref: `heads/${sourceBranch}`,
+  });
+
   console.log(`🌿 创建分支: ${newBranch}`);
-  await gitlabClient.Branches.create(projectId, newBranch, sourceBranch);
+  await githubClient.git.createRef({
+    ...repoInfo,
+    ref: `refs/heads/${newBranch}`,
+    sha: ref.object.sha,
+  });
 
   // checkout 到新分支并设置上游追踪
   await $`git fetch origin`.quiet();

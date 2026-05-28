@@ -7,7 +7,7 @@
  */
 
 import { dirname, join } from 'path';
-import getCurrentBranch from '../gitlab/get-current-branch';
+import getCurrentBranch from '../git/get-current-branch';
 import getUserName from '../git/get-user-name';
 import getVersion from '../claude-code/get-version';
 import getBranchUsage from '../claude-code/get-branch-usage';

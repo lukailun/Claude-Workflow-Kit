@@ -55,7 +55,7 @@ bun run scripts/workflow/submit.ts
 ### 创建合并请求
 
 ```bash
-# 创建 GitLab MR（支持 AI 生成 MR 内容）
+# 创建 GitHub PR（支持 AI 生成 PR 内容）
 bun run scripts/workflow/create-merge-request.ts
 ```
 
@@ -122,8 +122,7 @@ bun run scripts/workflow/create-merge-request.ts --ai mimo
 
 | 变量名 | 用途 | 必需 |
 |--------|------|------|
-| `GITLAB_HOST` | GitLab 地址 | 是（MR 功能） |
-| `GITLAB_TOKEN` | GitLab 认证 | 是（MR 功能） |
+| `GITHUB_TOKEN` | GitHub 认证 | 是（PR 功能） |
 | `ANTHROPIC_BASE_URL` | Anthropic API 地址 | 可选  |
 | `ANTHROPIC_API_KEY` | Anthropic 认证 | 可选 |
 | `ANTHROPIC_AUTH_TOKEN` | Anthropic 认证 | 可选 |
@@ -134,4 +133,4 @@ bun run scripts/workflow/create-merge-request.ts --ai mimo
 2. 创建分支前会自动拉取最新代码
 3. 合并到 main 分支时会使用 `--no-ff` 选项保留分支历史
 4. 发布操作会自动创建 tag 并删除已发布的分支
-5. 使用 `@gitbeaker/rest` 库与 GitLab API 交互
+5. 使用 `@octokit/rest` 库与 GitHub API 交互

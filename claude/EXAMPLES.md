@@ -68,8 +68,8 @@ bun run .claude/scripts/workflow/submit.ts
 ### Q: 如何取消操作？
 A: 在任何确认提示时输入 `n` 即可取消。
 
-### Q: 如何指定 GitLab 项目？
-A: 在 `.claude/.env` 中配置 `GITLAB_HOST` 和 `GITLAB_TOKEN`，脚本会自动检测当前 Git 仓库对应的 GitLab 项目。
+### Q: 如何关联 GitHub 仓库？
+A: 在 `.claude/.env` 中配置 `GITHUB_TOKEN`，脚本会自动从当前 Git remote URL 检测对应的 GitHub 仓库。
 
 ### Q: 如何使用自定义 commit message？
 A: 在 `commit-and-push.ts` 的提示中直接输入自定义 message，而不是按 `y` 确认。

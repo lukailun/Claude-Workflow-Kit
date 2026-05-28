@@ -1,11 +1,11 @@
 /**
- * 生成 MR 标题和描述
+ * 生成 PR 标题和描述
  *
- * 功能：使用 AI 自动生成合并请求的标题和描述
+ * 功能：使用 AI 自动生成 Pull Request 的标题和描述
  */
 
-import getRepositoryCompare from '../gitlab/get-repository-compare';
-import MergeRequestContent from '../gitlab/merge-request-content';
+import getRepositoryCompare from '../github/get-repository-compare';
+import PullRequestContent from '../github/pull-request-content';
 import {
   getTitlePrompt,
   getDescriptionPrompt,
@@ -16,24 +16,21 @@ import { formatTokenUsage } from './types/token-usage';
 
 interface GenerateMergeRequestContentParams {
   aiProvider: AIProvider;
-  projectId: number;
   sourceBranch: string;
   targetBranch: string;
 }
 
 /**
- * 生成 MR 标题和描述
- * @param params.projectId 项目 ID
+ * 生成 PR 标题和描述
  * @param params.targetBranch 目标分支
  * @param params.sourceBranch 源分支
- * @returns MR 标题和描述
+ * @returns PR 标题和描述
  */
 async function generateMergeRequestContent(
   params: GenerateMergeRequestContentParams
-): Promise<MergeRequestContent | undefined> {
-  const { projectId, sourceBranch, targetBranch } = params;
+): Promise<PullRequestContent | undefined> {
+  const { sourceBranch, targetBranch } = params;
   const compare = await getRepositoryCompare({
-    projectId,
     sourceBranch,
     targetBranch,
   });
@@ -48,28 +45,25 @@ async function generateMergeRequestContent(
   const commits = compare.commits;
   const diffLog = commits
     .map((commit) => {
-      const shortId = commit.short_id;
-      const message = commit.title || commit.message;
+      const shortId = commit.sha.slice(0, 7);
+      const message = commit.commit.message.split('\n')[0];
       return `${shortId} ${message}`;
     })
     .join('\n');
 
-  const diffs = compare.diffs || [];
-  const diffStat = diffs
-    .map((diff) => {
-      const oldPath = diff.old_path;
-      const newPath = diff.new_path;
-
-      if (diff.new_file) {
-        return `[新增] ${newPath}`;
+  const files = compare.files || [];
+  const diffStat = files
+    .map((file) => {
+      if (file.status === 'added') {
+        return `[新增] ${file.filename}`;
       }
-      if (diff.deleted_file) {
-        return `[删除] ${oldPath}`;
+      if (file.status === 'removed') {
+        return `[删除] ${file.filename}`;
       }
-      if (diff.renamed_file) {
-        return `[重命名] ${oldPath} => ${newPath}`;
+      if (file.status === 'renamed') {
+        return `[重命名] ${file.filename}`;
       }
-      return `[修改] ${newPath}`;
+      return `[修改] ${file.filename}`;
     })
     .join('\n');
 
@@ -128,7 +122,7 @@ async function generateMergeRequestContent(
     title,
     description,
     tokenUsage,
-  } satisfies MergeRequestContent;
+  } satisfies PullRequestContent;
 }
 
 export default generateMergeRequestContent;
