@@ -69,7 +69,6 @@ bun run .claude/scripts/workflow/create-merge-request.ts
 │   ├── package.json           # 依赖配置
 │   └── settings.json          # Claude Code 权限配置
 ├── init.sh                    # 初始化脚本
-├── test.sh                    # 测试脚本
 └── README.md                  # 项目说明（本文件）
 ```
 
@@ -181,4 +180,4 @@ bun run .claude/scripts/workflow/create-merge-request.ts --ai mimo
 ## 更多信息
 
 详细使用说明请参考：
-- [Claude Code 配置说明](.claude/README.md)
+- [Claude Code 配置说明](claude/README.md)
