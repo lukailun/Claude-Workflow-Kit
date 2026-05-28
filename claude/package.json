@@ -3,17 +3,25 @@
   "module": "index.ts",
   "type": "module",
   "private": true,
+  "scripts": {
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint scripts/",
+    "lint:fix": "eslint scripts/ --fix"
+  },
   "devDependencies": {
-    "@types/bun": "latest"
+    "@types/bun": "latest",
+    "@typescript-eslint/eslint-plugin": "^8.60.0",
+    "@typescript-eslint/parser": "^8.60.0",
+    "eslint": "^10.4.0"
   },
   "peerDependencies": {
-    "typescript": "latest"
+    "typescript": "^6.0.3"
   },
   "dependencies": {
-    "@anthropic-ai/claude-agent-sdk": "^0.3.146",
-    "@anthropic-ai/sdk": "^0.97.1",
+    "@anthropic-ai/claude-agent-sdk": "^0.3.153",
+    "@anthropic-ai/sdk": "^0.99.0",
     "@gitbeaker/rest": "^43.8.0",
     "dotenv": "^17.4.2",
-    "openai": "^6.38.0"
+    "openai": "^6.39.0"
   }
 }

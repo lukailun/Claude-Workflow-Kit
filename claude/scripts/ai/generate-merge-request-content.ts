@@ -4,10 +4,8 @@
  * 功能：使用 AI 自动生成合并请求的标题和描述
  */
 
-import { Issue } from '@linear/sdk';
 import getRepositoryCompare from '../gitlab/get-repository-compare';
 import MergeRequestContent from '../gitlab/merge-request-content';
-import getLinearIssue from '../linear/get-linear-issue';
 import {
   getTitlePrompt,
   getDescriptionPrompt,
@@ -21,16 +19,6 @@ interface GenerateMergeRequestContentParams {
   projectId: number;
   sourceBranch: string;
   targetBranch: string;
-}
-
-async function findRelatedIssue(
-  sourceBranch: string
-): Promise<Issue | undefined> {
-  const issueIdPattern = /[a-zA-Z0-9]+-\d+/i;
-  const match = sourceBranch.match(issueIdPattern);
-  if (!match) return undefined;
-  const issueId = match[0].toUpperCase();
-  return getLinearIssue(issueId);
 }
 
 /**
@@ -92,21 +80,17 @@ async function generateMergeRequestContent(
     diffLog,
   });
 
-  const [descriptionMessage, relatedIssue] = await Promise.all([
-    params.aiProvider.generate({
-      messages: [{ role: 'user', content: descriptionPrompt }],
-      maxTokens: 16384,
-    }),
-    findRelatedIssue(sourceBranch),
-  ]);
+  const descriptionMessage = await params.aiProvider.generate({
+    messages: [{ role: 'user', content: descriptionPrompt }],
+    maxTokens: 16384,
+  });
 
   const titleMessage = await params.aiProvider.generate({
     messages: [
       {
         role: 'user',
         content: getTitlePrompt({
-          description: descriptionMessage.text || '',
-          relatedIssue,
+          description: descriptionMessage.text ?? '',
         }),
       },
     ],
@@ -115,11 +99,6 @@ async function generateMergeRequestContent(
 
   const title =
     titleMessage.text || `将 ${sourceBranch} 合并到 ${targetBranch}`;
-  const issuesText = relatedIssue
-    ? `- [${relatedIssue.identifier}: ${relatedIssue.title}](${relatedIssue.url})`
-    : '无';
-  const relatedIssuesSection = `\n\n## 相关工单\n${issuesText}`;
-
   const tokenUsage: TokenUsage | undefined =
     descriptionMessage.tokenUsage && titleMessage.tokenUsage
       ? {
@@ -143,7 +122,7 @@ async function generateMergeRequestContent(
     : '';
   const generatedInfoSection = `\n\n## 生成信息\n* **AI 提供商**: [${name}](${url})\n* **模型**: ${model}${tokenInfo}`;
   const description =
-    descriptionMessage.text + relatedIssuesSection + generatedInfoSection;
+    descriptionMessage.text + generatedInfoSection;
 
   return {
     title,
