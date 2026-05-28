@@ -7,7 +7,16 @@
     "typecheck": "tsc --noEmit",
     "lint": "eslint scripts/",
     "lint:fix": "eslint scripts/ --fix",
-    "test": "bun test"
+    "test": "bun test",
+    "commit": "bun run scripts/workflow/commit-and-push.ts",
+    "pr": "bun run scripts/workflow/create-merge-request.ts",
+    "release": "bun run scripts/workflow/create-release.ts",
+    "publish-release": "bun run scripts/workflow/publish-release.ts",
+    "hotfix": "bun run scripts/workflow/create-hotfix.ts",
+    "publish-hotfix": "bun run scripts/workflow/publish-hotfix.ts",
+    "feature": "bun run scripts/workflow/create-feature.ts",
+    "experimental": "bun run scripts/workflow/create-experimental.ts",
+    "receipt": "bun run scripts/workflow/build-branch-receipt.ts"
   },
   "devDependencies": {
     "@types/bun": "latest",
