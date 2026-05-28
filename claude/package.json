@@ -6,7 +6,8 @@
   "scripts": {
     "typecheck": "tsc --noEmit",
     "lint": "eslint scripts/",
-    "lint:fix": "eslint scripts/ --fix"
+    "lint:fix": "eslint scripts/ --fix",
+    "test": "bun test"
   },
   "devDependencies": {
     "@types/bun": "latest",
