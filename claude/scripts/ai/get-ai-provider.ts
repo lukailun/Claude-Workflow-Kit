@@ -11,7 +11,7 @@ export const AI_PROVIDERS = [
 ] as const;
 export type AI = (typeof AI_PROVIDERS)[number];
 
-export const DEFAULT_AI: AI = 'ark';
+export const DEFAULT_AI: AI = 'longcat';
 
 async function getAIProvider(ai?: AI): Promise<AIProvider> {
   switch (ai ?? DEFAULT_AI) {
