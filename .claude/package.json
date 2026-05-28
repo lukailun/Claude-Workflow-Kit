@@ -1,0 +1,19 @@
+{
+  "name": "claude-config",
+  "module": "index.ts",
+  "type": "module",
+  "private": true,
+  "devDependencies": {
+    "@types/bun": "latest"
+  },
+  "peerDependencies": {
+    "typescript": "latest"
+  },
+  "dependencies": {
+    "@anthropic-ai/claude-agent-sdk": "^0.3.146",
+    "@anthropic-ai/sdk": "^0.97.1",
+    "@gitbeaker/rest": "^43.8.0",
+    "dotenv": "^17.4.2",
+    "openai": "^6.38.0"
+  }
+}

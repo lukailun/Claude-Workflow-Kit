@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN"
+  "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+  <key>Label</key>
+  <string>com.mampod.sickle.nightly-agent</string>
+
+  <key>ProgramArguments</key>
+  <array>
+    <string>/bin/bash</string>
+    <string>/Users/dongyi/work/mampod/sickle/.claude/scripts/nightly/nightly-agent.sh</string>
+  </array>
+
+  <!-- 每天 00:05 触发 -->
+  <key>StartCalendarInterval</key>
+  <dict>
+    <key>Hour</key>
+    <integer>0</integer>
+    <key>Minute</key>
+    <integer>5</integer>
+  </dict>
+
+  <!-- 确保 PATH 能找到 bun、claude、glab -->
+  <key>EnvironmentVariables</key>
+  <dict>
+    <key>PATH</key>
+    <string>/Users/dongyi/.local/bin:/Users/dongyi/.bun/bin:/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin</string>
+    <key>HOME</key>
+    <string>/Users/dongyi</string>
+  </dict>
+
+  <key>WorkingDirectory</key>
+  <string>/Users/dongyi/work/mampod/sickle</string>
+
+  <key>StandardOutPath</key>
+  <string>/Users/dongyi/.claude/logs/nightly-agent/launchd-stdout.log</string>
+
+  <key>StandardErrorPath</key>
+  <string>/Users/dongyi/.claude/logs/nightly-agent/launchd-stderr.log</string>
+
+  <!-- 机器唤醒后如果错过了窗口，不补跑 -->
+  <key>RunAtLoad</key>
+  <false/>
+</dict>
+</plist>

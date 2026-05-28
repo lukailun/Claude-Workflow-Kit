@@ -1,0 +1,10 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(git *)",
+      "Bash(bun *)",
+      "Bash(glab *)"
+    ],
+    "deny": []
+  }
+}
