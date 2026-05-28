@@ -1,4 +1,4 @@
-import type { TokenUsage } from '../ai/types/token-usage';
+import type { TokenUsage } from '@/ai/types/token-usage';
 
 export default interface PullRequestContent {
   title: string;

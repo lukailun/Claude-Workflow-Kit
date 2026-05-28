@@ -3,8 +3,8 @@
  *
  */
 
-import createBranch from './create-branch';
-import mainBranch from '../git/main-branch';
+import mainBranch from '@/git/main-branch';
+import createBranch from '@/github/create-branch';
 
 export async function createReleaseBranch(segment: string) {
   const branchName = `release/${segment}`;

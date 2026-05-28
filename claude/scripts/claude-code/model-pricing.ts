@@ -2,21 +2,21 @@
  * Claude Code 模型价格汇总（从各 provider price 聚合）
  */
 
-import type { ModelTokenUsageStats } from '../ai/types/token-usage';
-import type Currency from '../ai/types/currency';
+import type Currency from '@/ai/types/currency';
 import type {
   PricingPlan,
   PriceTier,
   ModelPricing,
-} from '../ai/types/model-pricing';
-import anthropicPricing from '../anthropic/anthropic-pricing';
-import xiaomiMimoPricing from '../xiaomi-mimo/xiaomi-mimo-pricing';
-import bigModelPricing from '../big-model/big-model-pricing';
-import miniMaxPricing from '../mini-max/mini-max-pricing';
-import deepSeekPricing from '../deep-seek/deep-seek-pricing';
-import kimiPricing from '../kimi/model-pricing';
-import longCatPricing from '../long-cat/long-cat-pricing';
-import arkCodingPlanPricing from '../ark-coding-plan/ark-coding-plan-pricing';
+} from '@/ai/types/model-pricing';
+import type { ModelTokenUsageStats } from '@/ai/types/token-usage';
+import anthropicPricing from '@/anthropic/anthropic-pricing';
+import arkCodingPlanPricing from '@/ark-coding-plan/ark-coding-plan-pricing';
+import bigModelPricing from '@/big-model/big-model-pricing';
+import deepSeekPricing from '@/deep-seek/deep-seek-pricing';
+import kimiPricing from '@/kimi/model-pricing';
+import longCatPricing from '@/long-cat/long-cat-pricing';
+import miniMaxPricing from '@/mini-max/mini-max-pricing';
+import xiaomiMimoPricing from '@/xiaomi-mimo/xiaomi-mimo-pricing';
 
 const allPricings: ModelPricing[][] = [
   anthropicPricing,

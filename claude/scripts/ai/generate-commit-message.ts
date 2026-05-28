@@ -2,9 +2,9 @@
  * 使用 AI 生成 commit message
  */
 
-import AIProvider from './types/ai-provider';
-import type { TokenUsage } from './types/token-usage';
-import { getCommitMessagePrompt } from './prompts/commit-message-prompts';
+import { getCommitMessagePrompt } from '@/ai/prompts/commit-message-prompts';
+import AIProvider from '@/ai/types/ai-provider';
+import type { TokenUsage } from '@/ai/types/token-usage';
 
 interface GenerateCommitMessageParams {
   aiProvider: AIProvider;

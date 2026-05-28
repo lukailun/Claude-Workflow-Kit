@@ -8,9 +8,9 @@
  */
 
 import { createInterface } from 'readline';
-import { commitAndPush } from './commit-and-push';
-import { createMergeRequestWorkflow } from './create-merge-request';
-import { AI, AI_PROVIDERS } from '../ai/get-ai-provider';
+import { AI, AI_PROVIDERS } from '@/ai/get-ai-provider';
+import { commitAndPush } from '@/workflow/commit-and-push';
+import { createMergeRequestWorkflow } from '@/workflow/create-merge-request';
 
 interface SubmitOptions {
   ai?: AI;

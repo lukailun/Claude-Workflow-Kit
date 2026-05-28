@@ -1,9 +1,9 @@
 import Anthropic from '@anthropic-ai/sdk';
-import xiaomiMimoFromEnv from '../env/xiaomi-mimo-from-env';
-import AIProvider from '../ai/types/ai-provider';
-import AIRequestParams from '../ai/types/ai-request-params';
-import AIResponse from '../ai/types/ai-response';
-import xiaomiMimoProviderInfo from './xiaomi-mimo-provider-info';
+import AIProvider from '@/ai/types/ai-provider';
+import AIRequestParams from '@/ai/types/ai-request-params';
+import AIResponse from '@/ai/types/ai-response';
+import xiaomiMimoFromEnv from '@/env/xiaomi-mimo-from-env';
+import xiaomiMimoProviderInfo from '@/xiaomi-mimo/xiaomi-mimo-provider-info';
 
 class XiaomiMimoProvider implements AIProvider {
   info = xiaomiMimoProviderInfo;

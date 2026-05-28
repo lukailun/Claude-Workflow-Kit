@@ -1,6 +1,6 @@
-import AIProviderInfo from './ai-provider-info';
-import AIRequestParams from './ai-request-params';
-import AIResponse from './ai-response';
+import AIProviderInfo from '@/ai/types/ai-provider-info';
+import AIRequestParams from '@/ai/types/ai-request-params';
+import AIResponse from '@/ai/types/ai-response';
 
 interface AIProvider {
   info: AIProviderInfo;

@@ -1,4 +1,4 @@
-import type { TokenUsage } from './token-usage';
+import type { TokenUsage } from '@/ai/types/token-usage';
 
 interface AIResponse {
   text: string;

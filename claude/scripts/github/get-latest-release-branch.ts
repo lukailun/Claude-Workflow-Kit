@@ -4,8 +4,8 @@
  * 功能：扫描远程分支，返回版本号最大的 release/x.y.z 分支
  */
 
-import { ReleaseBranch } from '../git/branch';
-import getRemoteBranches from './get-remote-branches';
+import { ReleaseBranch } from '@/git/branch';
+import getRemoteBranches from '@/github/get-remote-branches';
 
 /**
  * 获取最新的远程 release 分支

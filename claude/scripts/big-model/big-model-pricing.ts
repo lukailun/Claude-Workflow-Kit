@@ -1,4 +1,4 @@
-import type { ModelPricing } from '../ai/types/model-pricing';
+import type { ModelPricing } from '@/ai/types/model-pricing';
 
 const bigModelPricing: ModelPricing[] = [
   {

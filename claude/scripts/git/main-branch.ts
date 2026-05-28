@@ -2,7 +2,7 @@
  * 主分支名称常量
  */
 
-import { MainBranch } from './branch';
+import { MainBranch } from '@/git/branch';
 
 const mainBranch = {
   type: 'main',

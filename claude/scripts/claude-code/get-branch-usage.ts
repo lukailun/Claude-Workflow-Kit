@@ -3,12 +3,12 @@
  */
 
 import { readdir, readFile } from 'fs/promises';
-import { join } from 'path';
 import { homedir } from 'os';
+import { join } from 'path';
 import type {
   TokenUsageStats,
   ModelTokenUsageStats,
-} from '../ai/types/token-usage';
+} from '@/ai/types/token-usage';
 
 export interface BranchUsageResult {
   stats: Map<string, ModelTokenUsageStats>;

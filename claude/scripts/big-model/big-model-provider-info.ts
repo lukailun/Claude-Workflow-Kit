@@ -1,4 +1,4 @@
-import type AIProviderInfo from '../ai/types/ai-provider-info';
+import type AIProviderInfo from '@/ai/types/ai-provider-info';
 
 const bigModelProviderInfo: AIProviderInfo = {
   name: '智谱 BigModel',

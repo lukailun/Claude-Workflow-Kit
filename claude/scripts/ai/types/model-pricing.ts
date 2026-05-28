@@ -1,4 +1,4 @@
-import Currency from './currency';
+import Currency from '@/ai/types/currency';
 
 export interface PricingPlan {
   /** 货币单位 */

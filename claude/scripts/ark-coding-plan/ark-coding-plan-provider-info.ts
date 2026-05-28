@@ -1,4 +1,4 @@
-import type AIProviderInfo from '../ai/types/ai-provider-info';
+import type AIProviderInfo from '@/ai/types/ai-provider-info';
 
 const arkCodingPlanProviderInfo: AIProviderInfo = {
   name: '方舟 Coding Plan',

@@ -1,9 +1,9 @@
 import OpenAI from 'openai';
-import longCatFromEnv from '../env/long-cat-from-env';
-import AIProvider from '../ai/types/ai-provider';
-import AIRequestParams from '../ai/types/ai-request-params';
-import AIResponse from '../ai/types/ai-response';
-import longCatProviderInfo from './long-cat-provider-info';
+import AIProvider from '@/ai/types/ai-provider';
+import AIRequestParams from '@/ai/types/ai-request-params';
+import AIResponse from '@/ai/types/ai-response';
+import longCatFromEnv from '@/env/long-cat-from-env';
+import longCatProviderInfo from '@/long-cat/long-cat-provider-info';
 
 class LongCatProvider implements AIProvider {
   info = longCatProviderInfo;

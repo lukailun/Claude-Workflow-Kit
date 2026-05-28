@@ -2,9 +2,9 @@
  * 查找已有的 Pull Request
  */
 
-import githubClient from './github-client';
-import getOwner from './get-owner';
-import getRepo from './get-repo';
+import getOwner from '@/github/get-owner';
+import getRepo from '@/github/get-repo';
+import githubClient from '@/github/github-client';
 
 interface Params {
   sourceBranch: string;

@@ -1,9 +1,9 @@
 import OpenAI from 'openai';
-import deepSeekFromEnv from '../env/deep-seek-from-env';
-import AIProvider from '../ai/types/ai-provider';
-import AIRequestParams from '../ai/types/ai-request-params';
-import AIResponse from '../ai/types/ai-response';
-import deepSeekProviderInfo from './deep-seek-provider-info';
+import AIProvider from '@/ai/types/ai-provider';
+import AIRequestParams from '@/ai/types/ai-request-params';
+import AIResponse from '@/ai/types/ai-response';
+import deepSeekProviderInfo from '@/deep-seek/deep-seek-provider-info';
+import deepSeekFromEnv from '@/env/deep-seek-from-env';
 
 class DeepSeekProvider implements AIProvider {
   info = deepSeekProviderInfo;

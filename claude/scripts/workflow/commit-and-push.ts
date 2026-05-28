@@ -6,16 +6,16 @@
  *   tsx commit-and-push.ts --ai anthropic # 使用指定 AI provider
  */
 
-import { $ } from 'bun';
 import { createInterface } from 'readline';
-import getCurrentBranch from '../git/get-current-branch';
+import { $ } from 'bun';
+import generateCommitMessage from '@/ai/generate-commit-message';
 import getAIProvider, {
   AI,
   AI_PROVIDERS,
   DEFAULT_AI,
-} from '../ai/get-ai-provider';
-import generateCommitMessage from '../ai/generate-commit-message';
-import { formatTokenUsage } from '../ai/types/token-usage';
+} from '@/ai/get-ai-provider';
+import { formatTokenUsage } from '@/ai/types/token-usage';
+import getCurrentBranch from '@/git/get-current-branch';
 
 export interface CommitOptions {
   ai?: AI;

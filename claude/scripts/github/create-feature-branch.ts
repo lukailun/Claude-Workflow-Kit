@@ -3,8 +3,8 @@
  *
  */
 
-import createBranch from './create-branch';
-import getLatestReleaseBranch from './get-latest-release-branch';
+import createBranch from '@/github/create-branch';
+import getLatestReleaseBranch from '@/github/get-latest-release-branch';
 
 export async function createFeatureBranch(segment: string) {
   const releaseBranch = await getLatestReleaseBranch();

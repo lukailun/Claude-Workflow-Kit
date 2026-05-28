@@ -1,5 +1,6 @@
 import tsPlugin from "@typescript-eslint/eslint-plugin";
 import tsParser from "@typescript-eslint/parser";
+import importX from "eslint-plugin-import-x";
 
 export default [
   {
@@ -13,6 +14,7 @@ export default [
     },
     plugins: {
       "@typescript-eslint": tsPlugin,
+      "import-x": importX,
     },
     rules: {
       ...tsPlugin.configs.recommended.rules,
@@ -21,6 +23,20 @@ export default [
         { argsIgnorePattern: "^_" },
       ],
       "@typescript-eslint/no-explicit-any": "warn",
+      "import-x/order": [
+        "warn",
+        {
+          groups: [
+            "builtin",
+            "external",
+            "internal",
+            ["parent", "sibling"],
+            "index",
+          ],
+          alphabetize: { order: "asc", caseInsensitive: true },
+          "newlines-between": "never",
+        },
+      ],
     },
   },
   {

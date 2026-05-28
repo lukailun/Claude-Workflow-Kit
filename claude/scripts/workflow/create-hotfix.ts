@@ -11,9 +11,9 @@
 
 import { createInterface } from 'readline';
 import { $ } from 'bun';
-import { createHotfixBranch } from '../github/create-hotfix-branch';
-import getLatestTag from '../github/get-latest-tag';
-import getRemoteBranches from '../github/get-remote-branches';
+import { createHotfixBranch } from '@/github/create-hotfix-branch';
+import getLatestTag from '@/github/get-latest-tag';
+import getRemoteBranches from '@/github/get-remote-branches';
 
 async function promptVersion(suggested: string): Promise<string | null> {
   const readline = createInterface({

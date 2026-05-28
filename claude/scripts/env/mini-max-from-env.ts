@@ -1,5 +1,5 @@
 import { env } from 'process';
-import envPath from './env-path';
+import envPath from '@/env/env-path';
 
 interface MiniMaxFromEnv {
   baseUrl: string;

@@ -9,7 +9,7 @@
  */
 
 import { createInterface } from 'readline';
-import { createFeatureBranch } from '../github/create-feature-branch';
+import { createFeatureBranch } from '@/github/create-feature-branch';
 
 function promptUser(question: string): Promise<string> {
   const readline = createInterface({

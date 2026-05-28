@@ -1,4 +1,4 @@
-import AIProvider from './types/ai-provider';
+import AIProvider from '@/ai/types/ai-provider';
 
 export const AI_PROVIDERS = [
   'anthropic',

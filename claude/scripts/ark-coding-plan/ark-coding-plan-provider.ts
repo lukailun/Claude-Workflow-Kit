@@ -1,8 +1,8 @@
-import arkCodingPlanFromEnv from '../env/ark-coding-plan-from-env';
-import AIProvider from '../ai/types/ai-provider';
-import AIRequestParams from '../ai/types/ai-request-params';
-import AIResponse from '../ai/types/ai-response';
-import arkCodingPlanProviderInfo from './ark-coding-plan-provider-info';
+import AIProvider from '@/ai/types/ai-provider';
+import AIRequestParams from '@/ai/types/ai-request-params';
+import AIResponse from '@/ai/types/ai-response';
+import arkCodingPlanProviderInfo from '@/ark-coding-plan/ark-coding-plan-provider-info';
+import arkCodingPlanFromEnv from '@/env/ark-coding-plan-from-env';
 
 interface ArkOutput {
   type: 'message' | 'reasoning';

@@ -1,6 +1,6 @@
-import { getPricingPlan } from '../../claude-code/model-pricing';
-import { currencySymbol } from './currency';
-import type { PricingPlan, PriceTier } from './model-pricing';
+import { currencySymbol } from '@/ai/types/currency';
+import type { PricingPlan, PriceTier } from '@/ai/types/model-pricing';
+import { getPricingPlan } from '@/claude-code/model-pricing';
 
 /** token 用量基础数据 */
 export interface TokenUsage {

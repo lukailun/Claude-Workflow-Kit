@@ -1,9 +1,9 @@
 import OpenAI from 'openai';
-import bigModelFromEnv from '../env/big-model-from.env';
-import AIProvider from '../ai/types/ai-provider';
-import AIRequestParams from '../ai/types/ai-request-params';
-import AIResponse from '../ai/types/ai-response';
-import bigModelProviderInfo from './big-model-provider-info';
+import AIProvider from '@/ai/types/ai-provider';
+import AIRequestParams from '@/ai/types/ai-request-params';
+import AIResponse from '@/ai/types/ai-response';
+import bigModelProviderInfo from '@/big-model/big-model-provider-info';
+import bigModelFromEnv from '@/env/big-model-from.env';
 
 class BigModelProvider implements AIProvider {
   info = bigModelProviderInfo;

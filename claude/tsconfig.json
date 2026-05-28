@@ -11,7 +11,10 @@
     "allowImportingTsExtensions": true,
     "resolveJsonModule": true,
     "isolatedModules": true,
-    "forceConsistentCasingInFileNames": true
+    "forceConsistentCasingInFileNames": true,
+    "paths": {
+      "@/*": ["./scripts/*"]
+    }
   },
   "include": ["scripts/**/*.ts"],
   "exclude": ["node_modules"]

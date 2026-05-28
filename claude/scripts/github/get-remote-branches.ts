@@ -2,9 +2,9 @@
  * 获取远程分支列表
  */
 
-import githubClient from './github-client';
-import getOwner from './get-owner';
-import getRepo from './get-repo';
+import getOwner from '@/github/get-owner';
+import getRepo from '@/github/get-repo';
+import githubClient from '@/github/github-client';
 
 /**
  * 获取远程所有分支列表

@@ -4,9 +4,9 @@
  * 功能：对比指定项目中两个分支之间的差异
  */
 
-import githubClient from './github-client';
-import getOwner from './get-owner';
-import getRepo from './get-repo';
+import getOwner from '@/github/get-owner';
+import getRepo from '@/github/get-repo';
+import githubClient from '@/github/github-client';
 
 interface Params {
   sourceBranch: string;

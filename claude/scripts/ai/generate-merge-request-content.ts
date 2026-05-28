@@ -4,15 +4,15 @@
  * 功能：使用 AI 自动生成 Pull Request 的标题和描述
  */
 
-import getRepositoryCompare from '../github/get-repository-compare';
-import PullRequestContent from '../github/pull-request-content';
 import {
   getTitlePrompt,
   getDescriptionPrompt,
-} from './prompts/merge-request-prompts';
-import AIProvider from './types/ai-provider';
-import type { TokenUsage } from './types/token-usage';
-import { formatTokenUsage } from './types/token-usage';
+} from '@/ai/prompts/merge-request-prompts';
+import AIProvider from '@/ai/types/ai-provider';
+import type { TokenUsage } from '@/ai/types/token-usage';
+import { formatTokenUsage } from '@/ai/types/token-usage';
+import getRepositoryCompare from '@/github/get-repository-compare';
+import PullRequestContent from '@/github/pull-request-content';
 
 interface GenerateMergeRequestContentParams {
   aiProvider: AIProvider;

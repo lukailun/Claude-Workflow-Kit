@@ -1,4 +1,4 @@
-import AIMessage from './ai-message';
+import AIMessage from '@/ai/types/ai-message';
 
 interface AIRequestParams {
   messages: AIMessage[];
