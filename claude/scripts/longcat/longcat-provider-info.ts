@@ -1,4 +1,4 @@
-import type AIProviderInfo from '@/ai/types/ai-provider-info';
+import type { AIProviderInfo } from '@/ai/types';
 
 const longCatProviderInfo: AIProviderInfo = {
   name: 'LongCat',
@@ -6,4 +6,4 @@ const longCatProviderInfo: AIProviderInfo = {
   model: 'LongCat-2.0-Preview',
 };
 
-export default longCatProviderInfo;
+export { longCatProviderInfo };

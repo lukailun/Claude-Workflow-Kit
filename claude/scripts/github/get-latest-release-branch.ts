@@ -5,7 +5,7 @@
  */
 
 import { ReleaseBranch } from '@/git/branch';
-import getRemoteBranches from '@/github/get-remote-branches';
+import { getRemoteBranches } from '@/github';
 
 /**
  * 获取最新的远程 release 分支
@@ -37,4 +37,4 @@ async function getLatestReleaseBranch(): Promise<ReleaseBranch | null> {
   return branches[0] ?? null;
 }
 
-export default getLatestReleaseBranch;
+export { getLatestReleaseBranch };

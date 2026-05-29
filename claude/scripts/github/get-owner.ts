@@ -19,4 +19,4 @@ async function getOwner(): Promise<string | undefined> {
   return match[1];
 }
 
-export default getOwner;
+export { getOwner };

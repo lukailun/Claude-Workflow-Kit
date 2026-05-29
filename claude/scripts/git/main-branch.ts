@@ -9,4 +9,4 @@ const mainBranch = {
   fullName: 'main',
 } satisfies MainBranch;
 
-export default mainBranch;
+export { mainBranch };

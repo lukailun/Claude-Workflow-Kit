@@ -5,26 +5,26 @@ const mockGetOwner = mock(() =>
   Promise.resolve('myorg')
 );
 mock.module('../get-owner', () => ({
-  default: mockGetOwner,
+  getOwner: mockGetOwner,
 }));
 
 const mockGetRepo = mock(() =>
   Promise.resolve('myrepo')
 );
 mock.module('../get-repo', () => ({
-  default: mockGetRepo,
+  getRepo: mockGetRepo,
 }));
 
 const mockPaginate = mock(() => Promise.resolve<unknown[]>([]));
 const mockListTags = mock(() => ({}));
 mock.module('../github-client', () => ({
-  default: {
+  githubClient: {
     paginate: mockPaginate,
     repos: { listTags: mockListTags },
   },
 }));
 
-const { default: getLatestTag } = await import('../get-latest-tag');
+const { getLatestTag } = await import('../get-latest-tag');
 
 describe('getLatestTag', () => {
   test('返回版本号最大的 tag', async () => {

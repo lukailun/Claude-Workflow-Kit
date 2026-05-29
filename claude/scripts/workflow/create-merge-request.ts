@@ -8,21 +8,22 @@
  *   tsx create-merge-request.ts --auto-merge   # 创建/更新 PR 并开启 CI 通过后自动合并
  */
 
-import generateMergeRequestContent from '@/ai/generate-merge-request-content';
-import getAIProvider, {
+import { generateMergeRequestContent } from '@/ai';
+import {
+  getAIProvider,
   AI,
   AI_PROVIDERS,
   DEFAULT_AI,
 } from '@/ai/get-ai-provider';
 import { formatTokenUsage } from '@/ai/types/token-usage';
-import getCurrentBranch from '@/git/get-current-branch';
-import mainBranch from '@/git/main-branch';
-import createPullRequest from '@/github/create-pull-request';
-import enableAutoMerge from '@/github/enable-auto-merge';
-import getPullRequest from '@/github/get-pull-request';
-import getPullRequestTargetBranch from '@/github/get-pull-request-target-branch';
-import getRepo from '@/github/get-repo';
-import updatePullRequest from '@/github/update-pull-request';
+import { getCurrentBranch } from '@/git';
+import { mainBranch } from '@/git';
+import { createPullRequest } from '@/github';
+import { enableAutoMerge } from '@/github';
+import { getPullRequest } from '@/github';
+import { getPullRequestTargetBranch } from '@/github';
+import { getRepo } from '@/github';
+import { updatePullRequest } from '@/github';
 import { buildBranchReceiptWorkflow } from '@/workflow/build-branch-receipt';
 
 export interface MergeRequestOptions {

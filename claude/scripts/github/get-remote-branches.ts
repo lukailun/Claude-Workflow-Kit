@@ -2,9 +2,9 @@
  * 获取远程分支列表
  */
 
-import getOwner from '@/github/get-owner';
-import getRepo from '@/github/get-repo';
-import githubClient from '@/github/github-client';
+import { getOwner } from '@/github';
+import { getRepo } from '@/github';
+import { githubClient } from '@/github';
 
 /**
  * 获取远程所有分支列表
@@ -23,4 +23,4 @@ async function getRemoteBranches(): Promise<string[]> {
   return branches.map((b) => b.name);
 }
 
-export default getRemoteBranches;
+export { getRemoteBranches };

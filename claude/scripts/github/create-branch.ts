@@ -8,10 +8,10 @@
  */
 
 import { $ } from 'bun';
-import getCurrentBranch from '@/git/get-current-branch';
-import getOwner from '@/github/get-owner';
-import getRepo from '@/github/get-repo';
-import githubClient from '@/github/github-client';
+import { getCurrentBranch } from '@/git';
+import { getOwner } from '@/github';
+import { getRepo } from '@/github';
+import { githubClient } from '@/github';
 
 async function createBranch(sourceBranch: string, newBranch: string) {
   console.log(`📍 基于 ${sourceBranch} 分支`);
@@ -53,4 +53,4 @@ async function createBranch(sourceBranch: string, newBranch: string) {
   console.log(`📌 分支: ${newBranch}`);
 }
 
-export default createBranch;
+export { createBranch };

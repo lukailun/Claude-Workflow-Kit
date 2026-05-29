@@ -4,24 +4,24 @@ const mockGetOwner = mock(() =>
   Promise.resolve('myorg')
 );
 mock.module('../get-owner', () => ({
-  default: mockGetOwner,
+  getOwner: mockGetOwner,
 }));
 
 const mockGetRepo = mock(() =>
   Promise.resolve('myrepo')
 );
 mock.module('../get-repo', () => ({
-  default: mockGetRepo,
+  getRepo: mockGetRepo,
 }));
 
 const mockMerge = mock(() => Promise.resolve({ data: {} }));
 mock.module('../github-client', () => ({
-  default: {
+  githubClient: {
     pulls: { merge: mockMerge },
   },
 }));
 
-const { default: enableAutoMerge } = await import('../enable-auto-merge');
+const { enableAutoMerge } = await import('../enable-auto-merge');
 
 describe('enableAutoMerge', () => {
   test('调用 GitHub API 合并 PR', async () => {

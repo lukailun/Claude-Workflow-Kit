@@ -13,4 +13,4 @@ async function getCurrentBranch(): Promise<string> {
   return branch.trim();
 }
 
-export default getCurrentBranch;
+export { getCurrentBranch };

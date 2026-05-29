@@ -49,7 +49,7 @@ function emptyUsage(): TokenUsageStats {
  * 获取指定分支上各模型的 token 用量统计
  * @param tierThresholds 阶梯阈值（如 [256_000, 1_000_000]），不传则不分阶梯
  */
-export default async function getBranchUsage(
+export async function getBranchUsage(
   branch: string,
   tierThresholds?: number[],
   projectRoot?: string

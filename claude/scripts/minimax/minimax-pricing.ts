@@ -67,4 +67,4 @@ const miniMaxPricing: ModelPricing[] = [
   },
 ];
 
-export default miniMaxPricing;
+export { miniMaxPricing };

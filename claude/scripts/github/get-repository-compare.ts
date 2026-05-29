@@ -4,9 +4,9 @@
  * 功能：对比指定项目中两个分支之间的差异
  */
 
-import getOwner from '@/github/get-owner';
-import getRepo from '@/github/get-repo';
-import githubClient from '@/github/github-client';
+import { getOwner } from '@/github';
+import { getRepo } from '@/github';
+import { githubClient } from '@/github';
 
 interface Params {
   sourceBranch: string;
@@ -34,4 +34,4 @@ async function getRepositoryCompare(params: Params) {
   return compare;
 }
 
-export default getRepositoryCompare;
+export { getRepositoryCompare };

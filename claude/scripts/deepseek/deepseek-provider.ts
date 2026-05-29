@@ -1,9 +1,9 @@
 import OpenAI from 'openai';
-import AIProvider from '@/ai/types/ai-provider';
-import AIRequestParams from '@/ai/types/ai-request-params';
-import AIResponse from '@/ai/types/ai-response';
-import deepSeekProviderInfo from '@/deepseek/deepseek-provider-info';
-import deepSeekFromEnv from '@/env/deepseek-from-env';
+import type { AIProvider } from '@/ai/types';
+import type { AIRequestParams } from '@/ai/types';
+import type { AIResponse } from '@/ai/types';
+import { deepSeekProviderInfo } from '@/deepseek/deepseek-provider-info';
+import { deepSeekFromEnv } from '@/env';
 
 class DeepSeekProvider implements AIProvider {
   info = deepSeekProviderInfo;
@@ -35,4 +35,4 @@ class DeepSeekProvider implements AIProvider {
   }
 }
 
-export default new DeepSeekProvider();
+export const deepSeekProvider = new DeepSeekProvider();

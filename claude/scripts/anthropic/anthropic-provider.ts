@@ -1,9 +1,9 @@
 import Anthropic from '@anthropic-ai/sdk';
-import AIProvider from '@/ai/types/ai-provider';
-import AIRequestParams from '@/ai/types/ai-request-params';
-import AIResponse from '@/ai/types/ai-response';
-import anthropicProviderInfo from '@/anthropic/anthropic-provider-info';
-import anthropicFromEnv from '@/env/anthropic-from-env';
+import type { AIProvider } from '@/ai/types';
+import type { AIRequestParams } from '@/ai/types';
+import type { AIResponse } from '@/ai/types';
+import { anthropicProviderInfo } from '@/anthropic/anthropic-provider-info';
+import { anthropicFromEnv } from '@/env';
 
 class AnthropicProvider implements AIProvider {
   info = anthropicProviderInfo;
@@ -43,4 +43,4 @@ class AnthropicProvider implements AIProvider {
   }
 }
 
-export default new AnthropicProvider();
+export const anthropicProvider = new AnthropicProvider();

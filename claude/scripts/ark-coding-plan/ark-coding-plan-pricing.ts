@@ -93,4 +93,4 @@ const arkCodingPlanPricing: ModelPricing[] = [
   },
 ];
 
-export default arkCodingPlanPricing;
+export { arkCodingPlanPricing };

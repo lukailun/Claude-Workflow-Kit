@@ -2,15 +2,15 @@ import { describe, test, expect, mock } from 'bun:test';
 
 const mockGetCurrentBranch = mock(() => Promise.resolve(''));
 mock.module('../../git/get-current-branch', () => ({
-  default: mockGetCurrentBranch,
+  getCurrentBranch: mockGetCurrentBranch,
 }));
 
 const mockGetRemoteBranches = mock(() => Promise.resolve<string[]>([]));
 mock.module('../get-remote-branches', () => ({
-  default: mockGetRemoteBranches,
+  getRemoteBranches: mockGetRemoteBranches,
 }));
 
-const { default: getPullRequestTargetBranch } = await import(
+const { getPullRequestTargetBranch } = await import(
   '../get-pull-request-target-branch'
 );
 

@@ -8,11 +8,11 @@ import {
   getTitlePrompt,
   getDescriptionPrompt,
 } from '@/ai/prompts/merge-request-prompts';
-import AIProvider from '@/ai/types/ai-provider';
+import type { AIProvider } from '@/ai/types';
 import type { TokenUsage } from '@/ai/types/token-usage';
 import { formatTokenUsage } from '@/ai/types/token-usage';
-import getRepositoryCompare from '@/github/get-repository-compare';
-import PullRequestContent from '@/github/pull-request-content';
+import { getRepositoryCompare } from '@/github';
+import { PullRequestContent } from '@/github';
 
 interface GenerateMergeRequestContentParams {
   aiProvider: AIProvider;
@@ -125,4 +125,4 @@ async function generateMergeRequestContent(
   } satisfies PullRequestContent;
 }
 
-export default generateMergeRequestContent;
+export { generateMergeRequestContent };

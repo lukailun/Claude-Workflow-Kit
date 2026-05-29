@@ -1,5 +1,5 @@
 import { env } from 'process';
-import envPath from '@/env/env-path';
+import { envPath } from '@/env';
 
 interface ArkCodingPlanFromEnv {
   baseUrl: string;
@@ -26,4 +26,4 @@ const arkCodingPlanFromEnv = {
   apiKey,
 } satisfies ArkCodingPlanFromEnv;
 
-export default arkCodingPlanFromEnv;
+export { arkCodingPlanFromEnv };

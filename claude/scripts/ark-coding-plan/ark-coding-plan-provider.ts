@@ -1,8 +1,8 @@
-import AIProvider from '@/ai/types/ai-provider';
-import AIRequestParams from '@/ai/types/ai-request-params';
-import AIResponse from '@/ai/types/ai-response';
-import arkCodingPlanProviderInfo from '@/ark-coding-plan/ark-coding-plan-provider-info';
-import arkCodingPlanFromEnv from '@/env/ark-coding-plan-from-env';
+import type { AIProvider } from '@/ai/types';
+import type { AIRequestParams } from '@/ai/types';
+import type { AIResponse } from '@/ai/types';
+import { arkCodingPlanProviderInfo } from '@/ark-coding-plan/ark-coding-plan-provider-info';
+import { arkCodingPlanFromEnv } from '@/env';
 
 interface ArkOutput {
   type: 'message' | 'reasoning';
@@ -98,4 +98,4 @@ class ArkCodingPlanProvider implements AIProvider {
   }
 }
 
-export default new ArkCodingPlanProvider();
+export const arkCodingPlanProvider = new ArkCodingPlanProvider();

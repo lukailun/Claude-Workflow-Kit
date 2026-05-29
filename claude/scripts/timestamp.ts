@@ -12,4 +12,4 @@ const minutes = String(now.getMinutes()).padStart(2, '0');
 const seconds = String(now.getSeconds()).padStart(2, '0');
 const timestamp = `${year}-${month}-${day}-${hours}-${minutes}-${seconds}`;
 
-export default timestamp;
+export { timestamp };

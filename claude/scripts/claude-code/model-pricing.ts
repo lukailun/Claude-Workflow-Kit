@@ -2,21 +2,21 @@
  * Claude Code 模型价格汇总（从各 provider price 聚合）
  */
 
-import type Currency from '@/ai/types/currency';
+import type { Currency } from '@/ai/types';
 import type {
   PricingPlan,
   PriceTier,
   ModelPricing,
 } from '@/ai/types/model-pricing';
 import type { ModelTokenUsageStats } from '@/ai/types/token-usage';
-import anthropicPricing from '@/anthropic/anthropic-pricing';
-import arkCodingPlanPricing from '@/ark-coding-plan/ark-coding-plan-pricing';
-import bigModelPricing from '@/bigmodel/bigmodel-pricing';
-import deepSeekPricing from '@/deepseek/deepseek-pricing';
-import kimiPricing from '@/kimi/model-pricing';
-import longCatPricing from '@/longcat/longcat-pricing';
-import miniMaxPricing from '@/minimax/minimax-pricing';
-import xiaomiMimoPricing from '@/xiaomi-mimo/xiaomi-mimo-pricing';
+import { anthropicPricing } from '@/anthropic';
+import { arkCodingPlanPricing } from '@/ark-coding-plan';
+import { bigModelPricing } from '@/bigmodel';
+import { deepSeekPricing } from '@/deepseek';
+import { kimiPricing } from '@/kimi';
+import { longCatPricing } from '@/longcat';
+import { miniMaxPricing } from '@/minimax';
+import { xiaomiMimoPricing } from '@/xiaomi-mimo';
 
 const allPricings: ModelPricing[][] = [
   anthropicPricing,

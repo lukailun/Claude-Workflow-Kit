@@ -1,4 +1,4 @@
-import type AIProviderInfo from '@/ai/types/ai-provider-info';
+import type { AIProviderInfo } from '@/ai/types';
 
 const deepSeekProviderInfo: AIProviderInfo = {
   name: 'DeepSeek',
@@ -6,4 +6,4 @@ const deepSeekProviderInfo: AIProviderInfo = {
   model: 'deepseek-v4-flash',
 };
 
-export default deepSeekProviderInfo;
+export { deepSeekProviderInfo };

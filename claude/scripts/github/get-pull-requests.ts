@@ -4,9 +4,9 @@
  * 功能：获取所有打开的 Pull Request
  */
 
-import getOwner from '@/github/get-owner';
-import getRepo from '@/github/get-repo';
-import githubClient from '@/github/github-client';
+import { getOwner } from '@/github';
+import { getRepo } from '@/github';
+import { githubClient } from '@/github';
 
 /**
  * 获取所有打开的 Pull Request
@@ -25,4 +25,4 @@ async function getPullRequests() {
   return pullRequests;
 }
 
-export default getPullRequests;
+export { getPullRequests };

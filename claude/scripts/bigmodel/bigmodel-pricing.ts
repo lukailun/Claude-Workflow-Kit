@@ -72,4 +72,4 @@ const bigModelPricing: ModelPricing[] = [
   },
 ];
 
-export default bigModelPricing;
+export { bigModelPricing };

@@ -2,9 +2,9 @@
  * 获取 GitHub Pull Request 详情
  */
 
-import getOwner from '@/github/get-owner';
-import getRepo from '@/github/get-repo';
-import githubClient from '@/github/github-client';
+import { getOwner } from '@/github';
+import { getRepo } from '@/github';
+import { githubClient } from '@/github';
 
 interface Params {
   pullNumber: number;
@@ -30,4 +30,4 @@ async function getPullRequestDetails(params: Params) {
   return pullRequest;
 }
 
-export default getPullRequestDetails;
+export { getPullRequestDetails };

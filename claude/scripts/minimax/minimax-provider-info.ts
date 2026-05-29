@@ -1,4 +1,4 @@
-import type AIProviderInfo from '@/ai/types/ai-provider-info';
+import type { AIProviderInfo } from '@/ai/types';
 
 const miniMaxProviderInfo: AIProviderInfo = {
   name: 'MiniMax',
@@ -6,4 +6,4 @@ const miniMaxProviderInfo: AIProviderInfo = {
   model: 'MiniMax-M2.7',
 };
 
-export default miniMaxProviderInfo;
+export { miniMaxProviderInfo };

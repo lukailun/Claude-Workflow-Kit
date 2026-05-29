@@ -1,5 +1,5 @@
 import { env } from 'process';
-import envPath from '@/env/env-path';
+import { envPath } from '@/env';
 
 interface DeepSeekFromEnv {
   baseUrl: string;
@@ -26,4 +26,4 @@ const deepSeekFromEnv = {
   apiKey,
 } satisfies DeepSeekFromEnv;
 
-export default deepSeekFromEnv;
+export { deepSeekFromEnv };

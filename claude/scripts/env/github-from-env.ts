@@ -1,5 +1,5 @@
 import { env } from 'process';
-import envPath from '@/env/env-path';
+import { envPath } from '@/env';
 
 interface GithubFromEnv {
   token: string;
@@ -16,4 +16,4 @@ const githubFromEnv = {
   token,
 } satisfies GithubFromEnv;
 
-export default githubFromEnv;
+export { githubFromEnv };

@@ -1,5 +1,5 @@
 import { env } from 'process';
-import envPath from '@/env/env-path';
+import { envPath } from '@/env';
 
 interface XiaomiMimoFromEnv {
   baseUrl: string;
@@ -26,4 +26,4 @@ const xiaomiMimoFromEnv = {
   apiKey,
 } satisfies XiaomiMimoFromEnv;
 
-export default xiaomiMimoFromEnv;
+export { xiaomiMimoFromEnv };

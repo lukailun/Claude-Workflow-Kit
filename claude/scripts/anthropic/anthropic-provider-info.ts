@@ -1,4 +1,4 @@
-import type AIProviderInfo from '@/ai/types/ai-provider-info';
+import type { AIProviderInfo } from '@/ai/types';
 
 const anthropicProviderInfo: AIProviderInfo = {
   name: 'Anthropic',
@@ -6,4 +6,4 @@ const anthropicProviderInfo: AIProviderInfo = {
   model: 'claude-sonnet-4-6',
 };
 
-export default anthropicProviderInfo;
+export { anthropicProviderInfo };

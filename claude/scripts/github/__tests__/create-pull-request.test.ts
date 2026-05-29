@@ -4,24 +4,24 @@ const mockGetOwner = mock(() =>
   Promise.resolve('myorg')
 );
 mock.module('../get-owner', () => ({
-  default: mockGetOwner,
+  getOwner: mockGetOwner,
 }));
 
 const mockGetRepo = mock(() =>
   Promise.resolve('myrepo')
 );
 mock.module('../get-repo', () => ({
-  default: mockGetRepo,
+  getRepo: mockGetRepo,
 }));
 
 const mockCreate = mock(() => Promise.resolve({ data: { html_url: 'https://github.com/myorg/myrepo/pull/1', number: 1 } }));
 mock.module('../github-client', () => ({
-  default: {
+  githubClient: {
     pulls: { create: mockCreate },
   },
 }));
 
-const { default: createPullRequest } = await import('../create-pull-request');
+const { createPullRequest } = await import('../create-pull-request');
 
 describe('createPullRequest', () => {
   test('调用 GitHub API 创建 PR', async () => {

@@ -1,4 +1,4 @@
-import AIProvider from '@/ai/types/ai-provider';
+import type { AIProvider } from '@/ai/types';
 
 export const AI_PROVIDERS = [
   'anthropic',
@@ -16,48 +16,34 @@ export const DEFAULT_AI: AI = 'longcat';
 async function getAIProvider(ai?: AI): Promise<AIProvider> {
   switch (ai ?? DEFAULT_AI) {
     case 'anthropic': {
-      const { default: provider } = await import(
-        '../anthropic/anthropic-provider'
-      );
-      return provider;
+      const { anthropicProvider } = await import('@/anthropic');
+      return anthropicProvider;
     }
     case 'bigmodel': {
-      const { default: provider } = await import(
-        '../bigmodel/bigmodel-provider'
-      );
-      return provider;
+      const { bigModelProvider } = await import('@/bigmodel');
+      return bigModelProvider;
     }
     case 'minimax': {
-      const { default: provider } = await import(
-        '../minimax/mini-max-provider'
-      );
-      return provider;
+      const { miniMaxProvider } = await import('@/minimax');
+      return miniMaxProvider;
     }
     case 'ark': {
-      const { default: provider } = await import(
-        '../ark-coding-plan/ark-coding-plan-provider'
-      );
-      return provider;
+      const { arkCodingPlanProvider } = await import('@/ark-coding-plan');
+      return arkCodingPlanProvider;
     }
     case 'mimo': {
-      const { default: provider } = await import(
-        '../xiaomi-mimo/xiaomi-mimo-provider'
-      );
-      return provider;
+      const { xiaomiMimoProvider } = await import('@/xiaomi-mimo');
+      return xiaomiMimoProvider;
     }
     case 'deepseek': {
-      const { default: provider } = await import(
-        '../deepseek/deepseek-provider'
-      );
-      return provider;
+      const { deepSeekProvider } = await import('@/deepseek');
+      return deepSeekProvider;
     }
     case 'longcat': {
-      const { default: provider } = await import(
-        '../longcat/longcat-provider'
-      );
-      return provider;
+      const { longCatProvider } = await import('@/longcat');
+      return longCatProvider;
     }
   }
 }
 
-export default getAIProvider;
+export { getAIProvider };

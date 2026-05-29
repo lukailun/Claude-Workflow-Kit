@@ -1,10 +1,6 @@
-import AIProviderInfo from '@/ai/types/ai-provider-info';
-import AIRequestParams from '@/ai/types/ai-request-params';
-import AIResponse from '@/ai/types/ai-response';
+import type { AIProviderInfo, AIRequestParams, AIResponse } from '@/ai/types';
 
-interface AIProvider {
+export interface AIProvider {
   info: AIProviderInfo;
   generate(params: AIRequestParams): Promise<AIResponse>;
 }
-
-export default AIProvider;

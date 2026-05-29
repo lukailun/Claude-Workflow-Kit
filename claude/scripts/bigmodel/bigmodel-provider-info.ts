@@ -1,4 +1,4 @@
-import type AIProviderInfo from '@/ai/types/ai-provider-info';
+import type { AIProviderInfo } from '@/ai/types';
 
 const bigModelProviderInfo: AIProviderInfo = {
   name: '智谱 BigModel',
@@ -6,4 +6,4 @@ const bigModelProviderInfo: AIProviderInfo = {
   model: 'glm-5.1',
 };
 
-export default bigModelProviderInfo;
+export { bigModelProviderInfo };

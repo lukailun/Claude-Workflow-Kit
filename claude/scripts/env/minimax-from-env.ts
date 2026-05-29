@@ -1,5 +1,5 @@
 import { env } from 'process';
-import envPath from '@/env/env-path';
+import { envPath } from '@/env';
 
 interface MiniMaxFromEnv {
   baseUrl: string;
@@ -26,4 +26,4 @@ const miniMaxFromEnv = {
   apiKey,
 } satisfies MiniMaxFromEnv;
 
-export default miniMaxFromEnv;
+export { miniMaxFromEnv };

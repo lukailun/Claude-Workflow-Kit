@@ -1,5 +1,5 @@
 import { env } from 'process';
-import envPath from '@/env/env-path';
+import { envPath } from '@/env';
 
 interface LongCatFromEnv {
   baseUrl: string;
@@ -26,4 +26,4 @@ const longCatFromEnv = {
   apiKey,
 } satisfies LongCatFromEnv;
 
-export default longCatFromEnv;
+export { longCatFromEnv };

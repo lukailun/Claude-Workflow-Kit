@@ -1,8 +1,6 @@
-import type { TokenUsage } from '@/ai/types/token-usage';
+import type { TokenUsage } from '@/ai/types';
 
-interface AIResponse {
+export interface AIResponse {
   text: string;
   tokenUsage?: TokenUsage;
 }
-
-export default AIResponse;

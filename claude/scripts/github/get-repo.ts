@@ -19,4 +19,4 @@ async function getRepo(): Promise<string | undefined> {
   return match[1];
 }
 
-export default getRepo;
+export { getRepo };

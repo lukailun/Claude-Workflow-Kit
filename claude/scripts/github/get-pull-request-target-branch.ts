@@ -6,10 +6,10 @@
  * - 如果当前不是 release/hotfix 分支，目标分支为最新的 release 分支
  */
 
+import { getCurrentBranch } from '@/git';
+import { mainBranch } from '@/git';
 import { Branch, ReleaseBranch } from '@/git/branch';
-import getCurrentBranch from '@/git/get-current-branch';
-import mainBranch from '@/git/main-branch';
-import getRemoteBranches from '@/github/get-remote-branches';
+import { getRemoteBranches } from '@/github';
 
 /**
  * 获取 PR 目标分支
@@ -63,4 +63,4 @@ async function getPullRequestTargetBranch(): Promise<Branch> {
   return targetBranch;
 }
 
-export default getPullRequestTargetBranch;
+export { getPullRequestTargetBranch };

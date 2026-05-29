@@ -1,4 +1,4 @@
-import type AIProviderInfo from '@/ai/types/ai-provider-info';
+import type { AIProviderInfo } from '@/ai/types';
 
 const xiaomiMimoProviderInfo: AIProviderInfo = {
   name: 'Xiaomi MiMo',
@@ -6,4 +6,4 @@ const xiaomiMimoProviderInfo: AIProviderInfo = {
   model: 'mimo-v2.5-pro',
 };
 
-export default xiaomiMimoProviderInfo;
+export { xiaomiMimoProviderInfo };

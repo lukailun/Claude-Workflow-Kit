@@ -12,11 +12,11 @@
  */
 
 import { $ } from 'bun';
-import getCurrentBranch from '@/git/get-current-branch';
-import mainBranch from '@/git/main-branch';
-import getOwner from '@/github/get-owner';
-import getRepo from '@/github/get-repo';
-import githubClient from '@/github/github-client';
+import { getCurrentBranch } from '@/git';
+import { mainBranch } from '@/git';
+import { getOwner } from '@/github';
+import { getRepo } from '@/github';
+import { githubClient } from '@/github';
 
 async function gitMerge(source: string) {
   const result = await $`git merge ${source} --no-edit`.nothrow();

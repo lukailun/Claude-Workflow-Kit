@@ -3,8 +3,8 @@
  *
  */
 
-import mainBranch from '@/git/main-branch';
-import createBranch from '@/github/create-branch';
+import { mainBranch } from '@/git';
+import { createBranch } from '@/github';
 
 export async function createHotfixBranch(segment: string) {
   const branchName = `hotfix/${segment}`;

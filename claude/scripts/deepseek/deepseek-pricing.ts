@@ -35,4 +35,4 @@ const deepSeekPricing: ModelPricing[] = [
   },
 ];
 
-export default deepSeekPricing;
+export { deepSeekPricing };

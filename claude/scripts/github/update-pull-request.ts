@@ -2,10 +2,10 @@
  * 更新 GitHub Pull Request
  */
 
-import getOwner from '@/github/get-owner';
-import getRepo from '@/github/get-repo';
-import githubClient from '@/github/github-client';
-import PullRequestContent from '@/github/pull-request-content';
+import { getOwner } from '@/github';
+import { getRepo } from '@/github';
+import { githubClient } from '@/github';
+import { PullRequestContent } from '@/github';
 
 interface Params {
   pullNumber: number;
@@ -37,4 +37,4 @@ async function updatePullRequest(params: Params) {
   return pullRequest;
 }
 
-export default updatePullRequest;
+export { updatePullRequest };

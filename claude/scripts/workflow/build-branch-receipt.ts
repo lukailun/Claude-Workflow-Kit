@@ -7,10 +7,10 @@
  */
 
 import { dirname, join } from 'path';
-import type Currency from '@/ai/types/currency';
-import { currencySymbol } from '@/ai/types/currency';
-import getBranchUsage from '@/claude-code/get-branch-usage';
-import getVersion from '@/claude-code/get-version';
+import type { Currency } from '@/ai/types';
+import { currencySymbol } from '@/ai/types';
+import { getBranchUsage } from '@/claude-code';
+import { getVersion } from '@/claude-code';
 import {
   getModelPricing,
   getPricingPlan,
@@ -18,8 +18,8 @@ import {
   getAllTierThresholds,
   getCurrency,
 } from '@/claude-code/model-pricing';
-import getCurrentBranch from '@/git/get-current-branch';
-import getUserName from '@/git/get-user-name';
+import { getCurrentBranch } from '@/git';
+import { getUserName } from '@/git';
 
 const projectRoot = join(dirname(dirname(dirname(import.meta.dir))));
 

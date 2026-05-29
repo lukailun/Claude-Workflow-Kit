@@ -90,4 +90,4 @@ const xiaomiMimoPricing: ModelPricing[] = [
   },
 ];
 
-export default xiaomiMimoPricing;
+export { xiaomiMimoPricing };

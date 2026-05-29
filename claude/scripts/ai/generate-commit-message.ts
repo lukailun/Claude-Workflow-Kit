@@ -3,7 +3,7 @@
  */
 
 import { getCommitMessagePrompt } from '@/ai/prompts/commit-message-prompts';
-import AIProvider from '@/ai/types/ai-provider';
+import type { AIProvider } from '@/ai/types';
 import type { TokenUsage } from '@/ai/types/token-usage';
 
 interface GenerateCommitMessageParams {
@@ -38,4 +38,4 @@ async function generateCommitMessage(
   };
 }
 
-export default generateCommitMessage;
+export { generateCommitMessage };

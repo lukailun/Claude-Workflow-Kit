@@ -4,10 +4,10 @@
  * 功能：通过 GitHub API 创建 Pull Request
  */
 
-import getOwner from '@/github/get-owner';
-import getRepo from '@/github/get-repo';
-import githubClient from '@/github/github-client';
-import PullRequestContent from '@/github/pull-request-content';
+import { getOwner } from '@/github';
+import { getRepo } from '@/github';
+import { githubClient } from '@/github';
+import { PullRequestContent } from '@/github';
 
 interface Params {
   sourceBranch: string;
@@ -42,4 +42,4 @@ async function createPullRequest(params: Params) {
   return pullRequest;
 }
 
-export default createPullRequest;
+export { createPullRequest };

@@ -19,4 +19,4 @@ const longCatPricing: ModelPricing[] = [
   },
 ];
 
-export default longCatPricing;
+export { longCatPricing };

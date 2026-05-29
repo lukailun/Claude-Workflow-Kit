@@ -3,10 +3,10 @@ import { describe, test, expect, mock } from 'bun:test';
 // Mock getRemoteBranches
 const mockGetRemoteBranches = mock(() => Promise.resolve<string[]>([]));
 mock.module('../get-remote-branches', () => ({
-  default: mockGetRemoteBranches,
+  getRemoteBranches: mockGetRemoteBranches,
 }));
 
-const { default: getLatestReleaseBranch } = await import(
+const { getLatestReleaseBranch } = await import(
   '../get-latest-release-branch'
 );
 

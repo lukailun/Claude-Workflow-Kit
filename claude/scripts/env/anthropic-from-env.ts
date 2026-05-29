@@ -1,5 +1,5 @@
 import { env } from 'process';
-import envPath from '@/env/env-path';
+import { envPath } from '@/env';
 
 interface AnthropicFromEnv {
   baseUrl: string;
@@ -33,4 +33,4 @@ const anthropicFromEnv = {
   authToken,
 } satisfies AnthropicFromEnv;
 
-export default anthropicFromEnv;
+export { anthropicFromEnv };

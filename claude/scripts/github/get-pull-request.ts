@@ -2,9 +2,9 @@
  * 查找已有的 Pull Request
  */
 
-import getOwner from '@/github/get-owner';
-import getRepo from '@/github/get-repo';
-import githubClient from '@/github/github-client';
+import { getOwner } from '@/github';
+import { getRepo } from '@/github';
+import { githubClient } from '@/github';
 
 interface Params {
   sourceBranch: string;
@@ -34,4 +34,4 @@ async function getPullRequest(params: Params) {
   return pullRequests[0];
 }
 
-export default getPullRequest;
+export { getPullRequest };

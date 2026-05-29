@@ -1,4 +1,4 @@
-import type AIProviderInfo from '@/ai/types/ai-provider-info';
+import type { AIProviderInfo } from '@/ai/types';
 
 const arkCodingPlanProviderInfo: AIProviderInfo = {
   name: '方舟 Coding Plan',
@@ -6,4 +6,4 @@ const arkCodingPlanProviderInfo: AIProviderInfo = {
   model: 'doubao-seed-2-0-mini-260428',
 };
 
-export default arkCodingPlanProviderInfo;
+export { arkCodingPlanProviderInfo };

@@ -163,4 +163,4 @@ const anthropicPricing: ModelPricing[] = [
   },
 ];
 
-export default anthropicPricing;
+export { anthropicPricing };

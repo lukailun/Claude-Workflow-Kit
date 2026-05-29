@@ -51,4 +51,4 @@ const kimiPricing: ModelPricing[] = [
   },
 ];
 
-export default kimiPricing;
+export { kimiPricing };

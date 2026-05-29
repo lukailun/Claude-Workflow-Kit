@@ -4,9 +4,9 @@
  * 功能：PR 在 CI 通过后自动合并
  */
 
-import getOwner from '@/github/get-owner';
-import getRepo from '@/github/get-repo';
-import githubClient from '@/github/github-client';
+import { getOwner } from '@/github';
+import { getRepo } from '@/github';
+import { githubClient } from '@/github';
 
 interface Params {
   pullNumber: number;
@@ -32,4 +32,4 @@ async function enableAutoMerge(params: Params): Promise<void> {
   });
 }
 
-export default enableAutoMerge;
+export { enableAutoMerge };

@@ -1,9 +1,9 @@
 import OpenAI from 'openai';
-import AIProvider from '@/ai/types/ai-provider';
-import AIRequestParams from '@/ai/types/ai-request-params';
-import AIResponse from '@/ai/types/ai-response';
-import bigModelProviderInfo from '@/bigmodel/bigmodel-provider-info';
-import bigModelFromEnv from '@/env/bigmodel-from.env';
+import type { AIProvider } from '@/ai/types';
+import type { AIRequestParams } from '@/ai/types';
+import type { AIResponse } from '@/ai/types';
+import { bigModelProviderInfo } from '@/bigmodel/bigmodel-provider-info';
+import { bigModelFromEnv } from '@/env';
 
 class BigModelProvider implements AIProvider {
   info = bigModelProviderInfo;
@@ -35,4 +35,4 @@ class BigModelProvider implements AIProvider {
   }
 }
 
-export default new BigModelProvider();
+export const bigModelProvider = new BigModelProvider();

@@ -8,14 +8,15 @@
 
 import { createInterface } from 'readline';
 import { $ } from 'bun';
-import generateCommitMessage from '@/ai/generate-commit-message';
-import getAIProvider, {
+import { generateCommitMessage } from '@/ai';
+import {
+  getAIProvider,
   AI,
   AI_PROVIDERS,
   DEFAULT_AI,
 } from '@/ai/get-ai-provider';
 import { formatTokenUsage } from '@/ai/types/token-usage';
-import getCurrentBranch from '@/git/get-current-branch';
+import { getCurrentBranch } from '@/git';
 
 export interface CommitOptions {
   ai?: AI;

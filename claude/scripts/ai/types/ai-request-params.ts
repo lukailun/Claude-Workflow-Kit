@@ -1,8 +1,6 @@
-import AIMessage from '@/ai/types/ai-message';
+import type { AIMessage } from '@/ai/types';
 
-interface AIRequestParams {
+export interface AIRequestParams {
   messages: AIMessage[];
   maxTokens: number;
 }
-
-export default AIRequestParams;
