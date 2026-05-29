@@ -11,7 +11,7 @@ import type {
 import type { ModelTokenUsageStats } from '@/ai/types/token-usage';
 import anthropicPricing from '@/anthropic/anthropic-pricing';
 import arkCodingPlanPricing from '@/ark-coding-plan/ark-coding-plan-pricing';
-import bigModelPricing from '@/big-model/big-model-pricing';
+import bigModelPricing from '@/bigmodel/bigmodel-pricing';
 import deepSeekPricing from '@/deepseek/deepseek-pricing';
 import kimiPricing from '@/kimi/model-pricing';
 import longCatPricing from '@/longcat/longcat-pricing';

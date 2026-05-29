@@ -23,7 +23,7 @@ async function getAIProvider(ai?: AI): Promise<AIProvider> {
     }
     case 'bigmodel': {
       const { default: provider } = await import(
-        '../big-model/big-model-provider'
+        '../bigmodel/bigmodel-provider'
       );
       return provider;
     }
