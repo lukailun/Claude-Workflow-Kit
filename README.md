@@ -46,7 +46,7 @@ bun run .claude/scripts/workflow/create-merge-request.ts
 │   │   ├── anthropic/         # Anthropic API
 │   │   ├── big-model/         # BigModel API
 │   │   ├── claude-code/       # Claude Code 功能
-│   │   ├── deep-seek/         # DeepSeek API
+│   │   ├── deepseek/         # DeepSeek API
 │   │   ├── env/               # 环境变量
 │   │   ├── git/               # Git 功能
 │   │   ├── gitlab/            # GitLab API

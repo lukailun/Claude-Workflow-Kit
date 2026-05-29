@@ -2,8 +2,8 @@ import OpenAI from 'openai';
 import AIProvider from '@/ai/types/ai-provider';
 import AIRequestParams from '@/ai/types/ai-request-params';
 import AIResponse from '@/ai/types/ai-response';
-import miniMaxFromEnv from '@/env/mini-max-from-env';
-import miniMaxProviderInfo from '@/mini-max/mini-max-provider-info';
+import miniMaxFromEnv from '@/env/minimax-from-env';
+import miniMaxProviderInfo from '@/minimax/minimax-provider-info';
 
 class MiniMaxProvider implements AIProvider {
   info = miniMaxProviderInfo;

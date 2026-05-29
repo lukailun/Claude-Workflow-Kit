@@ -12,10 +12,10 @@ import type { ModelTokenUsageStats } from '@/ai/types/token-usage';
 import anthropicPricing from '@/anthropic/anthropic-pricing';
 import arkCodingPlanPricing from '@/ark-coding-plan/ark-coding-plan-pricing';
 import bigModelPricing from '@/big-model/big-model-pricing';
-import deepSeekPricing from '@/deep-seek/deep-seek-pricing';
+import deepSeekPricing from '@/deepseek/deepseek-pricing';
 import kimiPricing from '@/kimi/model-pricing';
-import longCatPricing from '@/long-cat/long-cat-pricing';
-import miniMaxPricing from '@/mini-max/mini-max-pricing';
+import longCatPricing from '@/longcat/longcat-pricing';
+import miniMaxPricing from '@/minimax/minimax-pricing';
 import xiaomiMimoPricing from '@/xiaomi-mimo/xiaomi-mimo-pricing';
 
 const allPricings: ModelPricing[][] = [

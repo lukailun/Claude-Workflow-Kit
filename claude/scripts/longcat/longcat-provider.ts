@@ -2,16 +2,16 @@ import OpenAI from 'openai';
 import AIProvider from '@/ai/types/ai-provider';
 import AIRequestParams from '@/ai/types/ai-request-params';
 import AIResponse from '@/ai/types/ai-response';
-import deepSeekProviderInfo from '@/deep-seek/deep-seek-provider-info';
-import deepSeekFromEnv from '@/env/deep-seek-from-env';
+import longCatFromEnv from '@/env/longcat-from-env';
+import longCatProviderInfo from '@/longcat/longcat-provider-info';
 
-class DeepSeekProvider implements AIProvider {
-  info = deepSeekProviderInfo;
+class LongCatProvider implements AIProvider {
+  info = longCatProviderInfo;
 
   async generate(params: AIRequestParams): Promise<AIResponse> {
     const client = new OpenAI({
-      baseURL: deepSeekFromEnv.baseUrl,
-      apiKey: deepSeekFromEnv.apiKey,
+      baseURL: `${longCatFromEnv.baseUrl}/openai`,
+      apiKey: longCatFromEnv.apiKey,
     });
     const response = await client.chat.completions.create({
       model: this.info.model,
@@ -35,4 +35,4 @@ class DeepSeekProvider implements AIProvider {
   }
 }
 
-export default new DeepSeekProvider();
+export default new LongCatProvider();

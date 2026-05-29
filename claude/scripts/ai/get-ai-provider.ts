@@ -29,7 +29,7 @@ async function getAIProvider(ai?: AI): Promise<AIProvider> {
     }
     case 'minimax': {
       const { default: provider } = await import(
-        '../mini-max/mini-max-provider'
+        '../minimax/mini-max-provider'
       );
       return provider;
     }
@@ -47,13 +47,13 @@ async function getAIProvider(ai?: AI): Promise<AIProvider> {
     }
     case 'deepseek': {
       const { default: provider } = await import(
-        '../deep-seek/deep-seek-provider'
+        '../deepseek/deepseek-provider'
       );
       return provider;
     }
     case 'longcat': {
       const { default: provider } = await import(
-        '../long-cat/long-cat-provider'
+        '../longcat/longcat-provider'
       );
       return provider;
     }
