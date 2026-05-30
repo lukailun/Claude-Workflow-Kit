@@ -1,9 +1,0 @@
-export { envPath } from '@/env/env-path';
-export { bigModelFromEnv } from '@/env/bigmodel-from.env';
-export { anthropicFromEnv } from '@/env/anthropic-from-env';
-export { longCatFromEnv } from '@/env/longcat-from-env';
-export { xiaomiMimoFromEnv } from '@/env/xiaomi-mimo-from-env';
-export { miniMaxFromEnv } from '@/env/minimax-from-env';
-export { arkCodingPlanFromEnv } from '@/env/ark-coding-plan-from-env';
-export { githubFromEnv } from '@/env/github-from-env';
-export { deepSeekFromEnv } from '@/env/deepseek-from-env';

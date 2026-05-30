@@ -9,8 +9,8 @@
 import { dirname, join } from 'path';
 import type { Currency } from '@/ai/types';
 import { currencySymbol } from '@/ai/types';
-import { getBranchUsage } from '@/claude-code';
-import { getVersion } from '@/claude-code';
+import { getBranchUsage } from '@/claude-code/get-branch-usage';
+import { getVersion } from '@/claude-code/get-version';
 import {
   getModelPricing,
   getPricingPlan,
@@ -18,8 +18,8 @@ import {
   getAllTierThresholds,
   getCurrency,
 } from '@/claude-code/model-pricing';
-import { getCurrentBranch } from '@/git';
-import { getUserName } from '@/git';
+import { getCurrentBranch } from '@/git/get-current-branch';
+import { getUserName } from '@/git/get-user-name';
 
 const projectRoot = join(dirname(dirname(dirname(import.meta.dir))));
 
@@ -53,7 +53,7 @@ function kv(label: string, value: string, indent = 0): string {
 export async function buildBranchReceiptWorkflow(
   branch?: string
 ): Promise<string | undefined> {
-  branch = branch || (await getCurrentBranch());
+  branch = branch ?? (await getCurrentBranch());
   const tierThresholds = getAllTierThresholds();
   const { stats, timestamps, sessionId } = await getBranchUsage(
     branch,

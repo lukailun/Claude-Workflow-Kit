@@ -33,7 +33,7 @@ async function generateCommitMessage(
   });
 
   return {
-    message: response.text?.trim() || '',
+    message: response.text?.trim() ?? '',
     tokenUsage: response.tokenUsage,
   };
 }

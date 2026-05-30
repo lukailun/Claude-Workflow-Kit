@@ -16,7 +16,7 @@ import {
   DEFAULT_AI,
 } from '@/ai/get-ai-provider';
 import { formatTokenUsage } from '@/ai/types/token-usage';
-import { getCurrentBranch } from '@/git';
+import { getCurrentBranch } from '@/git/get-current-branch';
 
 export interface CommitOptions {
   ai?: AI;
