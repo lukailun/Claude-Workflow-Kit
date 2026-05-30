@@ -8,7 +8,7 @@
  */
 
 import { $ } from 'bun';
-import { getCurrentBranch } from '@/git';
+import { getCurrentBranch } from '@/git/get-current-branch';
 import { getOwner } from '@/github';
 import { getRepo } from '@/github';
 import { githubClient } from '@/github';

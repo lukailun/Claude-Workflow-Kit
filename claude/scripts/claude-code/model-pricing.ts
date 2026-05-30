@@ -9,14 +9,13 @@ import type {
   ModelPricing,
 } from '@/ai/types/model-pricing';
 import type { ModelTokenUsageStats } from '@/ai/types/token-usage';
-import { anthropicPricing } from '@/anthropic';
-import { arkCodingPlanPricing } from '@/ark-coding-plan';
-import { bigModelPricing } from '@/bigmodel';
-import { deepSeekPricing } from '@/deepseek';
-import { kimiPricing } from '@/kimi';
-import { longCatPricing } from '@/longcat';
-import { miniMaxPricing } from '@/minimax';
-import { xiaomiMimoPricing } from '@/xiaomi-mimo';
+import { anthropicPricing } from '@/anthropic/anthropic-pricing';
+import { bigModelPricing } from '@/bigmodel/bigmodel-pricing';
+import { deepSeekPricing } from '@/deepseek/deepseek-pricing';
+import { kimiPricing } from '@/kimi/kimi-pricing';
+import { longCatPricing } from '@/longcat/longcat-pricing';
+import { miniMaxPricing } from '@/minimax/minimax-pricing';
+import { xiaomiMimoPricing } from '@/xiaomi-mimo/xiaomi-mimo-pricing';
 
 const allPricings: ModelPricing[][] = [
   anthropicPricing,
@@ -24,7 +23,6 @@ const allPricings: ModelPricing[][] = [
   bigModelPricing,
   miniMaxPricing,
   deepSeekPricing,
-  arkCodingPlanPricing,
   kimiPricing,
   longCatPricing,
 ];

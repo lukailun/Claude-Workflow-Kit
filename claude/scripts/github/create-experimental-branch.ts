@@ -3,7 +3,7 @@
  *
  */
 
-import { mainBranch } from '@/git';
+import { mainBranch } from '@/git/main-branch';
 import { createBranch } from '@/github';
 
 export async function createExperimentalBranch(name: string) {

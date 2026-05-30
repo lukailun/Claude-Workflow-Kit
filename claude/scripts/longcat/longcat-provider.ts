@@ -1,38 +1,12 @@
-import OpenAI from 'openai';
-import type { AIProvider } from '@/ai/types';
-import type { AIRequestParams } from '@/ai/types';
-import type { AIResponse } from '@/ai/types';
-import { longCatFromEnv } from '@/env';
+import { getLongCatFromEnv } from '@/env/get-longcat-from-env';
 import { longCatProviderInfo } from '@/longcat/longcat-provider-info';
+import { OpenAICompatibleProvider } from '@/ai/openai-compatible-provider';
 
-class LongCatProvider implements AIProvider {
-  info = longCatProviderInfo;
+const env = getLongCatFromEnv();
+const longCatProvider = new OpenAICompatibleProvider({
+  info: longCatProviderInfo,
+  baseUrl: `${env.baseUrl}/openai`,
+  apiKey: env.apiKey,
+});
 
-  async generate(params: AIRequestParams): Promise<AIResponse> {
-    const client = new OpenAI({
-      baseURL: `${longCatFromEnv.baseUrl}/openai`,
-      apiKey: longCatFromEnv.apiKey,
-    });
-    const response = await client.chat.completions.create({
-      model: this.info.model,
-      messages: params.messages,
-      max_tokens: params.maxTokens,
-      stream: false,
-    });
-
-    const text = response.choices[0]?.message?.content?.trim() || '';
-    return {
-      text,
-      tokenUsage: response.usage
-        ? {
-            input: response.usage.prompt_tokens,
-            output: response.usage.completion_tokens,
-            cacheRead: response.usage.prompt_tokens_details?.cached_tokens ?? 0,
-            cacheWrite: 0,
-          }
-        : undefined,
-    };
-  }
-}
-
-export const longCatProvider = new LongCatProvider();
+export { longCatProvider };

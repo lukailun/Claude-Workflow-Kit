@@ -2,7 +2,6 @@ import type { AIProvider } from '@/ai/types';
 
 export const AI_PROVIDERS = [
   'anthropic',
-  'ark',
   'minimax',
   'bigmodel',
   'mimo',
@@ -16,31 +15,27 @@ export const DEFAULT_AI: AI = 'longcat';
 async function getAIProvider(ai?: AI): Promise<AIProvider> {
   switch (ai ?? DEFAULT_AI) {
     case 'anthropic': {
-      const { anthropicProvider } = await import('@/anthropic');
+      const { anthropicProvider } = await import('@/anthropic/anthropic-provider');
       return anthropicProvider;
     }
     case 'bigmodel': {
-      const { bigModelProvider } = await import('@/bigmodel');
+      const { bigModelProvider } = await import('@/bigmodel/bigmodel-provider');
       return bigModelProvider;
     }
     case 'minimax': {
-      const { miniMaxProvider } = await import('@/minimax');
+      const { miniMaxProvider } = await import('@/minimax/minimax-provider');
       return miniMaxProvider;
     }
-    case 'ark': {
-      const { arkCodingPlanProvider } = await import('@/ark-coding-plan');
-      return arkCodingPlanProvider;
-    }
     case 'mimo': {
-      const { xiaomiMimoProvider } = await import('@/xiaomi-mimo');
+      const { xiaomiMimoProvider } = await import('@/xiaomi-mimo/xiaomi-mimo-provider');
       return xiaomiMimoProvider;
     }
     case 'deepseek': {
-      const { deepSeekProvider } = await import('@/deepseek');
+      const { deepSeekProvider } = await import('@/deepseek/deepseek-provider');
       return deepSeekProvider;
     }
     case 'longcat': {
-      const { longCatProvider } = await import('@/longcat');
+      const { longCatProvider } = await import('@/longcat/longcat-provider');
       return longCatProvider;
     }
   }
