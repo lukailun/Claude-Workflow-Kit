@@ -46,17 +46,16 @@ export async function buildBranchReceiptWorkflow(
   branch?: string
 ): Promise<string | undefined> {
   branch = branch ?? (await getCurrentBranch());
-  const { stats, timestamps, sessionId } = await getBranchUsage(
+  const branchUsage = await getBranchUsage(
     branch,
     projectRoot
-  );
-
-  const receiptNo = sessionId ? sessionId.slice(0, 8) : '';
-
-  if (stats.size === 0) {
+  )
+  if (!branchUsage || branchUsage.stats.size === 0) {
     console.log(`⚠️  分支 ${branch} 没有找到 Claude Code 使用记录`);
     return undefined;
   }
+  const { stats, timestamps, sessionId } = branchUsage;
+  const receiptNo = sessionId ? sessionId.slice(0, 8) : '';
 
   const models: {
     name: string;

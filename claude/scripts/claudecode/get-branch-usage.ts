@@ -10,7 +10,7 @@ import type { ModelTokenUsageStats } from '@/ai/types/token-usage';
 export interface BranchUsageResult {
   stats: Map<string, ModelTokenUsageStats>;
   timestamps: Date[];
-  sessionId?: string;
+  sessionId: string;
 }
 
 interface TranscriptEntry {
@@ -41,7 +41,7 @@ function getProjectDir(projectRoot?: string): string {
 export async function getBranchUsage(
   branch: string,
   projectRoot?: string
-): Promise<BranchUsageResult> {
+): Promise<BranchUsageResult | null> {
   const projectDir = getProjectDir(projectRoot);
   const files = (await readdir(projectDir)).filter((file) =>
     file.endsWith('.jsonl')
@@ -90,5 +90,6 @@ export async function getBranchUsage(
     }
   }
 
+  if (!sessionId) return null
   return { stats: statsMap, timestamps, sessionId };
 }
