@@ -5,11 +5,13 @@
  * 数据来源：openrouter.ai/rankings
  */
 
-import { OpenRouter } from '@openrouter/sdk'
+import { getOpenRouterClient } from '@/openrouter/openrouter-client'
+import { getModels } from '@/openrouter/get-models'
 
 export interface PopularModel {
   model: string
-  totalTokens: number
+  name: string
+  totalTokens: string
 }
 
 let _cachedPopularModels: PopularModel[] | null = null
@@ -24,24 +26,30 @@ export async function getPopularModels(count?: number): Promise<PopularModel[]> 
   if (_cachedPopularModels) return _cachedPopularModels.slice(0, count ?? 1)
 
   try {
-    const client = new OpenRouter()
+    const client = getOpenRouterClient()
     const response = await client.datasets.getRankingsDaily()
-
     const dates = [...new Set(response.data.map(item => item.date))].sort().reverse()
     const latestDate = dates[0]
 
     if (!latestDate) return []
 
+    const models = await getModels()
+
+    const findModelName = (permaslug: string): string => {
+      const matched = models.find(model => permaslug.startsWith(model.id))
+      return matched?.name ?? permaslug
+    }
+
     const dailyModels = response.data
-      .filter(item => item.date === latestDate && item.modelPermaslug !== 'other')
+      .filter(item => item.date === latestDate)
       .map(item => ({
         model: item.modelPermaslug,
-        totalTokens: Number(item.totalTokens),
+        name: findModelName(item.modelPermaslug),
+        totalTokens: item.totalTokens,
       }))
-      .sort((a, b) => b.totalTokens - a.totalTokens)
 
     _cachedPopularModels = dailyModels
-    return _cachedPopularModels.slice(0, count)
+    return _cachedPopularModels.slice(0, count ?? 1)
   } catch {
     return []
   }

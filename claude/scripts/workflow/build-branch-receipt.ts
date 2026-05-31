@@ -203,9 +203,9 @@ export async function buildBranchReceiptWorkflow(
   const popularModels = await getPopularModels(3);
   if (popularModels.length > 0) {
     lines.push(center('热门模型'));
+    lines.push(center(''));
     for (const model of popularModels) {
-      const name = model.model.split('/').pop() || model.model;
-      lines.push(center(kv(formatTokens(model.totalTokens), name)));
+      lines.push(center(kv(formatTokens(model.totalTokens), model.name)));
     }
     lines.push(center(''));
   }
