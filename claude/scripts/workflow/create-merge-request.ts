@@ -70,7 +70,7 @@ export async function createMergeRequestWorkflow(
 
   if (content.tokenUsage) {
     console.log(
-      `${formatTokenUsage(content.tokenUsage, provider.info.model)}\n`
+      `${await formatTokenUsage(content.tokenUsage, provider.info.model)}\n`
     );
   }
 

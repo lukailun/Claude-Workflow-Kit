@@ -1,6 +1,6 @@
 import { currencySymbol } from '@/ai/types/currency';
 import type { PricingPlan, PriceTier } from '@/ai/types/model-pricing';
-import { getPricingPlan } from '@/claude-code/model-pricing';
+import { getPricingPlan } from '@/claudecode/model-pricing';
 
 /** token 用量基础数据 */
 export interface TokenUsage {
@@ -46,7 +46,10 @@ export function calculateCost(usage: TokenUsage, tier: PriceTier): number {
   );
 }
 
-export function formatTokenUsage(usage: TokenUsage, model: string): string {
+export async function formatTokenUsage(
+  usage: TokenUsage,
+  model: string
+): Promise<string> {
   const totalTokens = usage.input + usage.output;
   const cacheParts: string[] = [];
   if (usage.cacheRead) cacheParts.push(`缓存读取 ${usage.cacheRead}`);
@@ -55,7 +58,7 @@ export function formatTokenUsage(usage: TokenUsage, model: string): string {
     cacheParts.length > 0 ? ` (${cacheParts.join(', ')})` : '';
 
   let result = `Token: 输入 ${usage.input}${cacheSuffix} + 输出 ${usage.output} = 总计 ${totalTokens}`;
-  const pricingPlan = getPricingPlan(model);
+  const pricingPlan = await getPricingPlan(model);
   if (pricingPlan) {
     const tier = findTier(pricingPlan, usage.input);
     if (tier) {

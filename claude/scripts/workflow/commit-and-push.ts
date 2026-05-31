@@ -120,7 +120,7 @@ export async function commitAndPush(
 
   if (commitResult.tokenUsage) {
     console.log(
-      `${formatTokenUsage(commitResult.tokenUsage, provider.info.model)}\n`
+      `${await formatTokenUsage(commitResult.tokenUsage, provider.info.model)}\n`
     );
   }
 

@@ -9,15 +9,15 @@
 import { dirname, join } from 'path';
 import type { Currency } from '@/ai/types';
 import { currencySymbol } from '@/ai/types';
-import { getBranchUsage } from '@/claude-code/get-branch-usage';
-import { getVersion } from '@/claude-code/get-version';
+import { getBranchUsage } from '@/claudecode/get-branch-usage';
+import { getVersion } from '@/claudecode/get-version';
 import {
   getModelPricing,
   getPricingPlan,
   calculateModelCost,
   getAllTierThresholds,
   getCurrency,
-} from '@/claude-code/model-pricing';
+} from '@/claudecode/model-pricing';
 import { getCurrentBranch } from '@/git/get-current-branch';
 import { getUserName } from '@/git/get-user-name';
 
@@ -54,7 +54,7 @@ export async function buildBranchReceiptWorkflow(
   branch?: string
 ): Promise<string | undefined> {
   branch = branch ?? (await getCurrentBranch());
-  const tierThresholds = getAllTierThresholds();
+  const tierThresholds = await getAllTierThresholds();
   const { stats, timestamps, sessionId } = await getBranchUsage(
     branch,
     tierThresholds.length > 0 ? tierThresholds : undefined,
@@ -84,7 +84,7 @@ export async function buildBranchReceiptWorkflow(
     (a, b) => b[1].usage.input - a[1].usage.input
   )) {
     const { usage } = s;
-    const price = getPricingPlan(model);
+    const price = await getPricingPlan(model);
     const cost = price ? calculateModelCost(s, price) : 0;
     const symbol = price ? currencySymbol[getCurrency(price)] : '';
 
@@ -94,9 +94,10 @@ export async function buildBranchReceiptWorkflow(
       costByCurrency.set(currency, Math.round((prev + cost) * 100) / 100);
     }
 
+    const pricing = await getModelPricing(model);
     models.push({
       name: model,
-      displayName: getModelPricing(model)?.name ?? model,
+      displayName: pricing?.name ?? model,
       count: s.count,
       input: usage.input,
       output: usage.output,
