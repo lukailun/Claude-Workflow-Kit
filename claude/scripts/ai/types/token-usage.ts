@@ -1,5 +1,4 @@
-import { currencySymbol } from '@/ai/types/currency';
-import { getPricingPlan, findTier, calculateCost } from '@/openrouter/get-model-pricing';
+import { getModelPricing, calculateCost } from '@/openrouter/get-model-pricing';
 
 /** token 用量基础数据 */
 export interface TokenUsage {
@@ -27,14 +26,10 @@ export async function formatTokenUsage(
     cacheParts.length > 0 ? ` (${cacheParts.join(', ')})` : '';
 
   let result = `Token: 输入 ${usage.input}${cacheSuffix} + 输出 ${usage.output} = 总计 ${totalTokens}`;
-  const pricingPlan = await getPricingPlan(model);
-  if (pricingPlan) {
-    const tier = findTier(pricingPlan, usage.input);
-    if (tier) {
-      const cost = calculateCost(usage, tier);
-      const symbol = currencySymbol[pricingPlan.currency];
-      result += ` | 费用: ${symbol}${cost.toFixed(2)}`;
-    }
+  const pricing = await getModelPricing(model);
+  const cost = calculateCost(usage, pricing);
+  if (cost > 0) {
+    result += ` | 费用: $${cost.toFixed(2)}`;
   }
 
   return result;

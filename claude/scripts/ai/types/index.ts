@@ -3,8 +3,5 @@ export type { AIProviderInfo } from '@/ai/types/ai-provider-info';
 export type { AIRequestParams } from '@/ai/types/ai-request-params';
 export type { AIResponse } from '@/ai/types/ai-response';
 export type { AIMessage } from '@/ai/types/ai-message';
-export type { Currency } from '@/ai/types/currency';
-export type { ModelPricing, PriceTier, PricingPlan } from '@/ai/types/model-pricing';
 export type { TokenUsage, ModelTokenUsageStats } from '@/ai/types/token-usage';
-export { currencySymbol } from '@/ai/types/currency';
 export { formatTokenUsage } from '@/ai/types/token-usage';

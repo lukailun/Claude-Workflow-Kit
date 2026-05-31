@@ -7,19 +7,11 @@
  */
 
 import { dirname, join } from 'path';
-import type { Currency } from '@/ai/types';
-import { currencySymbol } from '@/ai/types';
 import { getBranchUsage } from '@/claudecode/get-branch-usage';
 import { getVersion } from '@/claudecode/get-version';
-import {
-  getModelPricing,
-  getPricingPlan,
-  calculateModelCost,
-  getCurrency,
-} from '@/openrouter/get-model-pricing';
+import { getModelPricing, calculateModelCost } from '@/openrouter/get-model-pricing';
 import { getCurrentBranch } from '@/git/get-current-branch';
 import { getUserName } from '@/git/get-user-name';
-import { getModels } from '@/openrouter/get-models';
 
 const projectRoot = join(dirname(dirname(dirname(import.meta.dir))));
 
@@ -74,40 +66,27 @@ export async function buildBranchReceiptWorkflow(
     output: number;
     cacheRead: number;
     cost: number;
-    symbol: string;
   }[] = [];
-  const costByCurrency = new Map<Currency, number>();
+  let totalCost = 0;
 
   for (const [model, s] of [...stats.entries()].sort(
     (a, b) => b[1].usage.input - a[1].usage.input
   )) {
     const { usage } = s;
-    const price = await getPricingPlan(model);
-    const cost = price ? calculateModelCost(s, price) : 0;
-    const symbol = price ? currencySymbol[getCurrency(price)] : '';
-
-    if (price) {
-      const currency = getCurrency(price);
-      const prev = costByCurrency.get(currency) ?? 0;
-      costByCurrency.set(currency, Math.round((prev + cost) * 100) / 100);
-    }
-
     const pricing = await getModelPricing(model);
+    const cost = calculateModelCost(s, pricing);
+    totalCost += cost;
+
     models.push({
       name: model,
-      displayName: pricing?.name ?? model,
+      displayName: pricing.name,
       count: s.count,
       input: usage.input,
       output: usage.output,
       cacheRead: usage.cacheRead,
       cost,
-      symbol,
     });
   }
-
-  const totalCost = [...costByCurrency.entries()]
-    .map(([currency, cost]) => currencySymbol[currency] + cost.toFixed(2))
-    .join(' + ');
 
   let started = '';
   let ended = '';
@@ -161,7 +140,7 @@ export async function buildBranchReceiptWorkflow(
 
   for (const model of models) {
     lines.push(
-      center(kv(model.displayName, model.symbol + model.cost.toFixed(2)))
+      center(kv(model.displayName, '$' + model.cost.toFixed(2)))
     );
     lines.push(center(dashedSep()));
     lines.push(center(kv('INPUT', formatNum(model.input), 2)));
@@ -171,7 +150,7 @@ export async function buildBranchReceiptWorkflow(
     lines.push(center(sep()));
   }
 
-  lines.push(center(kv('TOTAL', totalCost)));
+  lines.push(center(kv('TOTAL', '$' + totalCost.toFixed(2))));
   lines.push(center(sep()));
   lines.push(center(''));
   lines.push(center('THANK YOU'));
