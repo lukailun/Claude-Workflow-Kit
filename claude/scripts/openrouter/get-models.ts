@@ -11,9 +11,9 @@ import type { Model } from '@openrouter/sdk/models';
 let _cachedModels: Model[] | null = null;
 
 /**
- * 通过 OpenRouter SDK 获取所有可用模型（同一 session 只请求一次）
+ * 通过 OpenRouter SDK 获取所有可用模型
  */
-export async function getModels(): Promise<Model[] | undefined> {
+export async function getModels(): Promise<Model[]> {
   if (_cachedModels) return _cachedModels;
 
   try {
@@ -22,6 +22,6 @@ export async function getModels(): Promise<Model[] | undefined> {
     _cachedModels = response.data;
     return _cachedModels;
   } catch {
-    return undefined;
+    return [];
   }
 }

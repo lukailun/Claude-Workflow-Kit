@@ -12,6 +12,7 @@ import { getVersion } from '@/claudecode/get-version';
 import { getModelPricing, calculateModelCost } from '@/openrouter/get-model-pricing';
 import { getModels } from '@/openrouter/get-models';
 import { getLatestModels } from '@/openrouter/get-latest-models';
+import { getPopularModels } from '@/openrouter/get-popular-models';
 import { getRate } from '@/exchange-rate/get-exchange-rate';
 import { getCurrentBranch } from '@/git/get-current-branch';
 import { getUserName } from '@/git/get-user-name';
@@ -192,10 +193,26 @@ export async function buildBranchReceiptWorkflow(
   lines.push(center(sep()));
   lines.push(center(''));
 
-  const allModels = await getModels();
-  if (allModels) {
-    const latestModels = getLatestModels(allModels, { count: 3 });
-    lines.push(center('最新发布'));
+  const formatTokens = (tokens: number) => {
+    if (tokens >= 1e9) return (tokens / 1e9).toFixed(1) + 'B';
+    if (tokens >= 1e6) return (tokens / 1e6).toFixed(1) + 'M';
+    if (tokens >= 1e3) return (tokens / 1e3).toFixed(1) + 'K';
+    return tokens.toString();
+  };
+
+  const popularModels = await getPopularModels(3);
+  if (popularModels.length > 0) {
+    lines.push(center('热门模型'));
+    for (const model of popularModels) {
+      const name = model.model.split('/').pop() || model.model;
+      lines.push(center(kv(formatTokens(model.totalTokens), name)));
+    }
+    lines.push(center(''));
+  }
+
+  const latestModels =  await getLatestModels(3);
+  if (latestModels.length > 0) {
+    lines.push(center('最新模型'));
     for (const model of latestModels) {
       const date = new Date(model.created * 1000).toISOString().split('T')[0];
       lines.push(center(kv(date, model.name)));
