@@ -193,19 +193,12 @@ export async function buildBranchReceiptWorkflow(
   lines.push(center(sep()));
   lines.push(center(''));
 
-  const formatTokens = (tokens: number) => {
-    if (tokens >= 1e9) return (tokens / 1e9).toFixed(1) + 'B';
-    if (tokens >= 1e6) return (tokens / 1e6).toFixed(1) + 'M';
-    if (tokens >= 1e3) return (tokens / 1e3).toFixed(1) + 'K';
-    return tokens.toString();
-  };
-
   const popularModels = await getPopularModels(3);
   if (popularModels.length > 0) {
     lines.push(center('热门模型'));
     lines.push(center(''));
     for (const model of popularModels) {
-      lines.push(center(kv(model.totalTokens, model.name)));
+      lines.push(center(kv(formatNum(model.totalTokens), model.name)));
     }
     lines.push(center(''));
   }

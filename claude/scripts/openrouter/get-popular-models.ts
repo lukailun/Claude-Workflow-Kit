@@ -11,7 +11,7 @@ import { getModels } from '@/openrouter/get-models'
 export interface PopularModel {
   model: string
   name: string
-  totalTokens: string
+  totalTokens: number
 }
 
 let _cachedPopularModels: PopularModel[] | null = null
@@ -45,7 +45,7 @@ export async function getPopularModels(count?: number): Promise<PopularModel[]> 
       .map(item => ({
         model: item.modelPermaslug,
         name: findModelName(item.modelPermaslug),
-        totalTokens: item.totalTokens,
+        totalTokens: Number(item.totalTokens),
       }))
 
     _cachedPopularModels = dailyModels
