@@ -213,6 +213,7 @@ export async function buildBranchReceiptWorkflow(
   const latestModels =  await getLatestModels(3);
   if (latestModels.length > 0) {
     lines.push(center('最新模型'));
+    lines.push(center(''));
     for (const model of latestModels) {
       const date = new Date(model.created * 1000).toISOString().split('T')[0];
       lines.push(center(kv(date, model.name)));
