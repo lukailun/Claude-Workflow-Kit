@@ -7,17 +7,9 @@
  */
 
 import { dirname, join } from 'path';
-import type { Currency } from '@/ai/types';
-import { currencySymbol } from '@/ai/types';
-import { getBranchUsage } from '@/claude-code/get-branch-usage';
-import { getVersion } from '@/claude-code/get-version';
-import {
-  getModelPricing,
-  getPricingPlan,
-  calculateModelCost,
-  getAllTierThresholds,
-  getCurrency,
-} from '@/claude-code/model-pricing';
+import { getBranchUsage } from '@/claudecode/get-branch-usage';
+import { getVersion } from '@/claudecode/get-version';
+import { getModelPricing, calculateModelCost } from '@/openrouter/get-model-pricing';
 import { getCurrentBranch } from '@/git/get-current-branch';
 import { getUserName } from '@/git/get-user-name';
 
@@ -25,12 +17,44 @@ const projectRoot = join(dirname(dirname(dirname(import.meta.dir))));
 
 const W = 32;
 
+/** 计算字符串的终端显示宽度（CJK 字符占 2 列） */
+function displayWidth(s: string): number {
+  let w = 0;
+  for (const ch of s) {
+    const code = ch.codePointAt(0)!;
+    // CJK 统一汉字 + 全角符号 + 韩文 + 日文假名等
+    w += (code >= 0x1100 &&
+      (code <= 0x115f ||
+        code === 0x2329 ||
+        code === 0x232a ||
+        (code >= 0x2e80 && code <= 0x3247 && code !== 0x303f) ||
+        (code >= 0x3250 && code <= 0x4dbf) ||
+        (code >= 0x4e00 && code <= 0xa4cf) ||
+        (code >= 0xa960 && code <= 0xa97c) ||
+        (code >= 0xac00 && code <= 0xd7a3) ||
+        (code >= 0xf900 && code <= 0xfaff) ||
+        (code >= 0xfe10 && code <= 0xfe6b) ||
+        (code >= 0xff01 && code <= 0xff60) ||
+        (code >= 0xffe0 && code <= 0xffe6) ||
+        (code >= 0x1b000 && code <= 0x1b001) ||
+        (code >= 0x1f200 && code <= 0x1f251) ||
+        (code >= 0x20000 && code <= 0x3fffd)))
+      ? 2
+      : 1;
+  }
+  return w;
+}
+
 function formatNum(n: number): string {
   return n.toLocaleString('en-US');
 }
 
+function padEnd(s: string, width: number): string {
+  return s + ' '.repeat(Math.max(0, width - displayWidth(s)));
+}
+
 function center(text: string): string {
-  const pad = Math.max(0, Math.floor((W - text.length) / 2));
+  const pad = Math.max(0, Math.floor((W - displayWidth(text)) / 2));
   return ' '.repeat(pad) + text;
 }
 
@@ -46,7 +70,7 @@ function kv(label: string, value: string, indent = 0): string {
   const pad = ' '.repeat(indent);
   const lbl = pad + label;
   const valStr = String(value);
-  const gap = Math.max(2, W - lbl.length - valStr.length);
+  const gap = Math.max(2, W - displayWidth(lbl) - displayWidth(valStr));
   return lbl + ' '.repeat(gap) + valStr;
 }
 
@@ -54,19 +78,16 @@ export async function buildBranchReceiptWorkflow(
   branch?: string
 ): Promise<string | undefined> {
   branch = branch ?? (await getCurrentBranch());
-  const tierThresholds = getAllTierThresholds();
-  const { stats, timestamps, sessionId } = await getBranchUsage(
+  const branchUsage = await getBranchUsage(
     branch,
-    tierThresholds.length > 0 ? tierThresholds : undefined,
     projectRoot
-  );
-
-  const receiptNo = sessionId ? sessionId.slice(0, 8) : '';
-
-  if (stats.size === 0) {
+  )
+  if (!branchUsage || branchUsage.stats.size === 0) {
     console.log(`⚠️  分支 ${branch} 没有找到 Claude Code 使用记录`);
     return undefined;
   }
+  const { stats, timestamps, sessionId } = branchUsage;
+  const receiptNo = sessionId ? sessionId.slice(0, 8) : '';
 
   const models: {
     name: string;
@@ -76,39 +97,27 @@ export async function buildBranchReceiptWorkflow(
     output: number;
     cacheRead: number;
     cost: number;
-    symbol: string;
   }[] = [];
-  const costByCurrency = new Map<Currency, number>();
+  let totalCost = 0;
 
-  for (const [model, s] of [...stats.entries()].sort(
+  for (const [model, usageStats] of [...stats.entries()].sort(
     (a, b) => b[1].usage.input - a[1].usage.input
   )) {
-    const { usage } = s;
-    const price = getPricingPlan(model);
-    const cost = price ? calculateModelCost(s, price) : 0;
-    const symbol = price ? currencySymbol[getCurrency(price)] : '';
-
-    if (price) {
-      const currency = getCurrency(price);
-      const prev = costByCurrency.get(currency) ?? 0;
-      costByCurrency.set(currency, Math.round((prev + cost) * 100) / 100);
-    }
+    const { usage } = usageStats;
+    const pricing = await getModelPricing(model);
+    const cost = calculateModelCost(usageStats, pricing);
+    totalCost += cost;
 
     models.push({
       name: model,
-      displayName: getModelPricing(model)?.name ?? model,
-      count: s.count,
+      displayName: pricing.name,
+      count: usageStats.count,
       input: usage.input,
       output: usage.output,
       cacheRead: usage.cacheRead,
       cost,
-      symbol,
     });
   }
-
-  const totalCost = [...costByCurrency.entries()]
-    .map(([currency, cost]) => currencySymbol[currency] + cost.toFixed(2))
-    .join(' + ');
 
   let started = '';
   let ended = '';
@@ -147,36 +156,39 @@ export async function buildBranchReceiptWorkflow(
   lines.push(center(''));
   lines.push(center(''));
   if (receiptNo) {
-    lines.push(center(kv('RECEIPT NO.', receiptNo)));
+    lines.push(center(kv('收据编号', receiptNo)));
   }
-  lines.push(center(kv('BRANCH', branch)));
-  lines.push(center(kv('AGENT', claudeCodeVersion)));
-  lines.push(center(kv('USER', userName)));
+  lines.push(center(kv('分支', branch)));
+  lines.push(center(kv('智能体', claudeCodeVersion)));
+  lines.push(center(kv('用户', userName)));
   if (started) {
-    lines.push(center(kv('STARTED', started)));
-    lines.push(center(kv('ENDED', ended)));
-    lines.push(center(kv('DURATION', duration)));
+    lines.push(center(kv('开始时间', started)));
+    lines.push(center(kv('结束时间', ended)));
+    lines.push(center(kv('耗时', duration)));
   }
   lines.push(center(''));
   lines.push(center(sep()));
 
   for (const model of models) {
     lines.push(
-      center(kv(model.displayName, model.symbol + model.cost.toFixed(2)))
+      center(kv(model.displayName, '$' + model.cost.toFixed(2)))
     );
     lines.push(center(dashedSep()));
-    lines.push(center(kv('INPUT', formatNum(model.input), 2)));
-    lines.push(center(kv('OUTPUT', formatNum(model.output), 2)));
-    lines.push(center(kv('CACHE READ', formatNum(model.cacheRead), 2)));
-    lines.push(center(kv('CALLS', formatNum(model.count), 2)));
+    lines.push(center(kv('输入', formatNum(model.input), 2)));
+    lines.push(center(kv('输出', formatNum(model.output), 2)));
+    lines.push(center(kv('缓存读取', formatNum(model.cacheRead), 2)));
+    lines.push(center(kv('调用次数', formatNum(model.count), 2)));
+    const totalInput = model.input + model.cacheRead;
+    const cacheHit = totalInput > 0 ? (model.cacheRead / totalInput * 100) : 0;
+    lines.push(center(kv('缓存命中率', cacheHit.toFixed(2) + '%', 2)));
     lines.push(center(sep()));
   }
 
-  lines.push(center(kv('TOTAL', totalCost)));
+  lines.push(center(kv('合计', '$' + totalCost.toFixed(2))));
   lines.push(center(sep()));
   lines.push(center(''));
-  lines.push(center('THANK YOU'));
-  lines.push(center('CUSTOMER COPY'));
+  lines.push(center('谢谢惠顾'));
+  lines.push(center('客户留存'));
   lines.push(center(''));
 
   return lines.join('\n');

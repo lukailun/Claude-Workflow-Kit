@@ -112,7 +112,7 @@ async function generateMergeRequestContent(
 
   const { name, url, model } = params.aiProvider.info;
   const tokenInfo = tokenUsage
-    ? `\n* ${formatTokenUsage(tokenUsage, model)}`
+    ? `\n* ${await formatTokenUsage(tokenUsage, model)}`
     : '';
   const generatedInfoSection = `\n\n## 生成信息\n* **AI 提供商**: [${name}](${url})\n* **模型**: ${model}${tokenInfo}`;
   const description =
