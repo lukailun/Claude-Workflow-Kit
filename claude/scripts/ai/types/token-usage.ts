@@ -24,13 +24,8 @@ export async function formatTokenUsage(
   if (usage.cacheWrite) cacheParts.push(`缓存写入 ${usage.cacheWrite}`);
   const cacheSuffix =
     cacheParts.length > 0 ? ` (${cacheParts.join(', ')})` : '';
-
-  let result = `Token: 输入 ${usage.input}${cacheSuffix} + 输出 ${usage.output} = 总计 ${totalTokens}`;
-  const pricing = await getModelPricing(model);
-  const cost = calculateCost(usage, pricing);
-  if (cost > 0) {
-    result += ` | 费用: $${cost.toFixed(2)}`;
-  }
-
+    const pricing = await getModelPricing(model);
+    const cost = calculateCost(usage, pricing);
+  let result = `词元: 输入 ${usage.input}${cacheSuffix} + 输出 ${usage.output} = 总计 ${totalTokens} | 费用: $${cost.toFixed(2)}`;
   return result;
 }
