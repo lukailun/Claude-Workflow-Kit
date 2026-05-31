@@ -73,9 +73,8 @@ export async function getModelPricing(modelId: string): Promise<ModelPricing> {
 
 /** 计算费用（USD），price 单位为每 1M token */
 export function calculateCost(usage: TokenUsage, price: ModelPricing): number {
-  const regularInput = usage.input - usage.cacheRead - usage.cacheWrite;
   return (
-    (Math.max(0, regularInput) * price.inputCacheMiss +
+    (usage.input * price.inputCacheMiss +
       usage.cacheRead * price.inputCacheHit +
       usage.cacheWrite * price.cacheWrite +
       usage.output * price.output) /
