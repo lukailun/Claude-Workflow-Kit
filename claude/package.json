@@ -29,10 +29,11 @@
     "typescript": "^6.0.3"
   },
   "dependencies": {
-    "@anthropic-ai/claude-agent-sdk": "^0.3.153",
-    "@anthropic-ai/sdk": "^0.99.0",
+    "@anthropic-ai/claude-agent-sdk": "^0.3.158",
+    "@anthropic-ai/sdk": "^0.100.1",
     "@octokit/rest": "^22.0.1",
+    "@openrouter/sdk": "^0.12.79",
     "dotenv": "^17.4.2",
-    "openai": "^6.39.0"
+    "openai": "^6.39.1"
   }
 }
