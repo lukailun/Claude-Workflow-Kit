@@ -15,11 +15,11 @@ import {
   getModelPricing,
   getPricingPlan,
   calculateModelCost,
-  getAllTierThresholds,
   getCurrency,
-} from '@/claudecode/model-pricing';
+} from '@/openrouter/get-model-pricing';
 import { getCurrentBranch } from '@/git/get-current-branch';
 import { getUserName } from '@/git/get-user-name';
+import { getModels } from '@/openrouter/get-models';
 
 const projectRoot = join(dirname(dirname(dirname(import.meta.dir))));
 
@@ -54,10 +54,8 @@ export async function buildBranchReceiptWorkflow(
   branch?: string
 ): Promise<string | undefined> {
   branch = branch ?? (await getCurrentBranch());
-  const tierThresholds = await getAllTierThresholds();
   const { stats, timestamps, sessionId } = await getBranchUsage(
     branch,
-    tierThresholds.length > 0 ? tierThresholds : undefined,
     projectRoot
   );
 

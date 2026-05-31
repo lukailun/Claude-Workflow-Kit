@@ -1,6 +1,5 @@
 import { currencySymbol } from '@/ai/types/currency';
-import type { PricingPlan, PriceTier } from '@/ai/types/model-pricing';
-import { getPricingPlan } from '@/claudecode/model-pricing';
+import { getPricingPlan, findTier, calculateCost } from '@/openrouter/get-model-pricing';
 
 /** token 用量基础数据 */
 export interface TokenUsage {
@@ -10,40 +9,10 @@ export interface TokenUsage {
   cacheWrite: number;
 }
 
-/** 带请求数的 token 用量（分支统计用） */
-export interface TokenUsageStats {
-  usage: TokenUsage;
-  count: number;
-}
-
-/** 模型统计（含分阶梯） */
+/** 模型统计 */
 export interface ModelTokenUsageStats {
   usage: TokenUsage;
   count: number;
-  tiers: Map<number, TokenUsageStats>;
-}
-
-/** 根据输入 token 数选择对应的价格档位 */
-export function findTier(
-  modelPrice: PricingPlan,
-  inputTokens: number
-): PriceTier | undefined {
-  const sorted = [...modelPrice.tiers].sort(
-    (a, b) => a.maxInputTokens - b.maxInputTokens
-  );
-  return sorted.find((tier) => inputTokens <= tier.maxInputTokens);
-}
-
-/** 计算费用，price 单位为每 1M token */
-export function calculateCost(usage: TokenUsage, tier: PriceTier): number {
-  const regularInput = usage.input - usage.cacheRead - usage.cacheWrite;
-  return (
-    (Math.max(0, regularInput) * tier.inputCacheMiss +
-      usage.cacheRead * tier.inputCacheHit +
-      usage.cacheWrite * tier.cacheWrite +
-      usage.output * tier.output) /
-    1_000_000
-  );
 }
 
 export async function formatTokenUsage(
