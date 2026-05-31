@@ -10,12 +10,13 @@ import { dirname, join } from 'path';
 import { getBranchUsage } from '@/claudecode/get-branch-usage';
 import { getVersion } from '@/claudecode/get-version';
 import { getModelPricing, calculateModelCost } from '@/openrouter/get-model-pricing';
+import { getRate } from '@/exchange-rate/get-exchange-rate';
 import { getCurrentBranch } from '@/git/get-current-branch';
 import { getUserName } from '@/git/get-user-name';
 
 const projectRoot = join(dirname(dirname(dirname(import.meta.dir))));
 
-const W = 32;
+const W = 38;
 
 /** 计算字符串的终端显示宽度（CJK 字符占 2 列） */
 function displayWidth(s: string): number {
@@ -47,10 +48,6 @@ function displayWidth(s: string): number {
 
 function formatNum(n: number): string {
   return n.toLocaleString('en-US');
-}
-
-function padEnd(s: string, width: number): string {
-  return s + ' '.repeat(Math.max(0, width - displayWidth(s)));
 }
 
 function center(text: string): string {
@@ -88,6 +85,7 @@ export async function buildBranchReceiptWorkflow(
   }
   const { stats, timestamps, sessionId } = branchUsage;
   const receiptNo = sessionId ? sessionId.slice(0, 8) : '';
+  const rate = await getRate();
 
   const models: {
     name: string;
@@ -137,10 +135,10 @@ export async function buildBranchReceiptWorkflow(
     } else {
       duration = `${durationS}s`;
     }
-    const fmt = (d: Date) =>
+    const format = (d: Date) =>
       `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')} ${String(d.getHours()).padStart(2, '0')}:${String(d.getMinutes()).padStart(2, '0')}:${String(d.getSeconds()).padStart(2, '0')}`;
-    started = fmt(first);
-    ended = fmt(last);
+    started = format(first);
+    ended = format(last);
   }
 
   const userName = getUserName(projectRoot);
@@ -169,10 +167,14 @@ export async function buildBranchReceiptWorkflow(
   lines.push(center(''));
   lines.push(center(sep()));
 
+  const formatCost = (usd: number) => {
+    const cost = '$' + usd.toFixed(2);
+    if (rate) return cost + '/¥' + (usd * rate).toFixed(2);
+    return cost;
+  };
+
   for (const model of models) {
-    lines.push(
-      center(kv(model.displayName, '$' + model.cost.toFixed(2)))
-    );
+    lines.push(center(kv(model.displayName, formatCost(model.cost))));
     lines.push(center(dashedSep()));
     lines.push(center(kv('输入', formatNum(model.input), 2)));
     lines.push(center(kv('输出', formatNum(model.output), 2)));
@@ -184,7 +186,7 @@ export async function buildBranchReceiptWorkflow(
     lines.push(center(sep()));
   }
 
-  lines.push(center(kv('合计', '$' + totalCost.toFixed(2))));
+  lines.push(center(kv('合计', formatCost(totalCost))));
   lines.push(center(sep()));
   lines.push(center(''));
   lines.push(center('谢谢惠顾'));
