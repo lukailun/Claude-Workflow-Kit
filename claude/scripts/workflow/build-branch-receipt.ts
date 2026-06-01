@@ -195,7 +195,7 @@ export async function buildBranchReceiptWorkflow(
 
   const popularModels = await getPopularModels(3);
   if (popularModels.length > 0) {
-    lines.push(center('热门模型'));
+    lines.push(center(`热门模型${popularModels[0].date}`));
     lines.push(center(''));
     for (const model of popularModels) {
       lines.push(center(kv(formatNum(model.totalTokens), model.name)));

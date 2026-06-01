@@ -12,6 +12,7 @@ export interface PopularModel {
   model: string
   name: string
   totalTokens: number
+  date: string;
 }
 
 let _cachedPopularModels: PopularModel[] | null = null
@@ -46,6 +47,7 @@ export async function getPopularModels(count?: number): Promise<PopularModel[]> 
         model: item.modelPermaslug,
         name: findModelName(item.modelPermaslug),
         totalTokens: Number(item.totalTokens),
+        date: item.date,
       }))
 
     _cachedPopularModels = dailyModels
