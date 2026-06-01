@@ -17,7 +17,7 @@ import { getRate } from '@/exchange-rate/get-exchange-rate';
 import { getCurrentBranch } from '@/git/get-current-branch';
 import { getUserName } from '@/git/get-user-name';
 
-const projectRoot = join(dirname(dirname(dirname(import.meta.dir))));
+const projectRoot = join(dirname(dirname(import.meta.dir)));
 
 const W = 45;
 
@@ -195,7 +195,7 @@ export async function buildBranchReceiptWorkflow(
 
   const popularModels = await getPopularModels(3);
   if (popularModels.length > 0) {
-    lines.push(center(`热门模型${popularModels[0].date}`));
+    lines.push(center(`热门模型 ${popularModels[0].date}`));
     lines.push(center(''));
     for (const model of popularModels) {
       lines.push(center(kv(formatNum(model.totalTokens), model.name)));
