@@ -5,6 +5,7 @@
 import { optionalEnv } from '@/env/require-env';
 
 interface OpenRouterFromEnv {
+  baseUrl: string | undefined;
   apiKey: string | undefined;
 }
 
@@ -13,6 +14,7 @@ let _config: OpenRouterFromEnv | undefined;
 export function getOpenRouterFromEnv(): OpenRouterFromEnv {
   if (!_config) {
     _config = {
+      baseUrl: optionalEnv('OPENROUTER_BASE_URL'),
       apiKey: optionalEnv('OPENROUTER_API_KEY'),
     };
   }

@@ -87,7 +87,19 @@ export async function buildBranchReceiptWorkflow(
   }
   const { stats, timestamps, sessionId } = branchUsage;
   const receiptNo = sessionId ? sessionId.slice(0, 8) : '';
-  const rate = await getRate();
+
+    const [rate, popularModels, latestModels] = await Promise.all([
+    getRate(),
+    getPopularModels(3),
+    getLatestModels(3),
+  ]);
+
+  const sortedStats = [...stats.entries()].sort(
+    (a, b) => b[1].usage.input - a[1].usage.input
+  );
+  const pricingResults = await Promise.all(
+    sortedStats.map(([model]) => getModelPricing(model))
+  );
 
   const models: {
     name: string;
@@ -100,11 +112,10 @@ export async function buildBranchReceiptWorkflow(
   }[] = [];
   let totalCost = 0;
 
-  for (const [model, usageStats] of [...stats.entries()].sort(
-    (a, b) => b[1].usage.input - a[1].usage.input
-  )) {
+for (let i = 0; i < sortedStats.length; i++) {
+    const [model, usageStats] = sortedStats[i];
+    const pricing = pricingResults[i];
     const { usage } = usageStats;
-    const pricing = await getModelPricing(model);
     const cost = calculateModelCost(usageStats, pricing);
     totalCost += cost;
 
@@ -191,8 +202,7 @@ export async function buildBranchReceiptWorkflow(
   lines.push(center(kv('合计', formatCost(totalCost))));
   lines.push(center(sep()));
   lines.push(center(''));
-
-  const popularModels = await getPopularModels(3);
+ 
   if (popularModels.length > 0) {
     lines.push(center(`热门模型 ${popularModels[0].date}`));
     lines.push(center(''));
@@ -201,8 +211,7 @@ export async function buildBranchReceiptWorkflow(
     }
     lines.push(center(''));
   }
-
-  const latestModels =  await getLatestModels(3);
+ 
   if (latestModels.length > 0) {
     lines.push(center('最新模型'));
     lines.push(center(''));
