@@ -5,8 +5,8 @@
  * 数据来源：openrouter.ai/rankings
  */
 
-import { getOpenRouterClient } from '@/openrouter/openrouter-client'
 import { getModels } from '@/openrouter/get-models'
+import { getOpenRouterClient } from '@/openrouter/openrouter-client'
 
 export interface PopularModel {
   model: string

@@ -9,13 +9,12 @@
 import { dirname, join } from 'path';
 import { getBranchUsage } from '@/claudecode/get-branch-usage';
 import { getVersion } from '@/claudecode/get-version';
-import { getModelPricing, calculateModelCost } from '@/openrouter/get-model-pricing';
-import { getModels } from '@/openrouter/get-models';
-import { getLatestModels } from '@/openrouter/get-latest-models';
-import { getPopularModels } from '@/openrouter/get-popular-models';
 import { getRate } from '@/exchange-rate/get-exchange-rate';
 import { getCurrentBranch } from '@/git/get-current-branch';
 import { getUserName } from '@/git/get-user-name';
+import { getLatestModels } from '@/openrouter/get-latest-models';
+import { getModelPricing, calculateModelCost } from '@/openrouter/get-model-pricing';
+import { getPopularModels } from '@/openrouter/get-popular-models';
 
 const projectRoot = join(dirname(dirname(import.meta.dir)));
 
