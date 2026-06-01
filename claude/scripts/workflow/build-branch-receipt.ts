@@ -229,7 +229,9 @@ if (import.meta.main) {
   const branch = process.argv[2];
   try {
     const receipt = await buildBranchReceiptWorkflow(branch);
-    console.log(receipt);
+    if(receipt) {
+      console.log(receipt);
+    }
   } catch (error) {
     console.error(`❌ ${error instanceof Error ? error.message : error}`);
     process.exit(1);
