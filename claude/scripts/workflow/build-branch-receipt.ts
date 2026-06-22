@@ -52,6 +52,10 @@ function formatNum(n: number): string {
   return n.toLocaleString('en-US');
 }
 
+function padEnd(s: string, width: number): string {
+  return s + ' '.repeat(Math.max(0, width - displayWidth(s)));
+}
+
 function center(text: string): string {
   const pad = Math.max(0, Math.floor((W - displayWidth(text)) / 2));
   return ' '.repeat(pad) + text;
@@ -88,7 +92,7 @@ export async function buildBranchReceiptWorkflow(
   const { stats, timestamps, sessionId } = branchUsage;
   const receiptNo = sessionId ? sessionId.slice(0, 8) : '';
 
-    const [rate, popularModels, latestModels] = await Promise.all([
+  const [rate, popularModels, latestModels] = await Promise.all([
     getRate(),
     getPopularModels(5),
     getLatestModels(5),
@@ -112,7 +116,7 @@ export async function buildBranchReceiptWorkflow(
   }[] = [];
   let totalCost = 0;
 
-for (let i = 0; i < sortedStats.length; i++) {
+  for (let i = 0; i < sortedStats.length; i++) {
     const [model, usageStats] = sortedStats[i];
     const pricing = pricingResults[i];
     const { usage } = usageStats;
@@ -207,7 +211,7 @@ for (let i = 0; i < sortedStats.length; i++) {
     lines.push(center('模型速览'));
     lines.push(center(sep()));
   }
- 
+
   if (popularModels.length > 0) {
     lines.push(center(`昨日热门 TOP ${popularModels.length}`));
     lines.push(center(''));
@@ -216,7 +220,7 @@ for (let i = 0; i < sortedStats.length; i++) {
     }
     lines.push(center(''));
   }
- 
+
   if (latestModels.length > 0) {
     lines.push(center(`最新上线 TOP ${latestModels.length}`));
     lines.push(center(''));
