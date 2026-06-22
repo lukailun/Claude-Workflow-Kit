@@ -10,7 +10,7 @@
 import { createInterface } from 'readline';
 import { AI, AI_PROVIDERS } from '@/ai/get-language-model';
 import { commitAndPush } from '@/workflow/commit-and-push';
-import { createMergeRequestWorkflow } from '@/workflow/create-merge-request';
+import { createPullRequestWorkflow } from '@/workflow/create-pull-request';
 
 interface SubmitOptions {
   ai?: AI;
@@ -40,15 +40,15 @@ async function submitWorkflow(options: SubmitOptions) {
   }
 
   if (commitResult.status === 'no_changes') {
-    const answer = await promptUser('没有新提交，是否仍要创建 MR？(y/n): ');
+    const answer = await promptUser('没有新提交，是否仍要创建 PR？(y/n): ');
     if (answer.toLowerCase() !== 'y' && answer !== '') {
       console.log('❌ 已取消');
       process.exit(0);
     }
   }
 
-  // 阶段二：创建 MR
-  await createMergeRequestWorkflow(options);
+  // 阶段二：创建 PR
+  await createPullRequestWorkflow(options);
 }
 
 // CLI 入口

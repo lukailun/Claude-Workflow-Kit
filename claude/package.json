@@ -9,7 +9,7 @@
     "lint:fix": "eslint scripts/ --fix",
     "test": "bun test",
     "commit": "bun run scripts/workflow/commit-and-push.ts",
-    "pr": "bun run scripts/workflow/create-merge-request.ts",
+    "pr": "bun run scripts/workflow/create-pull-request.ts",
     "release": "bun run scripts/workflow/create-release.ts",
     "publish-release": "bun run scripts/workflow/publish-release.ts",
     "hotfix": "bun run scripts/workflow/create-hotfix.ts",

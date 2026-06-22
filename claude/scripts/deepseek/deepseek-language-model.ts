@@ -9,6 +9,6 @@ const provider = createOpenAI({
     apiKey: env.apiKey,
 });
 
-const deepSeekLanguageModel: LanguageModel = provider.chat('deepseek-v4-flash')
+const deepSeekLanguageModel: LanguageModel = provider.chat('deepseek-v4-pro')
 
 export { deepSeekLanguageModel };

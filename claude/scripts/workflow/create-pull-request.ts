@@ -8,7 +8,7 @@
  *   tsx create-merge-request.ts --auto-merge   # 创建/更新 PR 并开启 CI 通过后自动合并
  */
 
-import { generateMergeRequestContent } from '@/ai/generate-pull-request-content';
+import { generatePullRequestContent } from '@/ai/generate-pull-request-content';
 import {
   getLanguageModel,
   AI,
@@ -25,19 +25,19 @@ import { getRepo } from '@/github';
 import { updatePullRequest } from '@/github';
 import { buildBranchReceiptWorkflow } from '@/workflow/build-branch-receipt';
 
-export interface MergeRequestOptions {
+export interface PullRequestOptions {
   ai?: AI;
   receipt?: boolean;
   autoMerge?: boolean;
 }
 
-export interface MergeRequestResult {
+export interface PullRequestResult {
   url: string;
 }
 
-export async function createMergeRequestWorkflow(
-  options: MergeRequestOptions = {}
-): Promise<MergeRequestResult> {
+export async function createPullRequestWorkflow(
+  options: PullRequestOptions = {}
+): Promise<PullRequestResult> {
   console.log('🚀 开始创建 Pull Request...\n');
 
   const sourceBranch = await getCurrentBranch();
@@ -55,7 +55,7 @@ export async function createMergeRequestWorkflow(
   console.log(`🤖 正在使用 ${options.ai ?? DEFAULT_AI} 生成 PR 内容...`);
   const model = await getLanguageModel(options.ai);
 
-  const content = await generateMergeRequestContent({
+  const content = await generatePullRequestContent({
     model,
     sourceBranch,
     targetBranch: targetBranch.fullName,
@@ -127,7 +127,7 @@ export async function createMergeRequestWorkflow(
 if (import.meta.main) {
   const args = process.argv.slice(2);
   const validAIProviders = AI_PROVIDERS;
-  const options: MergeRequestOptions = {};
+  const options: PullRequestOptions = {};
 
   for (let i = 0; i < args.length; i++) {
     if (args[i] === '--ai' && args[i + 1]) {
@@ -146,7 +146,7 @@ if (import.meta.main) {
     }
   }
 
-  createMergeRequestWorkflow(options).catch((err) => {
+  createPullRequestWorkflow(options).catch((err) => {
     console.error(`❌ ${err.message}`);
     process.exit(1);
   });

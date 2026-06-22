@@ -11,7 +11,7 @@ import {
 import { getRepositoryCompare } from '@/github';
 import type { PullRequestContent } from '@/github';
 
-interface GenerateMergeRequestContentParams {
+interface GeneratePullRequestContentParams {
   model: LanguageModel;
   sourceBranch: string;
   targetBranch: string;
@@ -23,8 +23,8 @@ interface GenerateMergeRequestContentParams {
  * @param params.sourceBranch 源分支
  * @returns PR 标题和描述
  */
-async function generateMergeRequestContent(
-  params: GenerateMergeRequestContentParams
+async function generatePullRequestContent(
+  params: GeneratePullRequestContentParams
 ): Promise<PullRequestContent | undefined> {
   const { sourceBranch, targetBranch } = params;
   const compare = await getRepositoryCompare({
@@ -134,4 +134,4 @@ async function generateMergeRequestContent(
   } satisfies PullRequestContent;
 }
 
-export { generateMergeRequestContent };
+export { generatePullRequestContent };

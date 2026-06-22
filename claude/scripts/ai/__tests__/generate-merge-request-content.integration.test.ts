@@ -8,14 +8,13 @@
 import { describe, test, expect, mock, beforeEach } from 'bun:test';
 import { getLanguageModel } from '@/ai/get-language-model';
 import { LanguageModel } from 'ai';
+import { generatePullRequestContent } from '@/ai/generate-pull-request-content'
 
 // Mock GitHub API
 const mockGetRepositoryCompare = mock(() => Promise.resolve({ commits: [], files: [] }));
 mock.module('@/github', () => ({
   getRepositoryCompare: mockGetRepositoryCompare,
 }));
-
-const { generateMergeRequestContent } = await import('../generate-pull-request-content');
 
 describe('generateMergeRequestContent - AI 生成结果观察', () => {
   let model: LanguageModel;
@@ -41,7 +40,7 @@ describe('generateMergeRequestContent - AI 生成结果观察', () => {
       ],
     } as any);
 
-    const result = await generateMergeRequestContent({
+    const result = await generatePullRequestContent({
       model,
       sourceBranch: 'feature/user-auth',
       targetBranch: 'main',
