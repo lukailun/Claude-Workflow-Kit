@@ -5,13 +5,11 @@
  */
 import { generateText, LanguageModel, Output } from 'ai';
 import { z } from 'zod';
-import {
-  getPullRequestPrompts,
-} from '@/ai/prompts/get-pull-request-prompts';
+import { getPullRequestPrompt } from '@/ai/prompts/get-pull-request-prompt';
 import { getRepositoryCompare } from '@/github';
 import type { PullRequestContent } from '@/github';
 
-interface GeneratePullRequestContentParams {
+interface GeneratePullRequestParams {
   model: LanguageModel;
   sourceBranch: string;
   targetBranch: string;
@@ -23,8 +21,8 @@ interface GeneratePullRequestContentParams {
  * @param params.sourceBranch 源分支
  * @returns PR 标题和描述
  */
-async function generatePullRequestContent(
-  params: GeneratePullRequestContentParams
+export async function generatePullRequest(
+  params: GeneratePullRequestParams
 ): Promise<PullRequestContent | undefined> {
   const { sourceBranch, targetBranch } = params;
   const compare = await getRepositoryCompare({
@@ -71,7 +69,7 @@ async function generatePullRequestContent(
     })
     .join('\n');
 
-  const descriptionPrompt = getPullRequestPrompts({
+  const prompt = getPullRequestPrompt({
     sourceBranch,
     targetBranch,
     diffStat,
@@ -80,7 +78,7 @@ async function generatePullRequestContent(
 
   const { output: pullRequest, totalUsage } = await generateText({
     model: params.model,
-    prompt: descriptionPrompt,
+    prompt,
     maxOutputTokens: 16384,
     output: Output.object({
       schema: z.object({
@@ -133,5 +131,3 @@ async function generatePullRequestContent(
     usage: totalUsage,
   } satisfies PullRequestContent;
 }
-
-export { generatePullRequestContent };

@@ -8,7 +8,7 @@
  *   tsx create-merge-request.ts --auto-merge   # 创建/更新 PR 并开启 CI 通过后自动合并
  */
 
-import { generatePullRequestContent } from '@/ai/generate-pull-request-content';
+import { generatePullRequest } from '@/ai/generate-pull-request';
 import {
   getLanguageModel,
   AI,
@@ -55,7 +55,7 @@ export async function createPullRequestWorkflow(
   console.log(`🤖 正在使用 ${options.ai ?? DEFAULT_AI} 生成 PR 内容...`);
   const model = await getLanguageModel(options.ai);
 
-  const content = await generatePullRequestContent({
+  const content = await generatePullRequest({
     model,
     sourceBranch,
     targetBranch: targetBranch.fullName,

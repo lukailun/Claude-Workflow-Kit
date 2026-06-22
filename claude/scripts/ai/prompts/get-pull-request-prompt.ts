@@ -1,4 +1,4 @@
-export function getPullRequestPrompts(params: {
+export function getPullRequestPrompt(params: {
   sourceBranch: string;
   targetBranch: string;
   diffStat: string;
