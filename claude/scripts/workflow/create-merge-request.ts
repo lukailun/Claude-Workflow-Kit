@@ -8,7 +8,7 @@
  *   tsx create-merge-request.ts --auto-merge   # 创建/更新 PR 并开启 CI 通过后自动合并
  */
 
-import { generateMergeRequestContent } from '@/ai';
+import { generateMergeRequestContent } from '@/ai/generate-merge-request-content';
 import {
   getAIProvider,
   AI,
