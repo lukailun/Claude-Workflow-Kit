@@ -8,14 +8,13 @@
  *   tsx create-merge-request.ts --auto-merge   # 创建/更新 PR 并开启 CI 通过后自动合并
  */
 
-import { generateMergeRequestContent } from '@/ai/generate-merge-request-content';
+import { generateMergeRequestContent } from '@/ai/generate-pull-request-content';
 import {
   getLanguageModel,
   AI,
   AI_PROVIDERS,
   DEFAULT_AI,
-} from '@/ai/get-ai-provider';
-import { formatTokenUsage } from '@/ai/types/token-usage';
+} from '@/ai/get-language-model';
 import { getCurrentBranch } from '@/git/get-current-branch';
 import { mainBranch } from '@/git/main-branch';
 import { createPullRequest } from '@/github';
@@ -68,10 +67,11 @@ export async function createMergeRequestWorkflow(
 
   console.log(`\n📝 标题: ${content.title}\n`);
 
-  if (content.tokenUsage) {
-    console.log(
-      `${await formatTokenUsage(content.tokenUsage, model.toString())}\n`
-    );
+  if (content.usage) {
+    content.usage.inputTokenDetails
+    // console.log(
+    //   `${await formatTokenUsage(content.usage, model.toString())}\n`
+    // );
   }
 
   const existingPullRequest = await getPullRequest({

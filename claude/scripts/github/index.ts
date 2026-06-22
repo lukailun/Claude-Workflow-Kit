@@ -12,5 +12,5 @@ export { getPullRequestDetails } from '@/github/get-pull-request-details';
 export { getPullRequestTargetBranch } from '@/github/get-pull-request-target-branch';
 export { getRepo } from '@/github/get-repo';
 export { getPullRequest } from '@/github/get-pull-request';
-export type { PullRequestContent } from '@/github/pull-request-content';
+export type { PullRequestContent, PullRequestType, PullRequestDescription } from '@/github/pull-request-content';
 export { createPullRequest } from '@/github/create-pull-request';

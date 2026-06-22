@@ -8,7 +8,7 @@
  */
 
 import { createInterface } from 'readline';
-import { AI, AI_PROVIDERS } from '@/ai/get-ai-provider';
+import { AI, AI_PROVIDERS } from '@/ai/get-language-model';
 import { commitAndPush } from '@/workflow/commit-and-push';
 import { createMergeRequestWorkflow } from '@/workflow/create-merge-request';
 

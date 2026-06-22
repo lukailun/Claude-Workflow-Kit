@@ -95,7 +95,7 @@ export async function buildBranchReceiptWorkflow(
   ]);
 
   const sortedStats = [...stats.entries()].sort(
-    (a, b) => b[1].usage.input - a[1].usage.input
+    (a, b) => (b[1].usage.inputTokens  ?? 0)- (a[1].usage.inputTokens ?? 0)
   );
   const pricingResults = await Promise.all(
     sortedStats.map(([model]) => getModelPricing(model))
@@ -123,9 +123,9 @@ export async function buildBranchReceiptWorkflow(
       name: model,
       displayName: pricing.name,
       count: usageStats.count,
-      input: usage.input,
-      output: usage.output,
-      cacheRead: usage.cacheRead,
+      input: usage.inputTokens ?? 0,
+      output: usage.outputTokens ?? 0,
+      cacheRead: usage.inputTokenDetails.cacheReadTokens ?? 0,
       cost,
     });
   }

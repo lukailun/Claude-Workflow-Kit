@@ -7,9 +7,10 @@
 
 import type { PublicPricing } from '@openrouter/sdk/models';
 import Big from 'big.js';
-import type { TokenUsage, ModelTokenUsageStats } from '@/ai/types/token-usage';
+import type {  ModelTokenUsageStats } from '@/ai/types/token-usage';
 import { getModels } from '@/openrouter/get-models';
 import { toOpenRouterId } from '@/openrouter/model-id';
+import { LanguageModelUsage } from 'ai';
 
 /** 模型定价（per 1M token，USD） */
 export interface ModelPricing {
@@ -72,12 +73,12 @@ export async function getModelPricing(modelId: string): Promise<ModelPricing> {
 }
 
 /** 计算费用（USD），price 单位为每 1M token */
-export function calculateCost(usage: TokenUsage, price: ModelPricing): number {
+export function calculateCost(usage: LanguageModelUsage, price: ModelPricing): number {
   return (
-    (usage.input * price.inputCacheMiss +
-      usage.cacheRead * price.inputCacheHit +
-      usage.cacheWrite * price.cacheWrite +
-      usage.output * price.output) /
+    ((usage.inputTokenDetails.noCacheTokens ?? 0) * price.inputCacheMiss +
+      (usage.inputTokenDetails.cacheReadTokens ?? 0 ) * price.inputCacheHit +
+      (usage.inputTokenDetails.cacheWriteTokens ?? 0) * price.cacheWrite +
+    (  usage.outputTokens ?? 0) * price.output) /
     1_000_000
   );
 }

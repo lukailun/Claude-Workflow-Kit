@@ -6,7 +6,7 @@
  */
 
 import { describe, test, expect, mock, beforeEach } from 'bun:test';
-import { getLanguageModel } from '@/ai/get-ai-provider';
+import { getLanguageModel } from '@/ai/get-language-model';
 import { LanguageModel } from 'ai';
 
 // Mock GitHub API
@@ -15,14 +15,14 @@ mock.module('@/github', () => ({
   getRepositoryCompare: mockGetRepositoryCompare,
 }));
 
-const { generateMergeRequestContent } = await import('../generate-merge-request-content');
+const { generateMergeRequestContent } = await import('../generate-pull-request-content');
 
 describe('generateMergeRequestContent - AI 生成结果观察', () => {
   let model: LanguageModel;
 
   beforeEach(async () => {
     mockGetRepositoryCompare.mockClear();
-    model = await getLanguageModel();
+    model = await getLanguageModel('mimo');
   });
 
   test('观察 AI 生成的 PR 内容', async () => {

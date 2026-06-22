@@ -14,7 +14,7 @@ import {
   AI,
   AI_PROVIDERS,
   DEFAULT_AI,
-} from '@/ai/get-ai-provider';
+} from '@/ai/get-language-model';
 import { formatTokenUsage } from '@/ai/types/token-usage';
 import { getCurrentBranch } from '@/git/get-current-branch';
 

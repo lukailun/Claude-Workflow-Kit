@@ -73,7 +73,20 @@ export async function getBranchUsage(
         }
         if (!statsMap.has(model)) {
           statsMap.set(model, {
-            usage: { input: 0, output: 0, cacheRead: 0, cacheWrite: 0 },
+            usage: {
+              inputTokens: 0,
+              inputTokenDetails: { 
+        noCacheTokens:  0,
+        cacheReadTokens:  0,
+        cacheWriteTokens: 0
+            },
+          outputTokens: 0,
+          outputTokenDetails: {
+            textTokens: 0,
+            reasoningTokens: 0,
+          },
+          totalTokens: 0,
+          },
             count: 0,
           });
         }
@@ -81,10 +94,13 @@ export async function getBranchUsage(
         if(!stats) continue;
         const cacheRead = usage.cache_read_input_tokens ?? 0;
         const cacheWrite = usage.cache_creation_input_tokens ?? 0;
-        stats.usage.input += inp;
-        stats.usage.output += out;
-        stats.usage.cacheRead += cacheRead;
-        stats.usage.cacheWrite += cacheWrite;
+        stats.usage.inputTokens = (stats.usage.inputTokens ?? 0) + inp;
+        stats.usage.outputTokens = (stats.usage.outputTokens ?? 0) + out;
+        stats.usage.inputTokenDetails.cacheReadTokens = (stats.usage.inputTokenDetails.cacheReadTokens ?? 0) + cacheRead;
+        stats.usage.inputTokenDetails.cacheWriteTokens = (stats.usage.inputTokenDetails.cacheWriteTokens ?? 0) + cacheWrite;
+        stats.usage.inputTokenDetails.noCacheTokens = (stats.usage.inputTokenDetails.noCacheTokens ?? 0) + inp;
+        stats.usage.outputTokenDetails.textTokens = (stats.usage.outputTokenDetails.textTokens ?? 0) + out;
+        stats.usage.outputTokenDetails.reasoningTokens  = stats.usage.outputTokenDetails.reasoningTokens;
         stats.count += 1;
       } catch {}
     }

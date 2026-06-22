@@ -24,16 +24,16 @@ async function getLanguageModel(ai?: AI): Promise<LanguageModel> {
       return longCatLanguageModel;
     }
     case 'bigmodel': {
-         const { longCatLanguageModel } = await import('@/longcat/longcat-language-model');
-      return longCatLanguageModel;
+         const { bigModelLanguageModel } = await import('@/bigmodel/bigmodel-language-model');
+      return bigModelLanguageModel;
     }
     case 'minimax': {
-        const { longCatLanguageModel } = await import('@/longcat/longcat-language-model');
-      return longCatLanguageModel;
+        const { miniMaxLanguageModel } = await import('@/minimax/minimax-language-model');
+      return miniMaxLanguageModel;
     }
     case 'mimo': {
-          const { longCatLanguageModel } = await import('@/longcat/longcat-language-model');
-      return longCatLanguageModel;
+      const { xiaomiMimoLanguageModel } = await import('@/xiaomi-mimo/xiaomi-mimo-language-model');
+      return xiaomiMimoLanguageModel;
     }
     case 'deepseek': {
       const { longCatLanguageModel } = await import('@/longcat/longcat-language-model');

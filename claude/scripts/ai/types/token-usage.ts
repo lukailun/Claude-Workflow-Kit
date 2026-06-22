@@ -1,4 +1,5 @@
 import { getModelPricing, calculateCost } from '@/openrouter/get-model-pricing';
+import { LanguageModelUsage } from 'ai';
 
 /** token 用量基础数据 */
 export interface TokenUsage {
@@ -10,22 +11,25 @@ export interface TokenUsage {
 
 /** 模型统计 */
 export interface ModelTokenUsageStats {
-  usage: TokenUsage;
+  usage: LanguageModelUsage;
   count: number;
 }
 
 export async function formatTokenUsage(
-  usage: TokenUsage,
+  usage: LanguageModelUsage,
   model: string
 ): Promise<string> {
-  const totalTokens = usage.input + usage.output;
+  const totalTokens = usage.totalTokens ?? 0;
   const cacheParts: string[] = [];
-  if (usage.cacheRead) cacheParts.push(`缓存读取 ${usage.cacheRead}`);
-  if (usage.cacheWrite) cacheParts.push(`缓存写入 ${usage.cacheWrite}`);
-  const cacheSuffix =
-    cacheParts.length > 0 ? ` (${cacheParts.join(', ')})` : '';
+  if (usage.inputTokenDetails.cacheReadTokens) {
+    cacheParts.push(`缓存读取 ${usage.inputTokenDetails.cacheReadTokens}`)
+  };
+  if (usage.inputTokenDetails.cacheWriteTokens) {
+    cacheParts.push(`缓存写入 ${usage.inputTokenDetails.cacheWriteTokens}`)
+  };
+  const cacheSuffix =  cacheParts.length > 0 ? ` (${cacheParts.join(', ')})` : '';
     const pricing = await getModelPricing(model);
     const cost = calculateCost(usage, pricing);
-  let result = `词元: 输入 ${usage.input}${cacheSuffix} + 输出 ${usage.output} = 总计 ${totalTokens} | 费用: $${cost.toFixed(2)}`;
+  let result = `词元: 输入 ${usage.inputTokens ?? 0}${cacheSuffix} + 输出 ${usage.outputTokens ?? 0} = 总计 ${totalTokens} | 费用: $${cost.toFixed(2)}`;
   return result;
 }
