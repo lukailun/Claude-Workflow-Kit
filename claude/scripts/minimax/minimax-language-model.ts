@@ -1,6 +1,6 @@
-import { getMiniMaxFromEnv } from '@/env/get-minimax-from-env';
 import { createOpenAI } from '@ai-sdk/openai';
 import type { LanguageModel } from 'ai';
+import { getMiniMaxFromEnv } from '@/env/get-minimax-from-env';
 
 const env = getMiniMaxFromEnv();
 const provider = createOpenAI({

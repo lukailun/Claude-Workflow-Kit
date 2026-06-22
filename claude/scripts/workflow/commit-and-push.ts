@@ -8,9 +8,9 @@
 
 import { createInterface } from 'readline';
 import { $ } from 'bun';
-import { generateCommitMessage } from '@/ai';
+import { generateCommitMessage } from '@/ai/generate-commit-message';
 import {
-  getModel,
+  getLanguageModel,
   AI,
   AI_PROVIDERS,
   DEFAULT_AI,
@@ -104,7 +104,7 @@ export async function commitAndPush(
 
   // 4. 使用 AI 生成 commit message
   console.log(`🤖 正在使用 ${options.ai ?? DEFAULT_AI} 生成 commit message...`);
-  const model = await getModel(options.ai);
+  const model = await getLanguageModel(options.ai);
   const commitResult = await generateCommitMessage({
     model,
     diffStat,
@@ -120,7 +120,7 @@ export async function commitAndPush(
 
   if (commitResult.tokenUsage) {
     console.log(
-      `${await formatTokenUsage(commitResult.tokenUsage, model.model)}\n`
+      `${await formatTokenUsage(commitResult.tokenUsage, model.toString())}\n`
     );
   }
 

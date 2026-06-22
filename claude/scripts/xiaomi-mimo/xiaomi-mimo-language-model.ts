@@ -1,6 +1,6 @@
-import { getXiaomiMimoFromEnv } from '@/env/get-xiaomi-mimo-from-env';
 import { createOpenAI } from '@ai-sdk/openai';
 import type { LanguageModel } from 'ai';
+import { getXiaomiMimoFromEnv } from '@/env/get-xiaomi-mimo-from-env';
 
 const env = getXiaomiMimoFromEnv();
 const provider = createOpenAI({

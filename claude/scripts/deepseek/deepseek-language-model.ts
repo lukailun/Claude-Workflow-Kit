@@ -1,11 +1,11 @@
-import { getDeepSeekFromEnv } from '@/env/get-deepseek-from-env';
-import { createOpenAI } from '@ai-sdk/openai';
+import { createAnthropic } from '@ai-sdk/anthropic';
 import type { LanguageModel } from 'ai';
+import { getDeepSeekFromEnv } from '@/env/get-deepseek-from-env';
 
 const env = getDeepSeekFromEnv();
-const provider = createOpenAI({
+const provider = createAnthropic({
     name: 'DeepSeek',
-    baseURL: env.baseUrl,
+    baseURL: `${ env.baseUrl}/anthropic`,
     apiKey: env.apiKey,
 });
 

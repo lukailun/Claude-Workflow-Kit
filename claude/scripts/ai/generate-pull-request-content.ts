@@ -3,8 +3,8 @@
  *
  * 功能：使用 AI 自动生成 Pull Request 的标题和描述
  */
-import { z } from 'zod';
 import { generateText, LanguageModel, Output } from 'ai';
+import { z } from 'zod';
 import {
   getPullRequestPrompts,
 } from '@/ai/prompts/get-pull-request-prompts';

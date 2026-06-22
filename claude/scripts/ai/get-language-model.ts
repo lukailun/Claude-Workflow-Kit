@@ -20,8 +20,8 @@ export const DEFAULT_AI: AI = 'longcat';
 async function getLanguageModel(ai?: AI): Promise<LanguageModel> {
   switch (ai ?? DEFAULT_AI) {
     case 'anthropic': {
-        const { longCatLanguageModel } = await import('@/longcat/longcat-language-model');
-      return longCatLanguageModel;
+        const { anthropicLanguageModel } = await import('@/anthropic/anthropic-language-model');
+      return anthropicLanguageModel;
     }
     case 'bigmodel': {
          const { bigModelLanguageModel } = await import('@/bigmodel/bigmodel-language-model');

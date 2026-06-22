@@ -1,6 +1,6 @@
-import { getLongCatFromEnv } from '@/env/get-longcat-from-env';
 import { createOpenAI } from '@ai-sdk/openai';
 import type { LanguageModel } from 'ai';
+import { getLongCatFromEnv } from '@/env/get-longcat-from-env';
 
 const env = getLongCatFromEnv();
 const provider = createOpenAI({

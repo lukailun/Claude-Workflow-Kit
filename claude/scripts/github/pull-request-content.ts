@@ -1,4 +1,3 @@
-import type { TokenUsage } from '@/ai/types/token-usage';
 import { LanguageModelUsage } from 'ai';
 
 export type PullRequestType = 'feat' | 'fix' | 'docs' | 'style' | 'refactor' | 'test' | 'chore' | 'perf';

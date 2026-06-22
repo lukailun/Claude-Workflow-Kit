@@ -1,6 +1,6 @@
-import { getBigModelFromEnv } from '@/env/get-bigmodel-from-env';
 import { createOpenAI } from '@ai-sdk/openai';
 import type { LanguageModel } from 'ai';
+import { getBigModelFromEnv } from '@/env/get-bigmodel-from-env';
 
 const env = getBigModelFromEnv();
 const provider = createOpenAI({
