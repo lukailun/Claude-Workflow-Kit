@@ -6,8 +6,8 @@
  */
 
 import { describe, test, expect, mock, beforeEach } from 'bun:test';
-import { getAIProvider } from '@/ai/get-ai-provider';
-import type { AIProvider } from '@/ai/types/ai-provider';
+import { getLanguageModel } from '@/ai/get-ai-provider';
+import { LanguageModel } from 'ai';
 
 // Mock GitHub API
 const mockGetRepositoryCompare = mock(() => Promise.resolve({ commits: [], files: [] }));
@@ -18,11 +18,11 @@ mock.module('@/github', () => ({
 const { generateMergeRequestContent } = await import('../generate-merge-request-content');
 
 describe('generateMergeRequestContent - AI 生成结果观察', () => {
-  let aiProvider: AIProvider;
+  let model: LanguageModel;
 
   beforeEach(async () => {
     mockGetRepositoryCompare.mockClear();
-    aiProvider = await getAIProvider();
+    model = await getLanguageModel();
   });
 
   test('观察 AI 生成的 PR 内容', async () => {
@@ -42,7 +42,7 @@ describe('generateMergeRequestContent - AI 生成结果观察', () => {
     } as any);
 
     const result = await generateMergeRequestContent({
-      aiProvider,
+      model,
       sourceBranch: 'feature/user-auth',
       targetBranch: 'main',
     });

@@ -4,18 +4,19 @@
  * 功能：使用 AI 自动生成 Pull Request 的标题和描述
  */
 
+import { generateText, LanguageModel } from 'ai';
+import type { ModelConfig } from '@/ai/models';
 import {
   getTitlePrompt,
   getDescriptionPrompt,
 } from '@/ai/prompts/merge-request-prompts';
-import type { AIProvider } from '@/ai/types';
 import type { TokenUsage } from '@/ai/types/token-usage';
 import { formatTokenUsage } from '@/ai/types/token-usage';
 import { getRepositoryCompare } from '@/github';
 import { PullRequestContent } from '@/github';
 
 interface GenerateMergeRequestContentParams {
-  aiProvider: AIProvider;
+  model: LanguageModel;
   sourceBranch: string;
   targetBranch: string;
 }
@@ -74,49 +75,64 @@ async function generateMergeRequestContent(
     diffLog,
   });
 
-  const descriptionMessage = await params.aiProvider.generate({
+  const descriptionResult = await generateText({
+    model: params.model,
     messages: [{ role: 'user', content: descriptionPrompt }],
-    maxTokens: 16384,
+    maxOutputTokens: 16384,
   });
 
-  const titleMessage = await params.aiProvider.generate({
+  const titleResult = await generateText({
+    model: params.model,
     messages: [
       {
         role: 'user',
         content: getTitlePrompt({
-          description: descriptionMessage.text ?? '',
+          description: descriptionResult.text ?? '',
         }),
       },
     ],
-    maxTokens: 2048,
+    maxOutputTokens: 2048,
   });
 
-  const title =
-    titleMessage.text || `将 ${sourceBranch} 合并到 ${targetBranch}`;
-  const tokenUsage: TokenUsage | undefined =
-    descriptionMessage.tokenUsage && titleMessage.tokenUsage
-      ? {
-          input:
-            descriptionMessage.tokenUsage.input + titleMessage.tokenUsage.input,
-          output:
-            descriptionMessage.tokenUsage.output +
-            titleMessage.tokenUsage.output,
-          cacheRead:
-            descriptionMessage.tokenUsage.cacheRead +
-            titleMessage.tokenUsage.cacheRead,
-          cacheWrite:
-            descriptionMessage.tokenUsage.cacheWrite +
-            titleMessage.tokenUsage.cacheWrite,
-        }
-      : descriptionMessage.tokenUsage || titleMessage.tokenUsage;
+  const descriptionUsage: TokenUsage | undefined = descriptionResult.usage
+    ? {
+        input: descriptionResult.usage.inputTokens ?? 0,
+        output: descriptionResult.usage.outputTokens ?? 0,
+        cacheRead:
+          descriptionResult.usage.inputTokenDetails?.cacheReadTokens ?? 0,
+        cacheWrite:
+          descriptionResult.usage.inputTokenDetails?.cacheWriteTokens ?? 0,
+      }
+    : undefined;
 
-  const { name, url, model } = params.aiProvider.info;
-  const tokenInfo = tokenUsage
-    ? `\n* ${await formatTokenUsage(tokenUsage, model)}`
-    : '';
-  const generatedInfoSection = `\n\n## 生成信息\n* AI 提供商: [${name}](${url})\n* 模型: ${model}${tokenInfo}`;
-  const description =
-    descriptionMessage.text + generatedInfoSection;
+  const titleUsage: TokenUsage | undefined = titleResult.usage
+    ? {
+        input: titleResult.usage.inputTokens ?? 0,
+        output: titleResult.usage.outputTokens ?? 0,
+        cacheRead: titleResult.usage.inputTokenDetails?.cacheReadTokens ?? 0,
+        cacheWrite: titleResult.usage.inputTokenDetails?.cacheWriteTokens ?? 0,
+      }
+    : undefined;
+
+  const title =
+    titleResult.text || `将 ${sourceBranch} 合并到 ${targetBranch}`;
+  const tokenUsage: TokenUsage | undefined =
+    descriptionUsage && titleUsage
+      ? {
+          input: descriptionUsage.input + titleUsage.input,
+          output: descriptionUsage.output + titleUsage.output,
+          cacheRead: descriptionUsage.cacheRead + titleUsage.cacheRead,
+          cacheWrite: descriptionUsage.cacheWrite + titleUsage.cacheWrite,
+        }
+      : descriptionUsage || titleUsage;
+
+  // const { name, url, model } = params.model;
+  // const tokenInfo = tokenUsage
+  //   ? `\n* ${await formatTokenUsage(tokenUsage, model)}`
+  //   : '';
+  // const generatedInfoSection = `\n\n## 生成信息\n* AI 提供商: [${name}](${url})\n* 模型: ${model}${tokenInfo}`;
+  // const description = descriptionResult.text + generatedInfoSection;
+  const description = descriptionResult.text
 
   return {
     title,

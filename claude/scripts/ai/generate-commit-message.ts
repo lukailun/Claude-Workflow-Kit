@@ -2,12 +2,13 @@
  * 使用 AI 生成 commit message
  */
 
+import { generateText } from 'ai';
+import type { ModelConfig } from '@/ai/models';
 import { getCommitMessagePrompt } from '@/ai/prompts/commit-message-prompts';
-import type { AIProvider } from '@/ai/types';
 import type { TokenUsage } from '@/ai/types/token-usage';
 
 interface GenerateCommitMessageParams {
-  aiProvider: AIProvider;
+  model: ModelConfig;
   diffStat: string;
   diffContent: string;
   branchName: string;
@@ -27,14 +28,22 @@ async function generateCommitMessage(
     branchName: params.branchName,
   });
 
-  const response = await params.aiProvider.generate({
+  const result = await generateText({
+    model: params.model.languageModel,
     messages: [{ role: 'user', content: prompt }],
-    maxTokens: 2048,
+    maxOutputTokens: 2048,
   });
 
   return {
-    message: response.text?.trim() ?? '',
-    tokenUsage: response.tokenUsage,
+    message: result.text?.trim() ?? '',
+    tokenUsage: result.usage
+      ? {
+          input: result.usage.inputTokens ?? 0,
+          output: result.usage.outputTokens ?? 0,
+          cacheRead: result.usage.inputTokenDetails?.cacheReadTokens ?? 0,
+          cacheWrite: result.usage.inputTokenDetails?.cacheWriteTokens ?? 0,
+        }
+      : undefined,
   };
 }
 

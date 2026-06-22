@@ -10,7 +10,7 @@ import { createInterface } from 'readline';
 import { $ } from 'bun';
 import { generateCommitMessage } from '@/ai';
 import {
-  getAIProvider,
+  getModel,
   AI,
   AI_PROVIDERS,
   DEFAULT_AI,
@@ -104,9 +104,9 @@ export async function commitAndPush(
 
   // 4. 使用 AI 生成 commit message
   console.log(`🤖 正在使用 ${options.ai ?? DEFAULT_AI} 生成 commit message...`);
-  const provider = await getAIProvider(options.ai);
+  const model = await getModel(options.ai);
   const commitResult = await generateCommitMessage({
-    aiProvider: provider,
+    model,
     diffStat,
     diffContent: diffContent.slice(0, 8000), // 限制长度避免 token 超限
     branchName: branch,
@@ -120,7 +120,7 @@ export async function commitAndPush(
 
   if (commitResult.tokenUsage) {
     console.log(
-      `${await formatTokenUsage(commitResult.tokenUsage, provider.info.model)}\n`
+      `${await formatTokenUsage(commitResult.tokenUsage, model.model)}\n`
     );
   }
 

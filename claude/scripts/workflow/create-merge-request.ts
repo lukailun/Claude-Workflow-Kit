@@ -10,7 +10,7 @@
 
 import { generateMergeRequestContent } from '@/ai/generate-merge-request-content';
 import {
-  getAIProvider,
+  getLanguageModel,
   AI,
   AI_PROVIDERS,
   DEFAULT_AI,
@@ -54,10 +54,10 @@ export async function createMergeRequestWorkflow(
 
   const isMergingToMainBranch = targetBranch.type === mainBranch.type;
   console.log(`🤖 正在使用 ${options.ai ?? DEFAULT_AI} 生成 PR 内容...`);
-  const provider = await getAIProvider(options.ai);
+  const model = await getLanguageModel(options.ai);
 
   const content = await generateMergeRequestContent({
-    aiProvider: provider,
+    model,
     sourceBranch,
     targetBranch: targetBranch.fullName,
   });
@@ -70,7 +70,7 @@ export async function createMergeRequestWorkflow(
 
   if (content.tokenUsage) {
     console.log(
-      `${await formatTokenUsage(content.tokenUsage, provider.info.model)}\n`
+      `${await formatTokenUsage(content.tokenUsage, model.toString())}\n`
     );
   }
 
