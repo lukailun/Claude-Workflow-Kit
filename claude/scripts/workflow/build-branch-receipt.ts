@@ -90,8 +90,8 @@ export async function buildBranchReceiptWorkflow(
 
     const [rate, popularModels, latestModels] = await Promise.all([
     getRate(),
-    getPopularModels(3),
-    getLatestModels(3),
+    getPopularModels(5),
+    getLatestModels(5),
   ]);
 
   const sortedStats = [...stats.entries()].sort(
@@ -202,9 +202,14 @@ for (let i = 0; i < sortedStats.length; i++) {
   lines.push(center(kv('合计', formatCost(totalCost))));
   lines.push(center(sep()));
   lines.push(center(''));
+
+  if (popularModels.length > 0 || latestModels.length > 0) {
+    lines.push(center('模型速览'));
+    lines.push(center(sep()));
+  }
  
   if (popularModels.length > 0) {
-    lines.push(center(`热门模型 ${popularModels[0].date}`));
+    lines.push(center(`昨日热门 TOP ${popularModels.length}`));
     lines.push(center(''));
     for (const model of popularModels) {
       lines.push(center(kv(formatNum(model.totalTokens), model.name)));
@@ -213,7 +218,7 @@ for (let i = 0; i < sortedStats.length; i++) {
   }
  
   if (latestModels.length > 0) {
-    lines.push(center('最新模型'));
+    lines.push(center(`最新上线 TOP ${latestModels.length}`));
     lines.push(center(''));
     for (const model of latestModels) {
       const date = new Date(model.created * 1000).toISOString().split('T')[0];
