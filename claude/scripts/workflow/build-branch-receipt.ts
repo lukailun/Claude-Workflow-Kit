@@ -52,10 +52,6 @@ function formatNum(n: number): string {
   return n.toLocaleString('en-US');
 }
 
-function padEnd(s: string, width: number): string {
-  return s + ' '.repeat(Math.max(0, width - displayWidth(s)));
-}
-
 function center(text: string): string {
   const pad = Math.max(0, Math.floor((W - displayWidth(text)) / 2));
   return ' '.repeat(pad) + text;
