@@ -9,6 +9,6 @@ const provider = createOpenAI({
     apiKey: env.apiKey,
 });
 
-const longCatLanguageModel: LanguageModel = provider('LongCat-2.0-Preview')
+const longCatLanguageModel: LanguageModel = provider.chat('LongCat-2.0-Preview')
 
 export { longCatLanguageModel };
