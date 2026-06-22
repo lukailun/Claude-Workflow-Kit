@@ -22,7 +22,7 @@ describe('generateMergeRequestContent - AI 生成结果观察', () => {
 
   beforeEach(async () => {
     mockGetRepositoryCompare.mockClear();
-    model = await getLanguageModel('mimo');
+    model = await getLanguageModel('deepseek');
   });
 
   test('观察 AI 生成的 PR 内容', async () => {

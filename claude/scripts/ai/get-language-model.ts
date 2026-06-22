@@ -36,8 +36,8 @@ async function getLanguageModel(ai?: AI): Promise<LanguageModel> {
       return xiaomiMimoLanguageModel;
     }
     case 'deepseek': {
-      const { longCatLanguageModel } = await import('@/longcat/longcat-language-model');
-      return longCatLanguageModel;
+      const { deepSeekLanguageModel } = await import('@/deepseek/deepseek-language-model');
+      return deepSeekLanguageModel;
     }
     case 'longcat': {
       const { longCatLanguageModel } = await import('@/longcat/longcat-language-model');
