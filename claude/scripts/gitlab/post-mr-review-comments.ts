@@ -64,9 +64,8 @@ export async function postMrInlineComment(
       },
     });
     console.log(`  ✓ 评论已发布：${filePath}:${lineNumber}`);
-  } catch (err: any) {
+  } catch {
     console.error(`  ✗ 评论发布失败：${filePath}:${lineNumber}`);
-    console.error(`    错误：${err?.message || err}`);
   }
 }
 

@@ -8,13 +8,10 @@ import { linearClient } from '@/linear/linear-client';
 
 /**
  * 通过 issue identifier 获取 issue
- * @param issueId Issue 的 identifier（如 '4T-9192'）
+ * @param issueId Issue 的 identifier
  * @returns issue 详情
  */
-async function getLinearIssue(issueId: string): Promise<Issue> {
+export async function getLinearIssue(issueId: string): Promise<Issue> {
   const issue = await linearClient.issue(issueId);
-  linearClient.imageUploadFromUrl;
   return issue;
 }
-
-export { getLinearIssue };
