@@ -22,7 +22,7 @@ export class OpenAICompatibleProvider implements AIProvider {
     const response = await this.client.chat.completions.create({
       model: this.info.model,
       messages: params.messages,
-      max_tokens: params.maxTokens,
+      max_completion_tokens: params.maxTokens,
       stream: false,
     });
 

@@ -9,13 +9,16 @@
 import { dirname, join } from 'path';
 import { getBranchUsage } from '@/claudecode/get-branch-usage';
 import { getVersion } from '@/claudecode/get-version';
-import { getModelPricing, calculateModelCost } from '@/openrouter/get-model-pricing';
+import { getRate } from '@/exchange-rate/get-exchange-rate';
 import { getCurrentBranch } from '@/git/get-current-branch';
 import { getUserName } from '@/git/get-user-name';
+import { getLatestModels } from '@/openrouter/get-latest-models';
+import { getModelPricing, calculateModelCost } from '@/openrouter/get-model-pricing';
+import { getPopularModels } from '@/openrouter/get-popular-models';
 
-const projectRoot = join(dirname(dirname(dirname(import.meta.dir))));
+const projectRoot = join(dirname(dirname(import.meta.dir)));
 
-const W = 32;
+const W = 45;
 
 /** 计算字符串的终端显示宽度（CJK 字符占 2 列） */
 function displayWidth(s: string): number {
@@ -47,10 +50,6 @@ function displayWidth(s: string): number {
 
 function formatNum(n: number): string {
   return n.toLocaleString('en-US');
-}
-
-function padEnd(s: string, width: number): string {
-  return s + ' '.repeat(Math.max(0, width - displayWidth(s)));
 }
 
 function center(text: string): string {
@@ -89,6 +88,19 @@ export async function buildBranchReceiptWorkflow(
   const { stats, timestamps, sessionId } = branchUsage;
   const receiptNo = sessionId ? sessionId.slice(0, 8) : '';
 
+  const [rate, popularModels, latestModels] = await Promise.all([
+    getRate(),
+    getPopularModels(5),
+    getLatestModels(5),
+  ]);
+
+  const sortedStats = [...stats.entries()].sort(
+    (a, b) => b[1].usage.input - a[1].usage.input
+  );
+  const pricingResults = await Promise.all(
+    sortedStats.map(([model]) => getModelPricing(model))
+  );
+
   const models: {
     name: string;
     displayName: string;
@@ -100,11 +112,10 @@ export async function buildBranchReceiptWorkflow(
   }[] = [];
   let totalCost = 0;
 
-  for (const [model, usageStats] of [...stats.entries()].sort(
-    (a, b) => b[1].usage.input - a[1].usage.input
-  )) {
+  for (let i = 0; i < sortedStats.length; i++) {
+    const [model, usageStats] = sortedStats[i];
+    const pricing = pricingResults[i];
     const { usage } = usageStats;
-    const pricing = await getModelPricing(model);
     const cost = calculateModelCost(usageStats, pricing);
     totalCost += cost;
 
@@ -137,10 +148,10 @@ export async function buildBranchReceiptWorkflow(
     } else {
       duration = `${durationS}s`;
     }
-    const fmt = (d: Date) =>
+    const format = (d: Date) =>
       `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')} ${String(d.getHours()).padStart(2, '0')}:${String(d.getMinutes()).padStart(2, '0')}:${String(d.getSeconds()).padStart(2, '0')}`;
-    started = fmt(first);
-    ended = fmt(last);
+    started = format(first);
+    ended = format(last);
   }
 
   const userName = getUserName(projectRoot);
@@ -169,10 +180,14 @@ export async function buildBranchReceiptWorkflow(
   lines.push(center(''));
   lines.push(center(sep()));
 
+  const formatCost = (usd: number) => {
+    const cost = '$' + usd.toFixed(2);
+    if (rate) return cost + '/¥' + (usd * rate).toFixed(2);
+    return cost;
+  };
+
   for (const model of models) {
-    lines.push(
-      center(kv(model.displayName, '$' + model.cost.toFixed(2)))
-    );
+    lines.push(center(kv(model.displayName, formatCost(model.cost))));
     lines.push(center(dashedSep()));
     lines.push(center(kv('输入', formatNum(model.input), 2)));
     lines.push(center(kv('输出', formatNum(model.output), 2)));
@@ -184,12 +199,33 @@ export async function buildBranchReceiptWorkflow(
     lines.push(center(sep()));
   }
 
-  lines.push(center(kv('合计', '$' + totalCost.toFixed(2))));
+  lines.push(center(kv('合计', formatCost(totalCost))));
   lines.push(center(sep()));
   lines.push(center(''));
-  lines.push(center('谢谢惠顾'));
-  lines.push(center('客户留存'));
-  lines.push(center(''));
+
+  if (popularModels.length > 0 || latestModels.length > 0) {
+    lines.push(center('模型速览'));
+    lines.push(center(sep()));
+  }
+
+  if (popularModels.length > 0) {
+    lines.push(center(`昨日热门 TOP ${popularModels.length}`));
+    lines.push(center(''));
+    for (const model of popularModels) {
+      lines.push(center(kv(formatNum(model.totalTokens), model.name)));
+    }
+    lines.push(center(''));
+  }
+
+  if (latestModels.length > 0) {
+    lines.push(center(`最新上线 TOP ${latestModels.length}`));
+    lines.push(center(''));
+    for (const model of latestModels) {
+      const date = new Date(model.created * 1000).toISOString().split('T')[0];
+      lines.push(center(kv(date, model.name)));
+    }
+    lines.push(center(''));
+  }
 
   return lines.join('\n');
 }
@@ -198,7 +234,9 @@ if (import.meta.main) {
   const branch = process.argv[2];
   try {
     const receipt = await buildBranchReceiptWorkflow(branch);
-    console.log(receipt);
+    if(receipt) {
+      console.log(receipt);
+    }
   } catch (error) {
     console.error(`❌ ${error instanceof Error ? error.message : error}`);
     process.exit(1);

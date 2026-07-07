@@ -114,7 +114,7 @@ async function generateMergeRequestContent(
   const tokenInfo = tokenUsage
     ? `\n* ${await formatTokenUsage(tokenUsage, model)}`
     : '';
-  const generatedInfoSection = `\n\n## 生成信息\n* **AI 提供商**: [${name}](${url})\n* **模型**: ${model}${tokenInfo}`;
+  const generatedInfoSection = `\n\n## 生成信息\n* AI 提供商: [${name}](${url})\n* 模型: ${model}${tokenInfo}`;
   const description =
     descriptionMessage.text + generatedInfoSection;
 
