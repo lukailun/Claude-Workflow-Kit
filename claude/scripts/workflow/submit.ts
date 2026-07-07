@@ -3,18 +3,20 @@
  *
  * 用法：
  *   tsx submit.ts                # 使用默认 AI provider（ark）
- *   tsx submit.ts --ai anthropic # 使用指定 AI provider
+ *   tsx submit.ts --ai claude    # 使用指定 AI provider
  *   tsx submit.ts --receipt      # 创建 MR 并在 Linear 中添加 receipt 评论
+ *   tsx submit.ts --auto-merge   # 创建/更新 MR 并开启 pipeline 通过后自动合并
  */
 
 import { createInterface } from 'readline';
-import { AI, AI_PROVIDERS } from '@/ai/get-ai-provider';
+import { AI, AI_PROVIDERS } from '@/ai/get-language-model';
 import { commitAndPush } from '@/workflow/commit-and-push';
 import { createMergeRequestWorkflow } from '@/workflow/create-merge-request';
 
 interface SubmitOptions {
   ai?: AI;
   receipt?: boolean;
+  autoMerge?: boolean;
 }
 
 function promptUser(question: string): Promise<string> {
@@ -69,6 +71,8 @@ for (let i = 0; i < args.length; i++) {
     i++;
   } else if (args[i] === '--receipt') {
     options.receipt = true;
+  } else if (args[i] === '--auto-merge') {
+    options.autoMerge = true;
   }
 }
 

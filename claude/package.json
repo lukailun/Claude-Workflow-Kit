@@ -21,21 +21,28 @@
   "devDependencies": {
     "@types/big.js": "^7.0.0",
     "@types/bun": "latest",
-    "@typescript-eslint/eslint-plugin": "^8.61.1",
-    "@typescript-eslint/parser": "^8.61.1",
-    "eslint": "^10.5.0",
-    "eslint-plugin-import-x": "^4.16.2"
+    "@typescript-eslint/eslint-plugin": "^8.63.0",
+    "@typescript-eslint/parser": "^8.63.0",
+    "eslint": "^10.6.0",
+    "eslint-plugin-import-x": "^4.17.1"
   },
   "peerDependencies": {
-    "typescript": "^6.0.3"
+    "typescript": "latest"
   },
   "dependencies": {
-    "@anthropic-ai/claude-agent-sdk": "^0.3.185",
-    "@anthropic-ai/sdk": "^0.105.0",
+    "@ai-sdk/anthropic": "^4.0.8",
+    "@ai-sdk/google": "^4.0.8",
+    "@ai-sdk/openai": "^4.0.8",
+    "@gitbeaker/rest": "^43.8.0",
+    "@linear/sdk": "87.0.0",
     "@octokit/rest": "^22.0.1",
-    "@openrouter/sdk": "^0.13.7",
+    "@openrouter/ai-sdk-provider": "^3.0.0",
+    "@openrouter/sdk": "^0.13.24",
+    "@sentry/api": "^0.253.0",
+    "ai": "^7.0.16",
     "big.js": "^7.0.1",
     "dotenv": "^17.4.2",
-    "openai": "^6.44.0"
+    "minimatch": "^10.2.5",
+    "zod": "^4.4.3"
   }
 }

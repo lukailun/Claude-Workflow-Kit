@@ -2,47 +2,18 @@
  * 创建 feature 分支的完整流程
  *
  * 用法：
- *   tsx create-feature.ts <branch-name>
+ *   tsx create-feature.ts                  # 从 Linear issues 中选择
+ *   tsx create-feature.ts <branch-name>    # 直接指定分支名称
  *
  * 示例：
- *   tsx create-feature.ts ui-redesign
+ *   tsx create-feature.ts 4t-9192
  */
 
-import { createInterface } from 'readline';
-import { createFeatureBranch } from '@/github/create-feature-branch';
+import { createFeatureBranch } from '@/gitlab/create-feature-branch';
+import { createBranchFromLinearWorkflow } from '@/workflow/create-branch-from-linear';
 
-function promptUser(question: string): Promise<string> {
-  const readline = createInterface({
-    input: process.stdin,
-    output: process.stdout,
-  });
-
-  return new Promise((resolve) => {
-    readline.question(question, (answer) => {
-      readline.close();
-      resolve(answer.trim());
-    });
-  });
-}
-
-async function createFeatureWorkflow() {
-  const argName = process.argv[2];
-
-  let branchName: string;
-
-  if (argName) {
-    branchName = argName;
-  } else {
-    branchName = await promptUser('请输入 feature 分支名称: ');
-  }
-
-  if (!branchName) {
-    console.error('❌ 分支名称不能为空');
-    process.exit(1);
-  }
-
-  console.log('\n🚀 开始创建 feature 分支...\n');
-  await createFeatureBranch(branchName);
-}
-
-createFeatureWorkflow();
+createBranchFromLinearWorkflow({
+  emoji: '🚀',
+  branchType: 'feature',
+  createBranch: createFeatureBranch,
+});

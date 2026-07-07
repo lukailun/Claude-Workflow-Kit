@@ -56,12 +56,12 @@ type Branch =
   | ExperimentalBranch
   | MainBranch;
 
-export {
-  type BranchType,
-  type Branch,
-  type FeatureBranch,
-  type ReleaseBranch,
-  type HotfixBranch,
-  type ExperimentalBranch,
-  type MainBranch,
+export type {
+  BranchType,
+  Branch,
+  FeatureBranch,
+  ReleaseBranch,
+  HotfixBranch,
+  ExperimentalBranch,
+  MainBranch,
 };

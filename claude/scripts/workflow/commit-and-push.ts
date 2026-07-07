@@ -8,13 +8,13 @@
 
 import { createInterface } from 'readline';
 import { $ } from 'bun';
-import { generateCommitMessage } from '@/ai';
+import { generateCommitMessage } from '@/ai/generate-commit-message';
 import {
-  getAIProvider,
+  getLanguageModel,
   AI,
   AI_PROVIDERS,
-  DEFAULT_AI,
-} from '@/ai/get-ai-provider';
+  getLanguageModelInfo,
+} from '@/ai/get-language-model';
 import { formatTokenUsage } from '@/ai/types/token-usage';
 import { getCurrentBranch } from '@/git/get-current-branch';
 
@@ -47,7 +47,6 @@ export async function commitAndPush(
   const branch = await getCurrentBranch();
   console.log(`📍 当前分支: ${branch}\n`);
 
-  // 1. 检查是否有未提交的改动
   const unstaged = await $`git diff --name-only`.text();
   const untracked = await $`git ls-files --others --exclude-standard`.text();
   const stagedNow = await $`git diff --cached --name-only`.text();
@@ -57,7 +56,6 @@ export async function commitAndPush(
     return { status: 'no_changes' };
   }
 
-  // 显示未暂存的改动文件
   if (unstaged || untracked) {
     const modifiedFiles = unstaged.trim().split('\n').filter(Boolean);
     const newFiles = untracked.trim().split('\n').filter(Boolean);
@@ -84,7 +82,6 @@ export async function commitAndPush(
     }
   }
 
-  // 2. 检查是否有暂存的改动
   const staged = await $`git diff --cached --name-only`.text();
   if (!staged.trim()) {
     console.log('⚠️  没有需要提交的改动');
@@ -98,40 +95,39 @@ export async function commitAndPush(
   }
   console.log();
 
-  // 3. 获取 diff 信息
   const diffStat = await $`git diff --cached --stat`.text();
   const diffContent = await $`git diff --cached --no-color`.text();
-
-  // 4. 使用 AI 生成 commit message
-  console.log(`🤖 正在使用 ${options.ai ?? DEFAULT_AI} 生成 commit message...`);
-  const provider = await getAIProvider(options.ai);
+  const model = await getLanguageModel(options.ai);
+  const modelInfo = getLanguageModelInfo(model);
+  console.log(`🤖 正在使用 ${modelInfo.modelId} 生成提交信息...`);
   const commitResult = await generateCommitMessage({
-    aiProvider: provider,
+    model,
     diffStat,
-    diffContent: diffContent.slice(0, 8000), // 限制长度避免 token 超限
+    diffContent: diffContent.slice(0, 8000),
     branchName: branch,
   });
 
-  if (!commitResult.message) {
-    throw new Error('无法生成 commit message');
+  if (!commitResult.type || !commitResult.subject) {
+    throw new Error('无法生成提交信息');
   }
 
-  console.log(`\n💬 生成的 commit message:\n   ${commitResult.message}\n`);
+  const commitMessage = `${commitResult.type}: ${commitResult.subject}`;
 
-  if (commitResult.tokenUsage) {
+  console.log(`\n💬 生成的提交信息:\n   ${commitMessage}\n`);
+
+  if (commitResult.usage) {
     console.log(
-      `${await formatTokenUsage(commitResult.tokenUsage, provider.info.model)}\n`
+      `${await formatTokenUsage(commitResult.usage, modelInfo.modelId)}\n`
     );
   }
 
-  // 5. 确认或修改 commit message
   const answer = await promptUser(
-    '是否使用此 message？(y=确认 / n=取消 / 直接输入自定义 message): '
+    '是否使用此提交信息？(y=确认 / n=取消 / 直接输入自定义提交信息): '
   );
 
   let finalMessage: string;
   if (answer.toLowerCase() === 'y' || answer === '') {
-    finalMessage = commitResult.message;
+    finalMessage = commitMessage;
   } else if (answer.toLowerCase() === 'n') {
     console.log('❌ 已取消提交');
     return { status: 'cancelled' };
@@ -139,12 +135,10 @@ export async function commitAndPush(
     finalMessage = answer;
   }
 
-  // 6. 执行 commit
   console.log('\n📝 正在提交...');
   const gitCommitOutput = await $`git commit -m ${finalMessage}`.text();
   console.log(gitCommitOutput);
 
-  // 7. 执行 push
   console.log('🚀 正在推送...');
   const pushResult = await $`git push origin ${branch}`.text();
   console.log(pushResult);

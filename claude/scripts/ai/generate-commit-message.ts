@@ -2,23 +2,27 @@
  * 使用 AI 生成 commit message
  */
 
-import { getCommitMessagePrompt } from '@/ai/prompts/commit-message-prompts';
-import type { AIProvider } from '@/ai/types';
-import type { TokenUsage } from '@/ai/types/token-usage';
+import { LanguageModelUsage, Output, LanguageModel } from 'ai';
+import z from 'zod';
+import { generateObject } from '@/ai/generate-object';
+import { getCommitMessagePrompt } from '@/ai/prompts/get-commit-message-prompt';
+import { CommitType, commitTypes } from '@/git/commit-type';
+import { retry } from '@/utils/retry';
 
 interface GenerateCommitMessageParams {
-  aiProvider: AIProvider;
+  model: LanguageModel;
   diffStat: string;
   diffContent: string;
   branchName: string;
 }
 
 export interface CommitMessageResult {
-  message: string;
-  tokenUsage?: TokenUsage;
+  type: CommitType;
+  subject: string;
+  usage?: LanguageModelUsage;
 }
 
-async function generateCommitMessage(
+export async function generateCommitMessage(
   params: GenerateCommitMessageParams
 ): Promise<CommitMessageResult> {
   const prompt = getCommitMessagePrompt({
@@ -27,15 +31,28 @@ async function generateCommitMessage(
     branchName: params.branchName,
   });
 
-  const response = await params.aiProvider.generate({
-    messages: [{ role: 'user', content: prompt }],
-    maxTokens: 2048,
-  });
-
-  return {
-    message: response.text?.trim() ?? '',
-    tokenUsage: response.tokenUsage,
-  };
+  try {
+    const { output, usage } = await retry(
+      async () => {
+        return await generateObject({
+          model: params.model,
+          prompt,
+          maxOutputTokens: 2048,
+          output: Output.object({
+            schema: z.object({
+              type: z.enum(commitTypes),
+              subject: z.string(),
+            }),
+          }),
+        });
+      },
+      { retryCount: 2 }
+    );
+    return {
+      ...output,
+      usage,
+    } satisfies CommitMessageResult;
+  } catch (error) {
+    throw error;
+  }
 }
-
-export { generateCommitMessage };

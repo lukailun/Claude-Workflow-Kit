@@ -32,9 +32,7 @@ export function toShortId(openRouterId: string): string {
  * 已是 OpenRouter 格式（含 `/`）则直接返回
  * 否则遍历 OpenRouter 模型列表，归一化后匹配
  */
-export async function toOpenRouterId(
-  modelId: string
-): Promise<string | null> {
+export async function toOpenRouterId(modelId: string): Promise<string | null> {
   if (modelId.includes('/')) return modelId;
 
   const normalized = normalize(modelId);

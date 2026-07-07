@@ -6,8 +6,9 @@
  */
 
 import type { PublicPricing } from '@openrouter/sdk/models';
+import { LanguageModelUsage } from 'ai';
 import Big from 'big.js';
-import type { TokenUsage, ModelTokenUsageStats } from '@/ai/types/token-usage';
+import type { ModelTokenUsageStats } from '@/ai/types/token-usage';
 import { getModels } from '@/openrouter/get-models';
 import { toOpenRouterId } from '@/openrouter/model-id';
 
@@ -27,7 +28,11 @@ function toPer1M(value: string | undefined): number {
   return new Big(value).times(1_000_000).toNumber();
 }
 
-function toModelPricing(model: { id: string; name: string; pricing: PublicPricing }): ModelPricing {
+function toModelPricing(model: {
+  id: string;
+  name: string;
+  pricing: PublicPricing;
+}): ModelPricing {
   return {
     model: model.id,
     name: model.name,
@@ -68,21 +73,34 @@ export async function getModelPricing(modelId: string): Promise<ModelPricing> {
     const pricing = await loadPricing();
     if (pricing[orId]) return pricing[orId];
   }
-  return { model: modelId, name: modelId, inputCacheMiss: 0, inputCacheHit: 0, output: 0, cacheWrite: 0 };
+  return {
+    model: modelId,
+    name: modelId,
+    inputCacheMiss: 0,
+    inputCacheHit: 0,
+    output: 0,
+    cacheWrite: 0,
+  };
 }
 
 /** 计算费用（USD），price 单位为每 1M token */
-export function calculateCost(usage: TokenUsage, price: ModelPricing): number {
+export function calculateCost(
+  usage: LanguageModelUsage,
+  price: ModelPricing
+): number {
   return (
-    (usage.input * price.inputCacheMiss +
-      usage.cacheRead * price.inputCacheHit +
-      usage.cacheWrite * price.cacheWrite +
-      usage.output * price.output) /
+    ((usage.inputTokenDetails.noCacheTokens ?? 0) * price.inputCacheMiss +
+      (usage.inputTokenDetails.cacheReadTokens ?? 0) * price.inputCacheHit +
+      (usage.inputTokenDetails.cacheWriteTokens ?? 0) * price.cacheWrite +
+      (usage.outputTokens ?? 0) * price.output) /
     1_000_000
   );
 }
 
 /** 计算模型总费用 */
-export function calculateModelCost(stats: ModelTokenUsageStats, price: ModelPricing): number {
+export function calculateModelCost(
+  stats: ModelTokenUsageStats,
+  price: ModelPricing
+): number {
   return calculateCost(stats.usage, price);
 }

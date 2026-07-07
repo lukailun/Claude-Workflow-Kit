@@ -7,18 +7,25 @@
  */
 
 import { dirname, join } from 'path';
-import { getBranchUsage } from '@/claudecode/get-branch-usage';
-import { getVersion } from '@/claudecode/get-version';
+import { getClaudeCodeBranchUsage } from '@/claudecode/get-claude-code-branch-usage';
+import { getClaudeCodeVersion } from '@/claudecode/get-claude-code-version';
+import { getCodexBranchUsage } from '@/codex/get-codex-branch-usage';
+import { getCodexVersion } from '@/codex/get-codex-version';
 import { getRate } from '@/exchange-rate/get-exchange-rate';
 import { getCurrentBranch } from '@/git/get-current-branch';
 import { getUserName } from '@/git/get-user-name';
 import { getLatestModels } from '@/openrouter/get-latest-models';
-import { getModelPricing, calculateModelCost } from '@/openrouter/get-model-pricing';
+import {
+  getModelPricing,
+  calculateModelCost,
+  type ModelPricing,
+} from '@/openrouter/get-model-pricing';
 import { getPopularModels } from '@/openrouter/get-popular-models';
+import { BANNERS } from '@/workflow/build-branch-receipt-banners';
 
-const projectRoot = join(dirname(dirname(import.meta.dir)));
+const projectRoot = join(dirname(dirname(dirname(import.meta.dir))));
 
-const W = 45;
+const W = 70;
 
 /** 计算字符串的终端显示宽度（CJK 字符占 2 列） */
 function displayWidth(s: string): number {
@@ -26,7 +33,8 @@ function displayWidth(s: string): number {
   for (const ch of s) {
     const code = ch.codePointAt(0)!;
     // CJK 统一汉字 + 全角符号 + 韩文 + 日文假名等
-    w += (code >= 0x1100 &&
+    w +=
+      code >= 0x1100 &&
       (code <= 0x115f ||
         code === 0x2329 ||
         code === 0x232a ||
@@ -41,9 +49,9 @@ function displayWidth(s: string): number {
         (code >= 0xffe0 && code <= 0xffe6) ||
         (code >= 0x1b000 && code <= 0x1b001) ||
         (code >= 0x1f200 && code <= 0x1f251) ||
-        (code >= 0x20000 && code <= 0x3fffd)))
-      ? 2
-      : 1;
+        (code >= 0x20000 && code <= 0x3fffd))
+        ? 2
+        : 1;
   }
   return w;
 }
@@ -74,18 +82,64 @@ function kv(label: string, value: string, indent = 0): string {
 }
 
 export async function buildBranchReceiptWorkflow(
-  branch?: string
+  branch?: string,
+  bannerIndex?: number
 ): Promise<string | undefined> {
   branch = branch ?? (await getCurrentBranch());
-  const branchUsage = await getBranchUsage(
-    branch,
-    projectRoot
-  )
-  if (!branchUsage || branchUsage.stats.size === 0) {
-    console.log(`⚠️  分支 ${branch} 没有找到 Claude Code 使用记录`);
+  const [branchUsage, codexUsage] = await Promise.all([
+    getClaudeCodeBranchUsage(branch, projectRoot),
+    getCodexBranchUsage(branch, projectRoot),
+  ]);
+
+  if (
+    (!branchUsage || branchUsage.stats.size === 0) &&
+    (!codexUsage || codexUsage.stats.size === 0)
+  ) {
+    console.log(`⚠️  分支 ${branch} 没有找到 Claude Code 或 Codex 使用记录`);
     return undefined;
   }
-  const { stats, timestamps, sessionId } = branchUsage;
+
+  // Merge Codex stats into Claude Code stats (additive for same model keys)
+  const mergedStats = new Map(branchUsage?.stats ?? []);
+  if (codexUsage) {
+    for (const [key, val] of codexUsage.stats) {
+      const existing = mergedStats.get(key);
+      if (!existing) {
+        mergedStats.set(key, val);
+      } else {
+        existing.count += val.count;
+        existing.usage.inputTokens =
+          (existing.usage.inputTokens ?? 0) + (val.usage.inputTokens ?? 0);
+        existing.usage.outputTokens =
+          (existing.usage.outputTokens ?? 0) + (val.usage.outputTokens ?? 0);
+        existing.usage.totalTokens =
+          (existing.usage.totalTokens ?? 0) + (val.usage.totalTokens ?? 0);
+        existing.usage.inputTokenDetails.noCacheTokens =
+          (existing.usage.inputTokenDetails.noCacheTokens ?? 0) +
+          (val.usage.inputTokenDetails.noCacheTokens ?? 0);
+        existing.usage.inputTokenDetails.cacheReadTokens =
+          (existing.usage.inputTokenDetails.cacheReadTokens ?? 0) +
+          (val.usage.inputTokenDetails.cacheReadTokens ?? 0);
+        existing.usage.inputTokenDetails.cacheWriteTokens =
+          (existing.usage.inputTokenDetails.cacheWriteTokens ?? 0) +
+          (val.usage.inputTokenDetails.cacheWriteTokens ?? 0);
+        existing.usage.outputTokenDetails.reasoningTokens =
+          (existing.usage.outputTokenDetails.reasoningTokens ?? 0) +
+          (val.usage.outputTokenDetails.reasoningTokens ?? 0);
+      }
+    }
+  }
+
+  const mergedTimestamps = [
+    ...(branchUsage?.timestamps ?? []),
+    ...(codexUsage?.timestamps ?? []),
+  ];
+
+  const { stats, timestamps, sessionId } = {
+    stats: mergedStats,
+    timestamps: mergedTimestamps,
+    sessionId: branchUsage?.sessionId ?? codexUsage?.sessionId ?? '',
+  };
   const receiptNo = sessionId ? sessionId.slice(0, 8) : '';
 
   const [rate, popularModels, latestModels] = await Promise.all([
@@ -95,7 +149,7 @@ export async function buildBranchReceiptWorkflow(
   ]);
 
   const sortedStats = [...stats.entries()].sort(
-    (a, b) => b[1].usage.input - a[1].usage.input
+    (a, b) => (b[1].usage.inputTokens ?? 0) - (a[1].usage.inputTokens ?? 0)
   );
   const pricingResults = await Promise.all(
     sortedStats.map(([model]) => getModelPricing(model))
@@ -103,12 +157,12 @@ export async function buildBranchReceiptWorkflow(
 
   const models: {
     name: string;
-    displayName: string;
     count: number;
     input: number;
     output: number;
     cacheRead: number;
     cost: number;
+    pricing?: ModelPricing;
   }[] = [];
   let totalCost = 0;
 
@@ -121,12 +175,12 @@ export async function buildBranchReceiptWorkflow(
 
     models.push({
       name: model,
-      displayName: pricing.name,
       count: usageStats.count,
-      input: usage.input,
-      output: usage.output,
-      cacheRead: usage.cacheRead,
+      input: usage.inputTokens ?? 0,
+      output: usage.outputTokens ?? 0,
+      cacheRead: usage.inputTokenDetails.cacheReadTokens ?? 0,
       cost,
+      pricing,
     });
   }
 
@@ -155,22 +209,30 @@ export async function buildBranchReceiptWorkflow(
   }
 
   const userName = getUserName(projectRoot);
-  const claudeCodeVersion = getVersion();
+  const claudeCodeVersion = getClaudeCodeVersion();
+  const hasCodex = !!codexUsage && codexUsage.stats.size > 0;
+  const codexVersion = hasCodex ? getCodexVersion() : null;
   const lines: string[] = [];
 
   // banner
-  lines.push(center(''));
-  lines.push(center('▐▛███▜▌'));
-  lines.push(center('▝▜█████▛▘'));
-  lines.push(center('▘▘ ▝▝'));
-  lines.push(center('CLAUDE CODE'));
-  lines.push(center(''));
-  lines.push(center(''));
+  const idx =
+    bannerIndex !== undefined &&
+    bannerIndex >= 0 &&
+    bannerIndex < BANNERS.length
+      ? bannerIndex
+      : Math.floor(Math.random() * BANNERS.length);
+  const banner = BANNERS[idx];
+  for (const line of banner) {
+    lines.push(center(line));
+  }
   if (receiptNo) {
     lines.push(center(kv('收据编号', receiptNo)));
   }
   lines.push(center(kv('分支', branch)));
   lines.push(center(kv('智能体', claudeCodeVersion)));
+  if (codexVersion) {
+    lines.push(center(kv('', codexVersion)));
+  }
   lines.push(center(kv('用户', userName)));
   if (started) {
     lines.push(center(kv('开始时间', started)));
@@ -187,14 +249,45 @@ export async function buildBranchReceiptWorkflow(
   };
 
   for (const model of models) {
-    lines.push(center(kv(model.displayName, formatCost(model.cost))));
+    lines.push(
+      center(kv(model.pricing?.name ?? model.name, formatCost(model.cost)))
+    );
     lines.push(center(dashedSep()));
-    lines.push(center(kv('输入', formatNum(model.input), 2)));
-    lines.push(center(kv('输出', formatNum(model.output), 2)));
-    lines.push(center(kv('缓存读取', formatNum(model.cacheRead), 2)));
+    const pricing = model.pricing;
+    lines.push(
+      center(
+        kv(
+          pricing
+            ? `输入($${pricing.inputCacheMiss.toFixed(2)} / MTok)`
+            : '输入',
+          formatNum(model.input),
+          2
+        )
+      )
+    );
+    lines.push(
+      center(
+        kv(
+          pricing ? `输出($${pricing.output.toFixed(2)} / MTok)` : '输出',
+          formatNum(model.output),
+          2
+        )
+      )
+    );
+    lines.push(
+      center(
+        kv(
+          pricing
+            ? `缓存读取($${pricing.inputCacheHit.toFixed(2)} / MTok)`
+            : '缓存读取',
+          formatNum(model.cacheRead),
+          2
+        )
+      )
+    );
     lines.push(center(kv('调用次数', formatNum(model.count), 2)));
     const totalInput = model.input + model.cacheRead;
-    const cacheHit = totalInput > 0 ? (model.cacheRead / totalInput * 100) : 0;
+    const cacheHit = totalInput > 0 ? (model.cacheRead / totalInput) * 100 : 0;
     lines.push(center(kv('缓存命中率', cacheHit.toFixed(2) + '%', 2)));
     lines.push(center(sep()));
   }
@@ -210,7 +303,7 @@ export async function buildBranchReceiptWorkflow(
 
   if (popularModels.length > 0) {
     lines.push(center(`昨日热门 TOP ${popularModels.length}`));
-    lines.push(center(''));
+    lines.push(center(dashedSep()));
     for (const model of popularModels) {
       lines.push(center(kv(formatNum(model.totalTokens), model.name)));
     }
@@ -219,7 +312,7 @@ export async function buildBranchReceiptWorkflow(
 
   if (latestModels.length > 0) {
     lines.push(center(`最新上线 TOP ${latestModels.length}`));
-    lines.push(center(''));
+    lines.push(center(dashedSep()));
     for (const model of latestModels) {
       const date = new Date(model.created * 1000).toISOString().split('T')[0];
       lines.push(center(kv(date, model.name)));
@@ -231,10 +324,22 @@ export async function buildBranchReceiptWorkflow(
 }
 
 if (import.meta.main) {
-  const branch = process.argv[2];
+  // yarn receipt [branch|bannerIndex] [bannerIndex]
+  // 纯数字参数识别为 banner index，字符串识别为分支名
+  let branch: string | undefined;
+  let bannerIndex: number | undefined;
+
+  for (const arg of process.argv.slice(2)) {
+    if (/^\d+$/.test(arg)) {
+      bannerIndex = parseInt(arg, 10);
+    } else {
+      branch = arg;
+    }
+  }
+
   try {
-    const receipt = await buildBranchReceiptWorkflow(branch);
-    if(receipt) {
+    const receipt = await buildBranchReceiptWorkflow(branch, bannerIndex);
+    if (receipt) {
       console.log(receipt);
     }
   } catch (error) {
