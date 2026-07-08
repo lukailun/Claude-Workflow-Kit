@@ -30,61 +30,61 @@ export async function getLanguageModel(ai?: AI): Promise<LanguageModel> {
   switch (ai ?? DEFAULT_AI) {
     case 'claude': {
       const { claudeLanguageModel } = await import(
-        '@/language-models/claude/anthropic-language-model'
+        '@/language-models/anthropic-language-model'
       );
       return claudeLanguageModel;
     }
     case 'gemini': {
       const { geminiLanguageModel } = await import(
-        '@/language-models/gemini/gemini-language-model'
+        '@/language-models/gemini-language-model'
       );
       return geminiLanguageModel;
     }
     case 'glm': {
       const { glmLanguageModel } = await import(
-        '@/language-models/glm/glm-language-model'
+        '@/language-models/glm-language-model'
       );
       return glmLanguageModel;
     }
     case 'hy': {
       const { hyLanguageModel } = await import(
-        '@/language-models/hy/hy-language-model'
+        '@/language-models/hy-language-model'
       );
       return hyLanguageModel;
     }
     case 'minimax': {
       const { miniMaxLanguageModel } = await import(
-        '@/language-models/minimax/minimax-language-model'
+        '@/language-models/minimax-language-model'
       );
       return miniMaxLanguageModel;
     }
     case 'mimo': {
       const { mimoLanguageModel } = await import(
-        '@/language-models/mimo/mimo-language-model'
+        '@/language-models/mimo-language-model'
       );
       return mimoLanguageModel;
     }
     case 'deepseek': {
       const { deepSeekLanguageModel } = await import(
-        '@/language-models/deepseek/deepseek-language-model'
+        '@/language-models/deepseek-language-model'
       );
       return deepSeekLanguageModel;
     }
     case 'qwen': {
       const { qwenLanguageModel } = await import(
-        '@/language-models/qwen/qwen-language-model'
+        '@/language-models/qwen-language-model'
       );
       return qwenLanguageModel;
     }
     case 'longcat': {
       const { longCatLanguageModel } = await import(
-        '@/language-models/longcat/longcat-language-model'
+        '@/language-models/longcat-language-model'
       );
       return longCatLanguageModel;
     }
     case 'openrouter': {
       const { openRouterLanguageModel } = await import(
-        '@/language-models/openrouter/openrouter-language-model'
+        '@/language-models/openrouter-language-model'
       );
       return openRouterLanguageModel;
     }
