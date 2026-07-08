@@ -92,7 +92,7 @@ bun commit \[--ai <provider>\]
 ### 创建或更新合并请求
 
 ```bash
-yarn mr \[--ai <provider>\] \[--receipt\] \[--auto-merge\]
+yarn mr [--ai <provider>] [--receipt] [--auto-merge]
 ```
 
 自动创建或更新 GitLab MR，使用 AI 生成合并请求内容。
@@ -107,7 +107,7 @@ yarn mr \[--ai <provider>\] \[--receipt\] \[--auto-merge\]
 ### 提交并创建合并请求
 
 ```bash
-yarn submit \[--ai <provider>\] \[--receipt\] \[--auto-merge\]
+yarn submit [--ai <provider>] [--receipt] [--auto-merge]
 ```
 
 一键完成 “提交、推送、创建合并请” 流程。等同于依次执行 `bun commit` 和 `bun mr`。
