@@ -7,7 +7,7 @@ import z from 'zod';
 import { generateObject } from '@/ai/generate-object';
 import { getCommitMessagePrompt } from '@/ai/prompts/get-commit-message-prompt';
 import { CommitType, commitTypes } from '@/git/commit-type';
-import { retry } from '@/utils/retry';
+import { retry } from '@/utils/retry/retry';
 
 interface GenerateCommitMessageParams {
   model: LanguageModel;
@@ -46,7 +46,7 @@ export async function generateCommitMessage(
           }),
         });
       },
-      { retryCount: 2 }
+      { behavior: { type: 'immediate', maxCount: 3 } }
     );
     return {
       ...output,

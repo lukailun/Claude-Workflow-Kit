@@ -17,7 +17,7 @@ import { codingRules } from '@/review/coding-standards/rules';
 import type { CodingRule } from '@/review/coding-standards/rules';
 import { getReviewPrompt } from '@/review/prompt';
 import type { Violation } from '@/review/types';
-import { retry } from '@/utils/retry';
+import { retry } from '@/utils/retry/retry';
 
 const MAX_DIFF_LINES = 1000;
 
@@ -233,7 +233,7 @@ async function reviewRule(
       });
       return output;
     },
-    { fallback: { violations: [] }, label: rule.ruleId, retryCount: 2 }
+    { defaultValue: { violations: [] }, behavior: { type: 'exponentialDelayed', maxCount: 3, initial: 1, multiplier: 1 } }
   );
 
   return output.violations;

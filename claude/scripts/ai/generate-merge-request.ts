@@ -15,7 +15,7 @@ import {
   MergeRequestContent,
 } from '@/gitlab/merge-request-content';
 import { getRelatedIssueFromBranch } from '@/linear/get-related-issue-from-branch';
-import { retry } from '@/utils/retry';
+import { retry } from '@/utils/retry/retry';
 
 interface GenerateMergeRequestParams {
   model: LanguageModel;
@@ -131,7 +131,7 @@ export async function generateMergeRequest(
           }),
         });
       },
-      { retryCount: 2 }
+           { behavior: { type: 'immediate', maxCount: 3 } }
     ),
     getRelatedIssueFromBranch(sourceBranch),
   ]);
