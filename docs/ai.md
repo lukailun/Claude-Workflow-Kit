@@ -23,19 +23,23 @@
 
 生成规范的提交信息：
 
-`bun commit [--ai <provider>]`
+```bash
+bun commit [--ai <provider>]
+```
+
+详见 [Git 工作流 “提交并推送”](git-workflow.md#提交并推送)
 
 ### Merge Request 生成
 
 生成完整 MR 内容：
 
-`bun mr [--ai <provider>]`
+```bash
+bun mr [--ai <provider>] [--receipt] [--auto-merge]
+```
+
+详见 [Git 工作流 “创建或更新合并请求”](git-workflow.md#创建或更新合并请求)
 
 ### 代码审查
-
-对 MR diff 逐规则运行 AI 审查：
-
-`bun review --ai mimo`
 
 详见 [AI 代码审查](code-review.md)。
 

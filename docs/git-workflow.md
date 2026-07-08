@@ -80,7 +80,7 @@ bun hotfix
 ### 提交并推送
 
 ```bash
-bun commit \[--ai <provider>\]
+bun commit [--ai <provider>]
 ```
 
 自动暂存改动、使用 AI 生成 commit message 并推送到远程。
