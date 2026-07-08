@@ -87,7 +87,7 @@ bun commit \[--ai <provider>\]
 
 | **Option**    | **Type** | **Description**                                      |
 | ------------- | -------- | ---------------------------------------------------- |
-| **`--ai`**    | `string` | 详见 [docs/ai.md](ai.md) |
+| **`--ai`**    | `string` | 详见 [AI 集成](ai.md) |
 
 ### 创建或更新合并请求
 
@@ -114,7 +114,7 @@ bun submit [--ai <provider>] [--receipt] [--auto-merge]
 
 | **Option**       | **Type** | **Description**                                      |
 | ---------------- | -------- | ---------------------------------------------------- |
-| **`--ai`**       | `string` | 详见 [docs/ai.md](ai.md) |
+| **`--ai`**       | `string` | 详见 [AI 集成](ai.md) |
 | **`--receipt`**  | `flag`   | 创建 MR 时附带开发信息 |
 | **`--auto-merge`** | `flag` | 创建/更新 MR 后开启 pipeline 通过后自动合并 |
 
