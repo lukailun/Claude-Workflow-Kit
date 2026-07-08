@@ -2,9 +2,9 @@
  * 获取 GitHub Pull Request 详情
  */
 
-import { getOwner } from '@/github';
-import { getRepo } from '@/github';
-import { githubClient } from '@/github';
+import { getOwner } from '@/git/get-owner';
+import { getRepo } from '@/git/get-repo';
+import { githubClient } from '@/github/github-client';
 
 interface Params {
   pullNumber: number;
@@ -15,7 +15,7 @@ interface Params {
  * @param params.pullNumber PR 编号
  * @returns Pull Request 详情
  */
-async function getPullRequestDetails(params: Params) {
+export async function getPullRequestDetails(params: Params) {
   const owner = await getOwner();
   const repo = await getRepo();
   if (!owner || !repo) {
@@ -29,5 +29,3 @@ async function getPullRequestDetails(params: Params) {
   });
   return pullRequest;
 }
-
-export { getPullRequestDetails };

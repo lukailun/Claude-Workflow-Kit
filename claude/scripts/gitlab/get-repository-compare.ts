@@ -17,7 +17,7 @@ interface Params {
  * 对比两个分支的差异
  * @returns 分支对比结果
  */
-async function getRepositoryCompare(
+export async function getRepositoryCompare(
   params: Params
 ): Promise<RepositoryCompareSchema> {
   const { projectId, sourceBranch, targetBranch } = params;
@@ -28,5 +28,3 @@ async function getRepositoryCompare(
   );
   return compare;
 }
-
-export { getRepositoryCompare };

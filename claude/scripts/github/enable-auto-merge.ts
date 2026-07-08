@@ -4,9 +4,9 @@
  * 功能：PR 在 CI 通过后自动合并
  */
 
-import { getOwner } from '@/github';
-import { getRepo } from '@/github';
-import { githubClient } from '@/github';
+import { getOwner } from '@/git/get-owner';
+import { getRepo } from '@/git/get-repo';
+import { githubClient } from '@/github/github-client';
 
 interface Params {
   pullNumber: number;
@@ -16,7 +16,7 @@ interface Params {
  * 开启自动合并
  * @param params.pullNumber PR 编号
  */
-async function enableAutoMerge(params: Params): Promise<void> {
+export async function enableAutoMerge(params: Params): Promise<void> {
   const owner = await getOwner();
   const repo = await getRepo();
   if (!owner || !repo) {
@@ -28,8 +28,5 @@ async function enableAutoMerge(params: Params): Promise<void> {
     repo,
     pull_number: params.pullNumber,
     merge_method: 'squash',
-    commit_title: `Merge pull request #${params.pullNumber}`,
   });
 }
-
-export { enableAutoMerge };

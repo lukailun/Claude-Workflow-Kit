@@ -11,7 +11,7 @@ import { getRemoteBranches } from '@/gitlab/get-remote-branches';
  * 获取最新的远程 release 分支
  * @returns 最新 release 分支，无则返回 null
  */
-async function getLatestReleaseBranch(): Promise<ReleaseBranch | null> {
+export async function getLatestReleaseBranch(): Promise<ReleaseBranch | null> {
   const remoteBranches = await getRemoteBranches();
 
   const branches = remoteBranches
@@ -36,5 +36,3 @@ async function getLatestReleaseBranch(): Promise<ReleaseBranch | null> {
 
   return branches[0] ?? null;
 }
-
-export { getLatestReleaseBranch };

@@ -4,10 +4,10 @@
  * 功能：通过 GitHub API 创建 Pull Request
  */
 
-import { getOwner } from '@/github';
-import { getRepo } from '@/github';
-import { githubClient } from '@/github';
-import { PullRequestContent } from '@/github';
+import { getOwner } from '@/git/get-owner';
+import { getRepo } from '@/git/get-repo';
+import { githubClient } from '@/github/github-client';
+import { PullRequestContent } from '@/github/pull-request-content';
 
 interface Params {
   sourceBranch: string;
@@ -24,7 +24,7 @@ interface Params {
  * @param params.squash 是否 squash 合并
  * @returns 创建的 Pull Request 信息
  */
-async function createPullRequest(params: Params) {
+export async function createPullRequest(params: Params) {
   const owner = await getOwner();
   const repo = await getRepo();
   if (!owner || !repo) {
@@ -41,5 +41,3 @@ async function createPullRequest(params: Params) {
   });
   return pullRequest;
 }
-
-export { createPullRequest };

@@ -15,7 +15,7 @@ import { getRemoteBranches } from '@/gitlab/get-remote-branches';
  * 获取 MR 目标分支
  * @returns 目标分支名称
  */
-async function getMergeRequestTargetBranch(): Promise<Branch> {
+export async function getMergeRequestTargetBranch(): Promise<Branch> {
   const currentBranch = await getCurrentBranch();
   if (!currentBranch) {
     return mainBranch;
@@ -62,5 +62,3 @@ async function getMergeRequestTargetBranch(): Promise<Branch> {
   }
   return targetBranch;
 }
-
-export { getMergeRequestTargetBranch };

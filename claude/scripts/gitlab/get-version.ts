@@ -41,7 +41,7 @@ export function compareVersion(v1: string, v2: string): number {
 /**
  * 获取 GitLab 实例版本信息
  */
-async function getVersion(): Promise<GitLabVersion> {
+export async function getVersion(): Promise<GitLabVersion> {
   const env = getGitlabFromEnv();
   const response = await fetch(`${env.baseUrl}/api/v4/version`, {
     headers: {
@@ -57,5 +57,3 @@ async function getVersion(): Promise<GitLabVersion> {
 
   return response.json() as Promise<GitLabVersion>;
 }
-
-export { getVersion };

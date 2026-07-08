@@ -2,10 +2,10 @@
  * 更新 GitHub Pull Request
  */
 
-import { getOwner } from '@/github';
-import { getRepo } from '@/github';
-import { githubClient } from '@/github';
-import { PullRequestContent } from '@/github';
+import { getOwner } from '@/git/get-owner';
+import { getRepo } from '@/git/get-repo';
+import { githubClient } from '@/github/github-client';
+import { PullRequestContent } from '@/github/pull-request-content';
 
 interface Params {
   pullNumber: number;

@@ -16,7 +16,7 @@ interface Params {
  * @param mergeRequestIid 合并请求 IID
  * @returns 合并请求详情
  */
-async function getMergeRequestDetails(
+export async function getMergeRequestDetails(
   params: Params
 ): Promise<ExpandedMergeRequestSchema> {
   const { projectId, mergeRequestIid } = params;
@@ -26,5 +26,3 @@ async function getMergeRequestDetails(
   );
   return mergeRequest;
 }
-
-export { getMergeRequestDetails };

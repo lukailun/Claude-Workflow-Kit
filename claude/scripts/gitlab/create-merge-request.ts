@@ -29,7 +29,7 @@ interface Params {
  * @param params.squash 是否 squash 合并
  * @returns 创建的合并请求信息
  */
-async function createMergeRequest(
+export async function createMergeRequest(
   params: Params
 ): Promise<ExpandedMergeRequestSchema> {
   const mergeRequest = await gitlabClient.MergeRequests.create(
@@ -45,5 +45,3 @@ async function createMergeRequest(
   );
   return mergeRequest;
 }
-
-export { createMergeRequest };

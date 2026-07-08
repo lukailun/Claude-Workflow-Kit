@@ -14,7 +14,7 @@ interface Params {
  * 获取当前项目的 GitLab 详细信息
  * @returns 项目详情，如果失败返回 undefined
  */
-async function getProjectDetails(
+export async function getProjectDetails(
   params: Params
 ): Promise<ProjectSchema | undefined> {
   const { projectId, projectPathWithNamespace } = params;
@@ -28,5 +28,3 @@ async function getProjectDetails(
   }
   return undefined;
 }
-
-export { getProjectDetails };

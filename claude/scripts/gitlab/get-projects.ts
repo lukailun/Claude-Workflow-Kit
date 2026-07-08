@@ -11,9 +11,7 @@ import { gitlabClient } from '@/gitlab/gitlab-client';
  * 获取所有项目列表
  * @returns 项目列表
  */
-async function getProjects(): Promise<ProjectSchema[]> {
+export async function getProjects(): Promise<ProjectSchema[]> {
   const projects = await gitlabClient.Projects.all();
   return projects;
 }
-
-export { getProjects };

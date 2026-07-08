@@ -4,9 +4,7 @@
 
 import { MainBranch } from '@/git/branch';
 
-const mainBranch = {
+export const mainBranch = {
   type: 'main',
   fullName: 'main',
 } satisfies MainBranch;
-
-export { mainBranch };

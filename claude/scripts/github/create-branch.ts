@@ -9,11 +9,11 @@
 
 import { $ } from 'bun';
 import { getCurrentBranch } from '@/git/get-current-branch';
-import { getOwner } from '@/github';
-import { getRepo } from '@/github';
-import { githubClient } from '@/github';
+import { getOwner } from '@/git/get-owner';
+import { getRepo } from '@/git/get-repo';
+import { githubClient } from '@/github/github-client';
 
-async function createBranch(sourceBranch: string, newBranch: string) {
+export async function createBranch(sourceBranch: string, newBranch: string) {
   console.log(`📍 基于 ${sourceBranch} 分支`);
 
   const currentBranch = await getCurrentBranch();
@@ -52,5 +52,3 @@ async function createBranch(sourceBranch: string, newBranch: string) {
   console.log(`\n✅ 分支创建成功！`);
   console.log(`📌 分支: ${newBranch}`);
 }
-
-export { createBranch };

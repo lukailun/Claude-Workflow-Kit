@@ -25,7 +25,7 @@ interface Params {
  * @param params.squash 是否 squash 合并
  * @returns 更新后的合并请求信息
  */
-async function updateMergeRequest(
+export async function updateMergeRequest(
   params: Params
 ): Promise<ExpandedMergeRequestSchema> {
   const { projectId, mergeRequestId, content, squash } = params;
@@ -40,5 +40,3 @@ async function updateMergeRequest(
   );
   return mergeRequest;
 }
-
-export { updateMergeRequest };

@@ -4,9 +4,9 @@
  * 功能：获取项目 tag，返回版本号最大的 vx.x.x tag
  */
 
-import { getOwner } from '@/github';
-import { getRepo } from '@/github';
-import { githubClient } from '@/github';
+import { getOwner } from '@/git/get-owner';
+import { getRepo } from '@/git/get-repo';
+import { githubClient } from '@/github/github-client';
 
 interface Tag {
   name: string;
@@ -19,7 +19,7 @@ interface Tag {
  * 获取最新的 tag
  * @returns 最新 tag，无则返回 null
  */
-async function getLatestTag(): Promise<Tag | null> {
+export async function getLatestTag(): Promise<Tag | null> {
   const owner = await getOwner();
   const repo = await getRepo();
   if (!owner || !repo) return null;
@@ -50,5 +50,3 @@ async function getLatestTag(): Promise<Tag | null> {
 
   return parsed[0] ?? null;
 }
-
-export { getLatestTag };

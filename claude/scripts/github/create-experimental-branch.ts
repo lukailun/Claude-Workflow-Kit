@@ -4,7 +4,7 @@
  */
 
 import { mainBranch } from '@/git/main-branch';
-import { createBranch } from '@/github';
+import { createBranch } from '@/github/create-branch';
 
 export async function createExperimentalBranch(name: string) {
   const branchName = `experimental/${name}`;

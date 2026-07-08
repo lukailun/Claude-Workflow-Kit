@@ -9,13 +9,13 @@
 import { Branch, ReleaseBranch } from '@/git/branch';
 import { getCurrentBranch } from '@/git/get-current-branch';
 import { mainBranch } from '@/git/main-branch';
-import { getRemoteBranches } from '@/github';
+import { getRemoteBranches } from '@/github/get-remote-branches';
 
 /**
  * 获取 PR 目标分支
  * @returns 目标分支名称
  */
-async function getPullRequestTargetBranch(): Promise<Branch> {
+export async function getPullRequestTargetBranch(): Promise<Branch> {
   const currentBranch = await getCurrentBranch();
   if (!currentBranch) {
     return mainBranch;
@@ -62,5 +62,3 @@ async function getPullRequestTargetBranch(): Promise<Branch> {
   }
   return targetBranch;
 }
-
-export { getPullRequestTargetBranch };

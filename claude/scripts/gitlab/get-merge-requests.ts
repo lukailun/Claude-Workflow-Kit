@@ -18,7 +18,7 @@ interface Params {
  * @param projectId GitLab 项目 ID（可选，默认从当前 git 仓库获取）
  * @returns 合并请求列表
  */
-async function getMergeRequests(
+export async function getMergeRequests(
   params: Params
 ): Promise<MergeRequestSchemaWithBasicLabels[]> {
   const { projectId } = params;
@@ -28,5 +28,3 @@ async function getMergeRequests(
   });
   return mergeRequests;
 }
-
-export { getMergeRequests };

@@ -18,7 +18,7 @@ interface Tag {
  * 获取最新的 tag
  * @returns 最新 tag，无则返回 null
  */
-async function getLatestTag(): Promise<Tag | null> {
+export async function getLatestTag(): Promise<Tag | null> {
   const projectId = await getCurrentProjectId();
   if (!projectId) return null;
 
@@ -44,5 +44,3 @@ async function getLatestTag(): Promise<Tag | null> {
 
   return parsed[0] ?? null;
 }
-
-export { getLatestTag };
