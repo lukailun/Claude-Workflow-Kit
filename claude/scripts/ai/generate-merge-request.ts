@@ -15,7 +15,7 @@ import {
   MergeRequestContent,
 } from '@/gitlab/merge-request-content';
 import { getRelatedIssueFromBranch } from '@/linear/get-related-issue-from-branch';
-import { retry } from '@/utils/retry/retry';
+import { retry } from '@/utils/retry';
 
 interface GenerateMergeRequestParams {
   model: LanguageModel;

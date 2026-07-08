@@ -17,7 +17,7 @@ import { codingRules } from '@/review/coding-standards/rules';
 import type { CodingRule } from '@/review/coding-standards/rules';
 import { getReviewPrompt } from '@/review/prompt';
 import type { Violation } from '@/review/types';
-import { retry } from '@/utils/retry/retry';
+import { retry } from '@/utils/retry';
 
 const MAX_DIFF_LINES = 1000;
 

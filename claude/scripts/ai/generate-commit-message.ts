@@ -7,7 +7,7 @@ import z from 'zod';
 import { generateObject } from '@/ai/generate-object';
 import { getCommitMessagePrompt } from '@/ai/prompts/get-commit-message-prompt';
 import { CommitType, commitTypes } from '@/git/commit-type';
-import { retry } from '@/utils/retry/retry';
+import { retry } from '@/utils/retry';
 
 interface GenerateCommitMessageParams {
   model: LanguageModel;
