@@ -2,7 +2,7 @@
 
 ## 配置
 
-在 `claude/.env` 中设置：
+在 `.env` 中设置：
 
 ```bash
 LINEAR_API_KEY=your-api-key

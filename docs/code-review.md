@@ -2,8 +2,6 @@
 
 ## 使用方式
 
-### CI 自动审查
-
 在 GitLab CI 中配置：
 
 ```yaml
@@ -18,19 +16,9 @@ ai-review:
     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
 ```
 
-### 手动运行
-
-```bash
-# 在 MR 分支上运行
-bun run scripts/review/run.ts
-bun run scripts/review/run.ts --ai anthropic
-```
-
-需要设置 `GITLAB_TOKEN` 和 `CI_MERGE_REQUEST_PROJECT_ID`、`CI_MERGE_REQUEST_IID` 等环境变量。
-
 ## 审查状态标记
 
-审查过程中通过 GitLab emoji reaction 标记进度：
+审查过程中通过 GitLab Reaction 标记进度：
 
 | Reaction | 含义 |
 |----------|------|
@@ -38,7 +26,7 @@ bun run scripts/review/run.ts --ai anthropic
 | 👍 | 审查通过（无违规） |
 | 👎 | 审查未通过（存在 error 级违规） |
 
-error 级违规会阻塞 CI pipeline（exit 1），warning 级不会。
+error 级违规会阻塞 CI pipeline，warning 级不会。
 
 ## 内置规则
 
