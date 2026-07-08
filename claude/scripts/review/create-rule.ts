@@ -9,7 +9,7 @@
 
 import fs from 'fs';
 import path from 'path';
-import * as readline from 'readline';
+import readline from 'readline';
 
 const CODING_STANDARDS_DIR = path.resolve(__dirname, './coding-standards');
 const ERROR_RULES_DIR = path.join(CODING_STANDARDS_DIR, 'error-rules');
