@@ -8,15 +8,25 @@
     "lint": "eslint scripts/",
     "lint:fix": "eslint scripts/ --fix",
     "test": "bun test",
-    "commit": "bun run scripts/workflow/commit-and-push.ts",
-    "pr": "bun run scripts/workflow/create-merge-request.ts",
+
     "release": "bun run scripts/workflow/create-release.ts",
-    "publish-release": "bun run scripts/workflow/publish-release.ts",
     "hotfix": "bun run scripts/workflow/create-hotfix.ts",
-    "publish-hotfix": "bun run scripts/workflow/publish-hotfix.ts",
     "feature": "bun run scripts/workflow/create-feature.ts",
+    "feat": "bun run scripts/workflow/create-feature.ts",
     "experimental": "bun run scripts/workflow/create-experimental.ts",
-    "receipt": "bun run scripts/workflow/build-branch-receipt.ts"
+    "exp": "bun run scripts/workflow/create-experimental.ts",
+
+    "commit": "bun run scripts/workflow/commit-and-push.ts",
+    "mr": "bun run scripts/workflow/create-merge-request.ts",
+    "submit": "bun run scripts/workflow/submit.ts",
+
+    "publish-hotfix": "bun run scripts/workflow/publish-hotfix.ts",
+    "publish-release": "bun run scripts/workflow/publish-release.ts",
+    
+    "receipt": "bun run scripts/workflow/build-branch-receipt.ts",
+    "yolo": "bun run scripts/workflow/yolo.ts",
+
+    "create-rule": "bun run /scripts/review/create-rule.ts"
   },
   "devDependencies": {
     "@types/big.js": "^7.0.0",
