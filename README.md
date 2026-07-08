@@ -4,11 +4,7 @@
 
 ## 技术栈
 
-- **运行时**: [Bun](https://bun.sh/)
-- **语言**: TypeScript (strict mode)
-- **AI**: [Vercel AI SDK](https://sdk.vercel.ai/) + 多 Provider 支持
-- **Git 平台**: GitLab (`@gitbeaker/rest`) / GitHub (`@octokit/rest`)
-- **项目管理**: Linear (`@linear/sdk`)
+- 运行时: [Bun](https://bun.sh/)
 
 ## 快速开始
 
@@ -38,61 +34,6 @@ bun run scripts/workflow/commit-and-push.ts
 
 # 创建 Merge Request（AI 自动生成标题和描述）
 bun run scripts/workflow/create-merge-request.ts
-```
-
-## 项目结构
-
-```
-claude/
-├── scripts/
-│   ├── workflow/              # 工作流入口脚本
-│   │   ├── create-feature.ts       # 创建 feature 分支
-│   │   ├── create-release.ts       # 创建 release 分支
-│   │   ├── create-hotfix.ts        # 创建 hotfix 分支
-│   │   ├── create-experimental.ts  # 创建 experimental 分支
-│   │   ├── commit-and-push.ts      # AI 生成 commit message 并推送
-│   │   ├── create-merge-request.ts # AI 生成 MR 内容并创建
-│   │   ├── submit.ts               # 一键提交流程 (commit + push + MR)
-│   │   ├── publish-release.ts      # 发布 release 到 main
-│   │   ├── publish-hotfix.ts       # 发布 hotfix 到 main
-│   │   └── build-branch-receipt.ts # 生成 Token 用量报告
-│   ├── ai/                    # AI 集成层
-│   │   ├── get-language-model.ts   # 语言模型工厂（支持 10 个 Provider）
-│   │   ├── generate-commit-message.ts
-│   │   ├── generate-merge-request.ts
-│   │   ├── generate-object.ts      # 结构化输出（Zod schema）
-│   │   └── prompts/                # Prompt 模板
-│   ├── language-models/       # 各 AI Provider 配置
-│   │   ├── claude/                 # Anthropic Claude
-│   │   ├── deepseek/               # DeepSeek
-│   │   ├── gemini/                 # Google Gemini
-│   │   ├── glm/                    # 智谱 GLM
-│   │   ├── hy/                     # 腾讯 HY
-│   │   ├── longcat/                # LongCat
-│   │   ├── mimo/                   # 小米 Mimo
-│   │   ├── minimax/                # MiniMax
-│   │   ├── qwen/                   # 阿里通义千问
-│   │   └── openrouter/             # OpenRouter
-│   ├── git/                   # Git 工具函数
-│   ├── gitlab/                # GitLab API 封装
-│   ├── github/                # GitHub API 封装
-│   ├── linear/                # Linear 集成（Issue 管理、状态流转）
-│   ├── review/                # AI 代码审查系统
-│   │   ├── coding-standards/       # 审查规则（Markdown + YAML frontmatter）
-│   │   │   ├── error-rules/        # 错误级规则
-│   │   │   └── warning-rules/      # 警告级规则
-│   │   ├── workflow.ts             # CI 审查工作流
-│   │   └── review.ts               # 核心审查逻辑
-│   ├── claudecode/            # Claude Code Token 用量追踪
-│   ├── codex/                 # OpenAI Codex Token 用量追踪
-│   ├── openrouter/            # OpenRouter 模型查询与定价
-│   ├── exchange-rate/         # 汇率查询（USD/CNY）
-│   ├── env/                   # 环境变量管理
-│   └── utils/                 # 通用工具（retry、fetch 调试等）
-├── package.json
-├── tsconfig.json
-├── eslint.config.js
-└── .env.template
 ```
 
 ## 可用命令
@@ -197,16 +138,6 @@ bun run scripts/workflow/create-merge-request.ts --ai deepseek
 | hotfix | `hotfix/<version>` | `hotfix/1.2.1` |
 | experimental | `experimental/<name>` | `experimental/new-ui` |
 
-## 提交规范
-
-使用 [Conventional Commits](https://www.conventionalcommits.org/) 格式：
-
-```
-type(scope): description
-```
-
-支持的类型：`feat` · `fix` · `docs` · `style` · `refactor` · `perf` · `test` · `chore`
-
 ## 环境变量
 
 在 `claude/.env` 中配置（从 `.env.template` 复制）。
@@ -269,12 +200,3 @@ type(scope): description
 | [AI 代码审查](docs/code-review.md) | 审查规则配置、CI/CD 集成、自定义规则 |
 | [Linear 集成](docs/linear.md) | Issue 管理、状态流转、分支关联 |
 | [环境变量配置](docs/environment.md) | 平台集成、AI Provider、CI 变量 |
-
-## 注意事项
-
-1. 所有脚本使用 **Bun** 运行，不支持 Node.js 或 ts-node
-2. 创建分支前会自动拉取最新代码
-3. 合并到 main 分支使用 `--no-ff` 保留分支历史
-4. 发布操作会自动创建 git tag 并删除已发布的远程分支
-5. AI 输出使用 Zod schema 校验，失败自动重试（最多 3 次）
-6. Token 用量报告通过解析本地 Claude Code / Codex 数据文件生成，费用计算基于 OpenRouter 定价
