@@ -1,183 +1,280 @@
-# 新项目模板
+# Claude Workflow Kit
 
-这是一个通用的项目模板，包含了 Git 工作流脚本和 Claude Code 配置。
+一个面向 GitLab/GitHub 团队的 Git 工作流自动化工具包，提供 AI 驱动的 commit message 生成、Merge Request 创建、代码审查以及完整的分支发布生命周期管理。
+
+## 技术栈
+
+- **运行时**: [Bun](https://bun.sh/)
+- **语言**: TypeScript (strict mode)
+- **AI**: [Vercel AI SDK](https://sdk.vercel.ai/) + 多 Provider 支持
+- **Git 平台**: GitLab (`@gitbeaker/rest`) / GitHub (`@octokit/rest`)
+- **项目管理**: Linear (`@linear/sdk`)
 
 ## 快速开始
 
-### 1. 克隆或复制项目
+### 1. 安装依赖
 
 ```bash
-# 如果是从模板创建
-git clone <repository-url>
-cd <project-name>
+cd claude
+bun install
 ```
 
-### 2. 初始化项目
+### 2. 配置环境变量
 
 ```bash
-# 运行初始化脚本
-chmod +x init.sh
-./init.sh
+cp .env.template .env
 ```
 
-### 3. 开始开发
+编辑 `.env`，填入你的 API 密钥和平台地址。详见 [环境变量](#环境变量)。
+
+### 3. 开始使用
 
 ```bash
-# 创建 feature 分支
-bun run .claude/scripts/workflow/create-feature.ts my-feature
+# 创建 feature 分支（可从 Linear issue 中选择）
+bun run scripts/workflow/create-feature.ts my-feature
 
-# 开发功能...
-# 编辑代码文件
+# 提交并推送（AI 自动生成 commit message）
+bun run scripts/workflow/commit-and-push.ts
 
-# 提交并推送（支持 AI 生成 commit message）
-bun run .claude/scripts/workflow/commit-and-push.ts
-
-# 创建 MR（支持 AI 生成 MR 内容）
-bun run .claude/scripts/workflow/create-merge-request.ts
+# 创建 Merge Request（AI 自动生成标题和描述）
+bun run scripts/workflow/create-merge-request.ts
 ```
 
 ## 项目结构
 
 ```
-.
-├── .claude/                    # Claude Code 配置目录
-│   ├── scripts/               # 脚本目录
-│   │   ├── ai/                # AI 功能
-│   │   ├── anthropic/         # Anthropic API
-│   │   ├── bigmodel/         # BigModel API
-│   │   ├── claude-code/       # Claude Code 功能
-│   │   ├── deepseek/         # DeepSeek API
-│   │   ├── env/               # 环境变量
-│   │   ├── git/               # Git 功能
-│   │   ├── gitlab/            # GitLab API
-│   │   ├── mini-max/          # MiniMax API
-│   │   ├── workflow/          # Git 工作流脚本
-│   │   │   ├── create-feature.ts
-│   │   │   ├── create-release.ts
-│   │   │   ├── create-hotfix.ts
-│   │   │   ├── create-experimental.ts
-│   │   │   ├── commit-and-push.ts
-│   │   │   ├── create-merge-request.ts
-│   │   │   ├── submit.ts
-│   │   │   ├── publish-release.ts
-│   │   │   └── publish-hotfix.ts
-│   │   └── xiaomi-mimo/       # Xiaomi Mimo API
-│   ├── .env.template          # 环境变量模板
-│   ├── .gitignore             # Git 忽略文件
-│   ├── CLAUDE.md              # Claude Code 行为约定
-│   ├── README.md              # 详细使用说明
-│   ├── package.json           # 依赖配置
-│   └── settings.json          # Claude Code 权限配置
-├── init.sh                    # 初始化脚本
-└── README.md                  # 项目说明（本文件）
+claude/
+├── scripts/
+│   ├── workflow/              # 工作流入口脚本
+│   │   ├── create-feature.ts       # 创建 feature 分支
+│   │   ├── create-release.ts       # 创建 release 分支
+│   │   ├── create-hotfix.ts        # 创建 hotfix 分支
+│   │   ├── create-experimental.ts  # 创建 experimental 分支
+│   │   ├── commit-and-push.ts      # AI 生成 commit message 并推送
+│   │   ├── create-merge-request.ts # AI 生成 MR 内容并创建
+│   │   ├── submit.ts               # 一键提交流程 (commit + push + MR)
+│   │   ├── publish-release.ts      # 发布 release 到 main
+│   │   ├── publish-hotfix.ts       # 发布 hotfix 到 main
+│   │   └── build-branch-receipt.ts # 生成 Token 用量报告
+│   ├── ai/                    # AI 集成层
+│   │   ├── get-language-model.ts   # 语言模型工厂（支持 10 个 Provider）
+│   │   ├── generate-commit-message.ts
+│   │   ├── generate-merge-request.ts
+│   │   ├── generate-object.ts      # 结构化输出（Zod schema）
+│   │   └── prompts/                # Prompt 模板
+│   ├── language-models/       # 各 AI Provider 配置
+│   │   ├── claude/                 # Anthropic Claude
+│   │   ├── deepseek/               # DeepSeek
+│   │   ├── gemini/                 # Google Gemini
+│   │   ├── glm/                    # 智谱 GLM
+│   │   ├── hy/                     # 腾讯 HY
+│   │   ├── longcat/                # LongCat
+│   │   ├── mimo/                   # 小米 Mimo
+│   │   ├── minimax/                # MiniMax
+│   │   ├── qwen/                   # 阿里通义千问
+│   │   └── openrouter/             # OpenRouter
+│   ├── git/                   # Git 工具函数
+│   ├── gitlab/                # GitLab API 封装
+│   ├── github/                # GitHub API 封装
+│   ├── linear/                # Linear 集成（Issue 管理、状态流转）
+│   ├── review/                # AI 代码审查系统
+│   │   ├── coding-standards/       # 审查规则（Markdown + YAML frontmatter）
+│   │   │   ├── error-rules/        # 错误级规则
+│   │   │   └── warning-rules/      # 警告级规则
+│   │   ├── workflow.ts             # CI 审查工作流
+│   │   └── review.ts               # 核心审查逻辑
+│   ├── claudecode/            # Claude Code Token 用量追踪
+│   ├── codex/                 # OpenAI Codex Token 用量追踪
+│   ├── openrouter/            # OpenRouter 模型查询与定价
+│   ├── exchange-rate/         # 汇率查询（USD/CNY）
+│   ├── env/                   # 环境变量管理
+│   └── utils/                 # 通用工具（retry、fetch 调试等）
+├── package.json
+├── tsconfig.json
+├── eslint.config.js
+└── .env.template
 ```
 
 ## 可用命令
 
+所有命令均在 `claude/` 目录下执行，使用 `bun run`。
+
 ### 分支管理
 
-```bash
-# 创建 feature 分支
-bun run .claude/scripts/workflow/create-feature.ts <branch-name>
-
-# 创建 release 分支（交互式）
-bun run .claude/scripts/workflow/create-release.ts
-
-# 创建 hotfix 分支（交互式）
-bun run .claude/scripts/workflow/create-hotfix.ts
-
-# 创建 experimental 分支
-bun run .claude/scripts/workflow/create-experimental.ts <branch-name>
-```
+| 命令 | 说明 |
+|------|------|
+| `bun run scripts/workflow/create-feature.ts <name>` | 创建 feature 分支，支持从 Linear 选择 issue |
+| `bun run scripts/workflow/create-release.ts` | 创建 release 分支，自动建议版本号 |
+| `bun run scripts/workflow/create-hotfix.ts` | 创建 hotfix 分支，自动建议补丁版本号 |
+| `bun run scripts/workflow/create-experimental.ts <name>` | 创建 experimental 分支 |
 
 ### 代码提交
 
-```bash
-# 提交并推送（支持 AI 生成 commit message）
-bun run .claude/scripts/workflow/commit-and-push.ts
+| 命令 | 说明 |
+|------|------|
+| `bun run scripts/workflow/commit-and-push.ts` | AI 生成 commit message，交互式确认后推送 |
+| `bun run scripts/workflow/submit.ts` | 一键完成 commit + push + 创建 MR |
 
-# 完整提交流程（commit + push + MR）
-bun run .claude/scripts/workflow/submit.ts
-```
+### Merge Request
 
-### 合并请求
-
-```bash
-# 创建 GitLab MR（支持 AI 生成 MR 内容）
-bun run .claude/scripts/workflow/create-merge-request.ts
-```
+| 命令 | 说明 |
+|------|------|
+| `bun run scripts/workflow/create-merge-request.ts` | AI 生成 MR 标题和描述，自动创建或更新 |
 
 ### 发布
 
-```bash
-# 发布 release 分支到 main
-bun run .claude/scripts/workflow/publish-release.ts
+| 命令 | 说明 |
+|------|------|
+| `bun run scripts/workflow/publish-release.ts` | 发布 release 到 main，创建 tag，清理远程分支 |
+| `bun run scripts/workflow/publish-hotfix.ts` | 发布 hotfix 到 main，并同步回最新 release 分支 |
 
-# 发布 hotfix 分支到 main
-bun run .claude/scripts/workflow/publish-hotfix.ts
+### Token 用量报告
+
+| 命令 | 说明 |
+|------|------|
+| `bun run scripts/workflow/build-branch-receipt.ts` | 生成当前分支的 Claude Code / Codex Token 用量及费用报告 |
+
+### npm scripts 快捷方式
+
+```bash
+bun run commit          # commit-and-push
+bun run pr              # create-merge-request
+bun run release         # create-release
+bun run publish-release # publish-release
+bun run hotfix          # create-hotfix
+bun run publish-hotfix  # publish-hotfix
+bun run feature         # create-feature
+bun run experimental    # create-experimental
+bun run receipt         # build-branch-receipt
 ```
+
+### 开发工具
+
+```bash
+bun run typecheck       # TypeScript 类型检查
+bun run lint            # ESLint 检查
+bun run lint:fix        # ESLint 自动修复
+bun test                # 运行测试
+```
+
+## AI 功能
+
+### 支持的 AI Provider
+
+通过 `--ai` 参数指定使用的 AI 服务，默认为 `mimo`：
+
+```bash
+bun run scripts/workflow/commit-and-push.ts --ai anthropic
+bun run scripts/workflow/create-merge-request.ts --ai deepseek
+```
+
+| Provider | 标识 | 默认模型 |
+|----------|------|----------|
+| Anthropic Claude | `claude` | `claude-sonnet-4-6` |
+| DeepSeek | `deepseek` | — |
+| Google Gemini | `gemini` | — |
+| 智谱 GLM | `glm` | — |
+| 腾讯 HY | `hy` | — |
+| LongCat | `longcat` | — |
+| 小米 Mimo | `mimo` | `mimo-v2.5` |
+| MiniMax | `minimax` | — |
+| 阿里通义千问 | `qwen` | — |
+| OpenRouter | `openrouter` | — |
+
+### AI 应用场景
+
+- **Commit Message 生成**: 分析 `git diff`，生成符合 Conventional Commits 规范的提交信息
+- **Merge Request 生成**: 分析分支差异，生成包含概览、变更说明、影响分析、测试说明的 MR 描述
+- **代码审查**: 基于可配置的编码规则，对 MR diff 进行 AI 审查并行评论（详见 `scripts/review/`）
+- **结构化输出**: 使用 Zod schema 确保 AI 输出格式可靠，内置重试机制
 
 ## 分支命名规范
 
-- **feature/**: `feature/<descriptive-name>` - 新功能
-- **release/**: `release/<version>` - 版本发布（如 `release/1.2.0`）
-- **hotfix/**: `hotfix/<version>` - 紧急修复（如 `hotfix/1.2.1`）
-- **experimental/**: `experimental/<name>` - 实验性功能
+| 分支类型 | 格式 | 示例 |
+|----------|------|------|
+| feature | `feature/<name>` | `feature/user-login` |
+| release | `release/<version>` | `release/1.2.0` |
+| hotfix | `hotfix/<version>` | `hotfix/1.2.1` |
+| experimental | `experimental/<name>` | `experimental/new-ui` |
 
 ## 提交规范
 
-使用约定式提交格式：
+使用 [Conventional Commits](https://www.conventionalcommits.org/) 格式：
 
 ```
 type(scope): description
 ```
 
-类型：
-- `feat`: 新功能
-- `fix`: 修复 bug
-- `docs`: 文档更新
-- `style`: 代码格式调整
-- `refactor`: 重构
-- `test`: 测试相关
-- `chore`: 构建/工具相关
-
-## AI 功能
-
-脚本支持多种 AI 服务：
-
-- **Anthropic** - Claude
-- **Ark Coding Plan** - 字节跳动
-- **BigModel** - 智谱
-- **DeepSeek**
-- **LongCat**
-- **MiniMax**
-- **Xiaomi Mimo**
-
-使用 `--ai` 参数指定 AI provider：
-```bash
-bun run .claude/scripts/workflow/commit-and-push.ts --ai anthropic
-bun run .claude/scripts/workflow/create-merge-request.ts --ai mimo
-```
+支持的类型：`feat` · `fix` · `docs` · `style` · `refactor` · `perf` · `test` · `chore`
 
 ## 环境变量
 
+在 `claude/.env` 中配置（从 `.env.template` 复制）。
+
+### 平台集成
+
 | 变量名 | 用途 | 必需 |
 |--------|------|------|
-| `GITLAB_HOST` | GitLab 地址 | 是（MR 功能） |
-| `GITLAB_TOKEN` | GitLab 认证 | 是（MR 功能） |
-| `ANTHROPIC_BASE_URL` | Anthropic API 地址 | 可选  |
-| `ANTHROPIC_API_KEY` | Anthropic 认证 | 可选 |
-| `ANTHROPIC_AUTH_TOKEN` | Anthropic 认证 | 可选 |
+| `GITHUB_BASE_URL` | GitHub API 地址 | GitHub 功能 |
+| `GITHUB_TOKEN` | GitHub 认证 Token | GitHub 功能 |
+| `GITLAB_BASE_URL` | GitLab API 地址 | GitLab 功能 |
+| `GITLAB_TOKEN` | GitLab 认证 Token | GitLab 功能 |
+| `LINEAR_API_KEY` | Linear API 密钥 | Linear 集成 |
+| `LINEAR_PROJECT_ID` | Linear 项目 ID | Linear 集成 |
+| `SENTRY_API_KEY` | Sentry API 密钥 | Sentry 集成 |
+| `SENTRY_BASE_URL` | Sentry 地址 | Sentry 集成 |
+| `SENTRY_ORGANIZATION` | Sentry 组织名 | Sentry 集成 |
+| `SENTRY_PROJECT` | Sentry 项目名 | Sentry 集成 |
+
+### AI Provider
+
+每个 Provider 需要配置 `*_BASE_URL` 和 `*_API_KEY`，未使用的可以删除或注释：
+
+| Provider | 变量名 |
+|----------|--------|
+| Anthropic | `CLAUDE_BASE_URL`, `CLAUDE_API_KEY`, `CLAUDE_AUTH_TOKEN` |
+| DeepSeek | `DEEPSEEK_BASE_URL`, `DEEPSEEK_API_KEY` |
+| Gemini | `GEMINI_BASE_URL`, `GEMINI_API_KEY` |
+| GLM | `GLM_BASE_URL`, `GLM_API_KEY` |
+| HY | `HY_BASE_URL`, `HY_API_KEY` |
+| LongCat | `LONGCAT_BASE_URL`, `LONGCAT_API_KEY` |
+| Mimo | `MIMO_BASE_URL`, `MIMO_API_KEY` |
+| MiniMax | `MINIMAX_BASE_URL`, `MINIMAX_API_KEY` |
+| Qwen | `QWEN_BASE_URL`, `QWEN_API_KEY` |
+| OpenRouter | `OPENROUTER_BASE_URL`, `OPENROUTER_API_KEY` |
+
+## 线性 (Linear) 集成
+
+工作流与 Linear 深度集成：
+
+- **创建分支时**: 可从 Linear issue 列表中选择，自动更新 issue 状态为「开发中」
+- **创建 MR 时**: 自动关联 Linear issue，更新 issue 状态为「代码审查中」
+- **分支名解析**: 自动从分支名中提取 Linear issue ID（格式 `[A-Z]+-\d+`）
+
+## 代码审查系统
+
+`scripts/review/` 提供基于 AI 的 MR 代码审查能力：
+
+- 规则以 Markdown 文件定义，支持 error / warning 两个级别
+- 每条规则独立运行 AI 审查，结果以评论形式发布到 MR
+- 通过 GitLab emoji reaction 标记审查状态（👀 审查中 / 👍 通过 / 👎 存在问题）
+- 可集成到 GitLab CI/CD pipeline 中自动运行
+
+## 文档
+
+| 文档 | 说明 |
+|------|------|
+| [Git 工作流](docs/workflow.md) | 分支管理、代码提交、合并请求、发布流程 |
+| [AI 集成](docs/ai.md) | AI Provider 配置、结构化输出、Prompt 模板 |
+| [AI 代码审查](docs/code-review.md) | 审查规则配置、CI/CD 集成、自定义规则 |
+| [Linear 集成](docs/linear.md) | Issue 管理、状态流转、分支关联 |
+| [环境变量配置](docs/environment.md) | 平台集成、AI Provider、CI 变量 |
 
 ## 注意事项
 
-1. 所有脚本都使用 `bun` 运行，不要使用 `node` 或 `ts-node`
+1. 所有脚本使用 **Bun** 运行，不支持 Node.js 或 ts-node
 2. 创建分支前会自动拉取最新代码
-3. 合并到 main 分支时会使用 `--no-ff` 选项保留分支历史
-4. 发布操作会自动创建 tag 并删除已发布的分支
-5. 使用 `@gitbeaker/rest` 库与 GitLab API 交互
-
-## 更多信息
-
-详细使用说明请参考：
-- [Claude Code 配置说明](claude/README.md)
+3. 合并到 main 分支使用 `--no-ff` 保留分支历史
+4. 发布操作会自动创建 git tag 并删除已发布的远程分支
+5. AI 输出使用 Zod schema 校验，失败自动重试（最多 3 次）
+6. Token 用量报告通过解析本地 Claude Code / Codex 数据文件生成，费用计算基于 OpenRouter 定价
