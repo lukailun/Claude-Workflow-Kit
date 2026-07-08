@@ -21,7 +21,7 @@ bun feature feature-name
 bun experimental feature-name
 ```
 
-详见 [Git 工作流](git-workflow.md) 分支管理。
+详见 [Git 工作流](git-workflow.md#分支管理) “分支管理” 章节。
 
 ### Issue 状态自动更新
 
@@ -47,6 +47,6 @@ bun mr --receipt
 bun submit --receipt
 ```
 
-详见 [Git 工作流](git-workflow.md) 代码提交。
+详见 [Git 工作流](git-workflow.md#代码提交) “代码提交” 章节。
 
 启用 `--receipt` 后，会将开发用量报告作为评论添加到关联的 Linear 工单中。
