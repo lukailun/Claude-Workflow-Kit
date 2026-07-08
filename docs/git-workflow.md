@@ -18,7 +18,7 @@ bun feature
 bun feat
 ```
 
-从 Linear 工单选择时，会显示当前用户 Todo 的工单列表，输入序号即可选中。选中后自动更新 issue 状态为 Developing。
+从 Linear 工单选择时，会显示当前用户的 Todo 工单列表，输入序号即可选中。选中后自动更新工单状态为 Developing。
 
 ### 创建 Experimental 分支
 
@@ -36,7 +36,7 @@ bun experimental
 bun exp
 ```
 
-从 Linear 工单选择时，会显示当前用户 Todo 的工单列表，输入序号即可选中。选中后自动更新 issue 状态为 Developing。
+从 Linear 工单选择时，会显示当前用户的 Todo 工单列表，输入序号即可选中。选中后自动更新工单状态为 Developing。
 
 ### 创建 Release 分支
 
