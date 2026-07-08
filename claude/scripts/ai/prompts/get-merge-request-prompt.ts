@@ -1,5 +1,3 @@
-// import { Issue } from '@linear/sdk';
-
 import { commitTypes } from '@/git/commit-type';
 
 export function getMergeRequestPrompt(params: {

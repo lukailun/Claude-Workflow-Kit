@@ -30,9 +30,8 @@ export async function generateObject(
   params: GenerateObjectParams
 ): ReturnType<typeof generateText> {
   const { thinking, ...rest } = params;
-
   return generateText({
-    ...(thinking && { providerOptions: THINKING_PROVIDER_OPTIONS }),
     ...rest,
+    providerOptions: {...rest.providerOptions,  ...(thinking ? THINKING_PROVIDER_OPTIONS : {})}
   });
 }
