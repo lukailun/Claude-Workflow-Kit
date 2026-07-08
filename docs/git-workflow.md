@@ -4,23 +4,48 @@
 
 ### 创建 Feature 分支
 
+创建 Feature 分支支持两种方式：指定分支名直接创建和交互式选择后创建。创建后分支使用 `feature/` 前缀。
+
 ```bash
 # 指定分支名
-bun run scripts/workflow/create-feature.ts my-feature
+bun feature feature-name
+# 或者
+bun feat feature-name
 
-# 交互式选择（从 Linear issue 列表中选择）
-bun run scripts/workflow/create-feature.ts
+# 交互式选择（从 Linear 待办工单列表中选择）
+bun feature
+# 或者
+bun feat
 ```
 
-从 Linear issue 选择时，会显示当前用户未开始的 issue 列表，输入序号即可选中。选中后自动更新 issue 状态为「Developing」。
+从 Linear 工单选择时，会显示当前用户 Todo 的工单列表，输入序号即可选中。选中后自动更新 issue 状态为 Developing。
+
+### 创建 Experimental 分支
+
+创建 Experimental 分支支持两种方式：指定分支名直接创建和交互式选择后创建。创建后分支使用 `experimental/` 前缀。
+
+```bash
+# 指定分支名
+bun experimental feature-name
+# 或者
+bun exp feature-name
+
+# 交互式选择（从 Linear 待办工单列表中选择）
+bun experimental
+# 或者
+bun exp
+```
+
+从 Linear 工单选择时，会显示当前用户 Todo 的工单列表，输入序号即可选中。选中后自动更新 issue 状态为 Developing。
 
 ### 创建 Release 分支
 
 ```bash
-bun run scripts/workflow/create-release.ts
+bun release
 ```
 
-自动获取最新 git tag 并建议下一个 minor 版本号（如 `2.56.0` → `2.57.0`）。支持：
+创建后分支使用 `release/` 前缀。创建 Release 分支时会自动获取最新 git tag 并建议下一个 minor 版本号（如 `2.56.0` → `2.57.0`）。支持：
+
 - `y` 或回车：接受建议版本
 - `n`：取消
 - 输入自定义版本号
@@ -30,20 +55,18 @@ bun run scripts/workflow/create-release.ts
 ### 创建 Hotfix 分支
 
 ```bash
-bun run scripts/workflow/create-hotfix.ts
+bun hotfix
 ```
 
-与 release 类似，自动建议 patch 版本号（如 `2.56.0` → `2.56.1`）。
+创建后分支使用 `hotfix/` 前缀。创建 Hotfix 分支时会自动获取最新 git tag 并建议下一个 patch 版本号（如 `2.56.0` → `2.56.1`）。支持：
 
-### 创建 Experimental 分支
+- `y` 或回车：接受建议版本
+- `n`：取消
+- 输入自定义版本号
 
-```bash
-bun run scripts/workflow/create-experimental.ts my-experiment
-```
+如果远程已存在该 hotfix 分支，会直接 checkout 并 pull。
 
-与 feature 分支流程相同，使用 `experimental/` 前缀。
-
-### 分支命名规范
+## 分支命名规范
 
 | 类型 | 格式 | 示例 |
 |------|------|------|
@@ -52,18 +75,16 @@ bun run scripts/workflow/create-experimental.ts my-experiment
 | hotfix | `hotfix/<version>` | `hotfix/1.2.1` |
 | experimental | `experimental/<name>` | `experimental/new-ui` |
 
----
-
 ## 代码提交
 
 ### commit-and-push
 
 ```bash
-bun run scripts/workflow/commit-and-push.ts
+bun commit
 bun run scripts/workflow/commit-and-push.ts --ai anthropic
 ```
 
-**交互流程：**
+交互流程：
 
 1. 检测工作区变更，如有未暂存文件，提示是否全部暂存
 2. AI 分析已暂存的 diff，生成 commit message
