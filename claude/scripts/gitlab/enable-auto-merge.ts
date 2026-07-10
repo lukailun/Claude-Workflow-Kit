@@ -4,16 +4,14 @@
  * 功能：MR 在 pipeline 通过后自动合并
  */
 
+import { AcceptMergeRequestOptions } from '@gitbeaker/core';
 import { getVersion, compareVersion } from '@/gitlab/get-version';
 import { gitlabClient } from '@/gitlab/gitlab-client';
+import { retry } from '@/utils/retry';
 
 interface Params {
   projectId: number;
   mergeRequestId: number;
-}
-
-function delay(ms: number): Promise<void> {
-  return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
 /**
@@ -29,28 +27,24 @@ export async function enableAutoMerge(params: Params): Promise<void> {
     ? compareVersion(versionInfo.version, '17.11.0') >= 0
     : true;
 
-  const retryDelays = [500, 1000, 2000];
-  let lastError: unknown;
-
-  for (let attempt = 0; attempt <= retryDelays.length; attempt++) {
-    try {
-      if (isNewApi) {
-        await gitlabClient.MergeRequests.merge(projectId, mergeRequestId, {
-          autoMerge: true,
-        });
-      } else {
-        await gitlabClient.MergeRequests.merge(projectId, mergeRequestId, {
-          mergeWhenPipelineSucceeds: true,
-        });
-      }
-      return;
-    } catch (error) {
-      lastError = error;
-      if (attempt < retryDelays.length) {
-        await delay(retryDelays[attempt]);
-      }
+  await retry(
+    async () => {
+      const options: AcceptMergeRequestOptions = isNewApi
+        ? { autoMerge: true }
+        : { mergeWhenPipelineSucceeds: true };
+      await gitlabClient.MergeRequests.merge(
+        projectId,
+        mergeRequestId,
+        options
+      );
+    },
+    {
+      behavior: {
+        type: 'exponentialDelayed',
+        maxCount: 3,
+        initial: 0.5,
+        multiplier: 1,
+      },
     }
-  }
-
-  throw lastError;
+  );
 }
