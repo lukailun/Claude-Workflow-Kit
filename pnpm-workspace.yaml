@@ -22,7 +22,6 @@ catalog:
   "@sentry/api": "^0.253.0"
   big.js: "^7.0.1"
   better-sqlite3: "^11.7.0"
-  dotenv: "^17.4.2"
   minimatch: "^10.2.5"
   zod: "^4.4.3"
 

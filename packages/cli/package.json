@@ -18,7 +18,8 @@
   "dependencies": {
     "@cwkit/ai": "workspace:*",
     "@cwkit/shared": "workspace:*",
-    "@cwkit/workflow": "workspace:*"
+    "@cwkit/workflow": "workspace:*",
+    "@cwkit/gitlab": "workspace:*"
   },
   "devDependencies": {
     "@types/node": "catalog:",
