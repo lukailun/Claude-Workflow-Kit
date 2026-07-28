@@ -16,12 +16,14 @@ interface CreateBranchConfig {
   emoji: string;
   branchType: string;
   createBranch: (name: string) => Promise<void>;
+  /** 可选分支名，未提供时回退到 process.argv[2] */
+  branchName?: string;
 }
 
 export async function createBranchFromLinearWorkflow(
   config: CreateBranchConfig
 ) {
-  const argName = process.argv[2];
+  const argName = config.branchName ?? process.argv[2];
 
   let branchName: string;
 

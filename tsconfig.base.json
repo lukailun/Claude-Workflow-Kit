@@ -30,7 +30,9 @@
       "@cwkit/review": ["./packages/review/src/index.ts"],
       "@cwkit/review/*": ["./packages/review/src/*"],
       "@cwkit/workflow": ["./packages/workflow/src/index.ts"],
-      "@cwkit/workflow/*": ["./packages/workflow/src/*"]
+      "@cwkit/workflow/*": ["./packages/workflow/src/*"],
+      "@cwkit/cli": ["./packages/cli/src/index.ts"],
+      "@cwkit/cli/*": ["./packages/cli/src/*"]
     }
   }
 }

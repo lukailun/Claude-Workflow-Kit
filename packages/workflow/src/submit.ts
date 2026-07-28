@@ -33,7 +33,7 @@ function promptUser(question: string): Promise<string> {
   });
 }
 
-async function submitWorkflow(options: SubmitOptions) {
+export async function submitWorkflow(options: SubmitOptions) {
   // 阶段一：commit & push
   const commitResult = await commitAndPush(options);
 
