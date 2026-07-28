@@ -1,7 +1,7 @@
 import { createAnthropic } from '@ai-sdk/anthropic';
-import { getMimoFromEnv } from '@cwkit/shared/env/get-mimo-from-env';
 import { debugFetch } from '@cwkit/shared/utils/debug-fetch';
 import type { LanguageModel } from 'ai';
+import { getMimoFromEnv } from '../env/get-mimo-from-env';
 
 const env = getMimoFromEnv();
 const provider = createAnthropic({

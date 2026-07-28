@@ -8,7 +8,6 @@
  *   tsx create-merge-request.ts --auto-merge   # 创建/更新 MR 并开启 pipeline 通过后自动合并
  */
 
-import { ExpandedMergeRequestSchema } from '@gitbeaker/rest';
 import { generateMergeRequest } from './generate-merge-request';
 import {
   getLanguageModel,
@@ -94,7 +93,7 @@ export async function createMergeRequestWorkflow(
     targetBranch: targetBranch.fullName,
   });
 
-  let mergeRequest: ExpandedMergeRequestSchema | undefined;
+  let mergeRequest: Awaited<ReturnType<typeof createMergeRequest>> | undefined = undefined;
   if (existingMergeRequest) {
     console.log(`📝 已有合并请求 !${existingMergeRequest.iid}，正在更新...`);
     mergeRequest = await updateMergeRequest({

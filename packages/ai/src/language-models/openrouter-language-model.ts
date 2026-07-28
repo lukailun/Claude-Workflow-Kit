@@ -1,7 +1,7 @@
-import { getOpenRouterFromEnv } from '@cwkit/shared/env/get-openrouter-from-env';
 import { debugFetch } from '@cwkit/shared/utils/debug-fetch';
 import { createOpenRouter } from '@openrouter/ai-sdk-provider';
 import type { LanguageModel } from 'ai';
+import { getOpenRouterFromEnv } from '../env/get-openrouter-from-env';
 
 const env = getOpenRouterFromEnv();
 const provider = createOpenRouter({

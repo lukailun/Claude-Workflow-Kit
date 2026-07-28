@@ -36,9 +36,6 @@ catalogs:
     '@openrouter/sdk':
       specifier: ^0.13.24
       version: 0.13.67
-    '@sentry/api':
-      specifier: ^0.253.0
-      version: 0.253.0
     '@types/better-sqlite3':
       specifier: ^7.6.12
       version: 7.6.13
@@ -203,9 +200,6 @@ importers:
       '@gitbeaker/rest':
         specifier: 'catalog:'
         version: 43.8.0
-      '@linear/sdk':
-        specifier: 'catalog:'
-        version: 87.0.0(graphql@17.0.2)
       ai:
         specifier: 'catalog:'
         version: 7.0.37(zod@4.4.3)
@@ -347,12 +341,6 @@ importers:
       '@cwkit/usage':
         specifier: workspace:*
         version: link:../usage
-      '@gitbeaker/rest':
-        specifier: 'catalog:'
-        version: 43.8.0
-      '@sentry/api':
-        specifier: 'catalog:'
-        version: 0.253.0(zod@4.4.3)
       ai:
         specifier: 'catalog:'
         version: 7.0.37(zod@4.4.3)
@@ -803,15 +791,6 @@ packages:
 
   '@openrouter/sdk@0.13.67':
     resolution: {integrity: sha512-kUVaFYA9Xehq67ndTk98i+tRLfYH/F6xSf/WuC8dsukBzcgBvYQydoeKw4Xe+peXG/wOVtDxukWt5SqzhbloKw==}
-
-  '@sentry/api@0.253.0':
-    resolution: {integrity: sha512-g6zU6Qa7HaqEAhcPkrAF2yIF9Th3UBxNIM2HjFt9eTLWT+cHqO1zvgPe8yl5IXVpn4xwZmytbdome43ba+FgSQ==}
-    engines: {node: '>=22'}
-    peerDependencies:
-      zod: ^3.24.0
-    peerDependenciesMeta:
-      zod:
-        optional: true
 
   '@standard-schema/spec@1.1.0':
     resolution: {integrity: sha512-l2aFy5jALhniG5HgqrD6jXLi/rUWrKvqN/qJx6yoJsgKhblVd+iqqU4RCXavm/jPityDo5TCvKMnpjKnOriy0w==}
@@ -2407,10 +2386,6 @@ snapshots:
 
   '@openrouter/sdk@0.13.67':
     dependencies:
-      zod: 4.4.3
-
-  '@sentry/api@0.253.0(zod@4.4.3)':
-    optionalDependencies:
       zod: 4.4.3
 
   '@standard-schema/spec@1.1.0': {}

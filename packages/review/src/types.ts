@@ -15,5 +15,3 @@ export interface Violation {
 export interface ReviewResult {
   violations: Violation[];
 }
-
-export type ReactionType = 'eyes' | 'thumbsup' | 'thumbsdown';

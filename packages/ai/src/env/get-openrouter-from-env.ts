@@ -2,7 +2,7 @@
  * 从环境变量读取 OpenRouter 配置
  */
 
-import { optionalEnv } from './require-env';
+import { optionalEnv } from '@cwkit/shared/env/require-env';
 
 interface OpenRouterFromEnv {
   baseUrl: string | undefined;

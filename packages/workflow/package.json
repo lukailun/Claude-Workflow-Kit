@@ -4,7 +4,6 @@
   "private": true,
   "type": "module",
   "exports": {
-    ".": "./src/index.ts",
     "./*": "./src/*"
   },
   "scripts": {
@@ -36,8 +35,6 @@
     "@cwkit/openrouter": "workspace:*",
     "@cwkit/shared": "workspace:*",
     "@cwkit/usage": "workspace:*",
-    "@gitbeaker/rest": "catalog:",
-    "@sentry/api": "catalog:",
     "ai": "catalog:",
     "zod": "catalog:"
   },

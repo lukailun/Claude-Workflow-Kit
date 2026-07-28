@@ -1,12 +1,6 @@
 import type { LanguageModelUsage } from 'ai';
 
-/** token 用量基础数据 */
-export interface TokenUsage {
-  input: number;
-  output: number;
-  cacheRead: number;
-  cacheWrite: number;
-}
+export type { TokenUsage } from '@cwkit/shared/types/token-usage';
 
 /** 模型统计 */
 export interface ModelTokenUsageStats {

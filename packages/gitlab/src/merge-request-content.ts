@@ -1,10 +1,15 @@
-import { Issue } from '@linear/sdk';
 import { LanguageModel, LanguageModelUsage } from 'ai';
 import { getLanguageModelInfo } from '@cwkit/ai/get-language-model';
 import { CommitType } from '@cwkit/shared/git/commit-type';
 import { getCurrentBranch } from '@cwkit/shared/git/get-current-branch';
 import { getCurrentProjectId } from './get-current-project-id';
 import { getProjectDetails } from './get-project-details';
+
+export interface RelatedIssue {
+  identifier: string;
+  title: string;
+  url: string;
+}
 
 export interface MergeRequestTitle {
   type: CommitType;
@@ -31,7 +36,7 @@ export interface MergeRequestContent {
   model: LanguageModel;
   usage?: LanguageModelUsage;
   receipt?: string;
-  relatedIssue?: Issue;
+  relatedIssue?: RelatedIssue;
 }
 
 export function formatTitle(content: MergeRequestContent): string {

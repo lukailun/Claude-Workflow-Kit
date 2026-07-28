@@ -1,7 +1,7 @@
 import { createAnthropic } from '@ai-sdk/anthropic';
-import { getLongCatFromEnv } from '@cwkit/shared/env/get-longcat-from-env';
 import { debugFetch } from '@cwkit/shared/utils/debug-fetch';
 import type { LanguageModel } from 'ai';
+import { getLongCatFromEnv } from '../env/get-longcat-from-env';
 
 const env = getLongCatFromEnv();
 const provider = createAnthropic({

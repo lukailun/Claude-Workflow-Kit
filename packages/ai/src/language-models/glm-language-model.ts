@@ -1,7 +1,7 @@
 import { createAnthropic } from '@ai-sdk/anthropic';
-import { getGlmFromEnv } from '@cwkit/shared/env/get-glm-from-env';
 import { debugFetch } from '@cwkit/shared/utils/debug-fetch';
 import type { LanguageModel } from 'ai';
+import { getGlmFromEnv } from '../env/get-glm-from-env';
 
 const env = getGlmFromEnv();
 const provider = createAnthropic({

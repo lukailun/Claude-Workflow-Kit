@@ -1,7 +1,7 @@
 import { createOpenAI } from '@ai-sdk/openai';
-import { getQwenFromEnv } from '@cwkit/shared/env/get-qwen-from-env';
 import { debugFetch } from '@cwkit/shared/utils/debug-fetch';
 import type { LanguageModel } from 'ai';
+import { getQwenFromEnv } from '../env/get-qwen-from-env';
 
 const env = getQwenFromEnv();
 const provider = createOpenAI({

@@ -4,12 +4,11 @@
   "private": true,
   "type": "module",
   "exports": {
-    ".": "./src/index.ts",
     "./env/*": "./src/env/*",
     "./git/*": "./src/git/*",
     "./utils/*": "./src/utils/*",
     "./exchange-rate/*": "./src/exchange-rate/*",
-    "./types": "./src/types.ts",
+    "./types/*": "./src/types/*",
     "./*": "./src/*"
   },
   "scripts": {

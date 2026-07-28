@@ -1,7 +1,7 @@
 import { createAnthropic } from '@ai-sdk/anthropic';
-import { getMiniMaxFromEnv } from '@cwkit/shared/env/get-minimax-from-env';
 import { debugFetch } from '@cwkit/shared/utils/debug-fetch';
 import type { LanguageModel } from 'ai';
+import { getMiniMaxFromEnv } from '../env/get-minimax-from-env';
 
 const env = getMiniMaxFromEnv();
 const provider = createAnthropic({

@@ -2,15 +2,14 @@
  * Claude MR 代码审查脚本 — 完整 CI 工作流
  *
  * 包含环境检查、代码审核、发布评论、退出码处理。
+ * 通过 ReviewPlatform 接口与平台交互，支持 GitLab/GitHub 等。
  */
 
 import { DEFAULT_AI, type AI } from '@cwkit/ai/get-language-model';
-import { getMergeRequestDiffText } from '@cwkit/gitlab/get-merge-request-diff-text';
-import { postMrReviewComments } from '@cwkit/gitlab/post-mr-review-comments';
 import { codingRules } from './coding-standards/rules';
-import { addReaction, removeReaction } from './reaction';
 import { getReviewViolations } from './review';
 import type { Violation, ViolationSeverity } from './types';
+import type { ReviewPlatform } from './platform/types';
 
 // ─── CI 环境变量 ───
 const PROJECT_ID = parseInt(process.env.CI_MERGE_REQUEST_PROJECT_ID || '0', 10);
@@ -75,8 +74,10 @@ function buildSummaryBody(violations: Violation[]): string {
 
 /**
  * 完整的 MR 代码审查工作流
+ *
+ * @param platform - 平台适配器（GitLab、GitHub 等）
  */
-export async function runReview() {
+export async function runReview(platform: ReviewPlatform) {
   const ai = parseAIFromArgs();
   const errorRules = codingRules.error;
   const warningRules = codingRules.warning;
@@ -98,14 +99,13 @@ export async function runReview() {
   const params = { projectId: PROJECT_ID, mrIid: MR_IID };
 
   // 2. 标记 review 开始：移除 👍/👎，添加 👀
-  await removeReaction(params, 'thumbsup');
-  await removeReaction(params, 'thumbsdown');
-  await addReaction(params, 'eyes');
+  await platform.removeReaction(params, 'thumbsup');
+  await platform.removeReaction(params, 'thumbsdown');
+  await platform.addReaction(params, 'eyes');
 
   // 3. 获取 diff
-  const diffText = await getMergeRequestDiffText({
-    projectId: PROJECT_ID,
-    mrIid: MR_IID,
+  const diffText = await platform.getDiffText({
+    ...params,
     include: ['src/**/*.ts', 'src/**/*.tsx'],
     exclude: [
       'src/Assets/**',
@@ -125,9 +125,8 @@ export async function runReview() {
     console.log(
       `\n💬 发布 ${violations.length} 条（${reviewReulst.errors.length} error / ${reviewReulst.warnings.length} warning）审查评论...`
     );
-    await postMrReviewComments({
-      projectId: PROJECT_ID,
-      mrIid: MR_IID,
+    await platform.postReviewComments({
+      ...params,
       baseSha: BASE_SHA,
       headSha: HEAD_SHA,
       summaryBody: buildSummaryBody(violations),
@@ -143,11 +142,11 @@ export async function runReview() {
   }
 
   // 6. 标记 review 结束：移除 👀，根据结果添加 👍 或 👎
-  await removeReaction(params, 'eyes');
+  await platform.removeReaction(params, 'eyes');
   if (violations.length === 0) {
-    await addReaction(params, 'thumbsup');
+    await platform.addReaction(params, 'thumbsup');
   } else if (violations.some((violation) => violation.severity === 'error')) {
-    await addReaction(params, 'thumbsdown');
+    await platform.addReaction(params, 'thumbsdown');
   }
 
   // 7. 退出

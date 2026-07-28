@@ -1,4 +1,4 @@
-import { requireEnv } from './require-env';
+import { requireEnv } from '@cwkit/shared/env/require-env';
 
 interface MiniMaxFromEnv {
   baseUrl: string;

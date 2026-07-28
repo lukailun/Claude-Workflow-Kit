@@ -4,7 +4,6 @@
   "private": true,
   "type": "module",
   "exports": {
-    ".": "./src/index.ts",
     "./*": "./src/*"
   },
   "scripts": {
@@ -17,7 +16,6 @@
     "@cwkit/shared": "workspace:*",
     "@gitbeaker/core": "catalog:",
     "@gitbeaker/rest": "catalog:",
-    "@linear/sdk": "catalog:",
     "ai": "catalog:",
     "minimatch": "catalog:"
   },

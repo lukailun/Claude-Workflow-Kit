@@ -1,7 +1,7 @@
 import { createAnthropic } from '@ai-sdk/anthropic';
-import { getClaudeFromEnv } from '@cwkit/shared/env/get-claude-from-env';
 import { debugFetch } from '@cwkit/shared/utils/debug-fetch';
 import type { LanguageModel } from 'ai';
+import { getClaudeFromEnv } from '../env/get-claude-from-env';
 
 const env = getClaudeFromEnv();
 const provider = createAnthropic({

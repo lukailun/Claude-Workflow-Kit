@@ -1,4 +1,4 @@
-import type { TokenUsage } from '@cwkit/ai/types/token-usage';
+import type { TokenUsage } from '@cwkit/shared/types/token-usage';
 
 export interface PullRequestContent {
   title: string;

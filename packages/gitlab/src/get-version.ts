@@ -2,7 +2,7 @@
  * 获取 GitLab 版本号
  */
 
-import { getGitlabFromEnv } from '@cwkit/shared/env/get-gitlab-from-env';
+import { getGitlabFromEnv } from './get-gitlab-from-env';
 
 interface GitLabVersion {
   version: string | undefined;

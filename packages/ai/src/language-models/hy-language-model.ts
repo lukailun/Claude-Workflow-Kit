@@ -1,7 +1,7 @@
 import { createOpenAI } from '@ai-sdk/openai';
-import { getHyFromEnv } from '@cwkit/shared/env/get-hy-from-env';
 import { debugFetch } from '@cwkit/shared/utils/debug-fetch';
 import type { LanguageModel } from 'ai';
+import { getHyFromEnv } from '../env/get-hy-from-env';
 
 const env = getHyFromEnv();
 const provider = createOpenAI({

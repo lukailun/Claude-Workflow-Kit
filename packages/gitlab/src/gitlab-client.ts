@@ -1,5 +1,5 @@
 import { Gitlab } from '@gitbeaker/rest';
-import { getGitlabFromEnv } from '@cwkit/shared/env/get-gitlab-from-env';
+import { getGitlabFromEnv } from './get-gitlab-from-env';
 
 const env = getGitlabFromEnv();
 export const gitlabClient = new Gitlab({
