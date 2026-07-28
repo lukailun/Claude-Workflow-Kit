@@ -1,8 +1,8 @@
 import { Octokit } from '@octokit/rest';
-import { getGithubFromEnv } from '@lukailun/dev-kit/env/get-github-from-env';
+import { getGithubFromEnv } from '@cwkit/shared/env/get-github-from-env';
 
 const env = getGithubFromEnv()
-const githubClient: InstanceType<typeof Octokit> = new Octokit({
+const githubClient = new Octokit({
   baseUrl: env.baseUrl,
   auth: env.token,
 });

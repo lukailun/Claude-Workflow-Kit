@@ -6,7 +6,7 @@
 
 import { MergeRequestDiffSchema } from '@gitbeaker/rest';
 import { minimatch } from 'minimatch';
-import { gitlabClient } from '@/gitlab-client';
+import { gitlabClient } from './gitlab-client';
 
 interface GetMergeRequestDiffTextParams {
   projectId: number;
@@ -72,7 +72,7 @@ export async function getMergeRequestDiffs(
   const { projectId, mrIid } = params;
   console.log('📥 正在获取 MR diff...');
 
-  const diffs = (await gitlabClient.MergeRequests.allDiffs(projectId, mrIid)) as any;
+  const diffs = await gitlabClient.MergeRequests.allDiffs(projectId, mrIid);
   return diffs;
 }
 

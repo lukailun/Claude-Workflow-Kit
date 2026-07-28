@@ -3,7 +3,7 @@
  */
 
 import { WorkflowState } from '@linear/sdk';
-import { getLinearIssue } from '@/get-linear-issue';
+import { getLinearIssue } from './get-linear-issue';
 
 /**
  * 通过 issue identifier 获取其所在团队的工作流状态列表

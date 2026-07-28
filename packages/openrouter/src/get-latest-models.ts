@@ -5,7 +5,7 @@
  */
 
 import type { Model } from '@openrouter/sdk/models';
-import { getModels } from '@/get-models';
+import { getModels } from './get-models';
 
 /**
  * 从模型列表中获取最新发布的前 n 个模型

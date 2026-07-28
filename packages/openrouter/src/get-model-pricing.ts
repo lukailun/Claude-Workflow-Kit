@@ -8,9 +8,9 @@
 import type { PublicPricing } from '@openrouter/sdk/models';
 import { LanguageModelUsage } from 'ai';
 import Big from 'big.js';
-import type { ModelTokenUsageStats } from '@lukailun/dev-kit/ai/types/token-usage';
-import { getModels } from '@/get-models';
-import { toOpenRouterId } from '@/model-id';
+import type { ModelTokenUsageStats } from '@cwkit/ai/types/token-usage';
+import { getModels } from './get-models';
+import { toOpenRouterId } from './model-id';
 
 /** 模型定价（per 1M token，USD） */
 export interface ModelPricing {

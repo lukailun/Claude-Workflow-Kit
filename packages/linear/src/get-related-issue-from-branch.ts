@@ -1,5 +1,5 @@
 import { Issue } from '@linear/sdk';
-import { getLinearIssue } from '@/get-linear-issue';
+import { getLinearIssue } from './get-linear-issue';
 
 export async function getRelatedIssueFromBranch(
   branch: string

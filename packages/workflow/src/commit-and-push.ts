@@ -7,16 +7,16 @@
  */
 
 import { createInterface } from 'readline';
-import { $ } from 'bun';
-import { generateCommitMessage } from '@/generate-commit-message';
+import { sh } from '@cwkit/shared/utils/sh';
+import { generateCommitMessage } from '@cwkit/ai/generate-commit-message';
 import {
   getLanguageModel,
   AI,
   AI_PROVIDERS,
   getLanguageModelInfo,
-} from '@/get-language-model';
-import { formatTokenUsage } from '@/token-usage';
-import { getCurrentBranch } from '@lukailun/dev-kit/git/get-current-branch';
+} from '@cwkit/ai/get-language-model';
+import { formatTokenUsage } from '@cwkit/openrouter/format-token-usage';
+import { getCurrentBranch } from '@cwkit/shared/git/get-current-branch';
 
 export interface CommitOptions {
   ai?: AI;
@@ -47,9 +47,9 @@ export async function commitAndPush(
   const branch = await getCurrentBranch();
   console.log(`📍 当前分支: ${branch}\n`);
 
-  const unstaged = await $`git diff --name-only`.text();
-  const untracked = await $`git ls-files --others --exclude-standard`.text();
-  const stagedNow = await $`git diff --cached --name-only`.text();
+  const unstaged = await sh`git diff --name-only`.text();
+  const untracked = await sh`git ls-files --others --exclude-standard`.text();
+  const stagedNow = await sh`git diff --cached --name-only`.text();
 
   if (!unstaged && !untracked && !stagedNow.trim()) {
     console.log('⚠️  没有未提交的改动');
@@ -75,14 +75,14 @@ export async function commitAndPush(
 
     if (stageAnswer.toLowerCase() === 'y' || stageAnswer === '') {
       console.log('📦 正在暂存所有改动...');
-      await $`git add -A`.quiet();
+      await sh`git add -A`.quiet();
       console.log('✅ 所有改动已暂存\n');
     } else {
       console.log('⏭️  跳过暂存，仅提交已暂存的改动\n');
     }
   }
 
-  const staged = await $`git diff --cached --name-only`.text();
+  const staged = await sh`git diff --cached --name-only`.text();
   if (!staged.trim()) {
     console.log('⚠️  没有需要提交的改动');
     return { status: 'no_changes' };
@@ -95,8 +95,8 @@ export async function commitAndPush(
   }
   console.log();
 
-  const diffStat = await $`git diff --cached --stat`.text();
-  const diffContent = await $`git diff --cached --no-color`.text();
+  const diffStat = await sh`git diff --cached --stat`.text();
+  const diffContent = await sh`git diff --cached --no-color`.text();
   const model = await getLanguageModel(options.ai);
   const modelInfo = getLanguageModelInfo(model);
   console.log(`🤖 正在使用 ${modelInfo.modelId} 生成提交信息...`);
@@ -136,11 +136,11 @@ export async function commitAndPush(
   }
 
   console.log('\n📝 正在提交...');
-  const gitCommitOutput = await $`git commit -m ${finalMessage}`.text();
+  const gitCommitOutput = await sh`git commit -m ${finalMessage}`.text();
   console.log(gitCommitOutput);
 
   console.log('🚀 正在推送...');
-  const pushResult = await $`git push origin ${branch}`.text();
+  const pushResult = await sh`git push origin ${branch}`.text();
   console.log(pushResult);
 
   console.log('\n✅ 提交并推送成功！');

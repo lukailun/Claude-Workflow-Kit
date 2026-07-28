@@ -3,7 +3,7 @@
  */
 
 import { Comment } from '@linear/sdk';
-import { linearClient } from '@/linear-client';
+import { linearClient } from './linear-client';
 
 /**
  * 给指定 issue 添加评论

@@ -3,7 +3,7 @@
  *
  */
 
-import { gitlabClient } from '@/gitlab-client';
+import { gitlabClient } from './gitlab-client';
 
 interface Params {
   projectId: number;

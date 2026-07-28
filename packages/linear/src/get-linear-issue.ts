@@ -4,7 +4,7 @@
  */
 
 import { Issue } from '@linear/sdk';
-import { linearClient } from '@/linear-client';
+import { linearClient } from './linear-client';
 
 /**
  * 通过 issue identifier 获取 issue

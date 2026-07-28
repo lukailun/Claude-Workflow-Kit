@@ -4,9 +4,9 @@
  * 使用 bun 运行：bun run .claude/scripts/review/review.test.ts
  */
 
-import type { AI } from '@lukailun/dev-kit/ai/language-model-types';
-import { getReviewViolations } from '@/review';
-import { diffs1 } from '@/test/diff';
+import type { AI } from '@cwkit/ai/get-language-model';
+import { getReviewViolations } from '../review';
+import { diffs1 } from './diff';
 
 // ── 硬编码参数 ─────────────────────────────────────────────────────────────────
 

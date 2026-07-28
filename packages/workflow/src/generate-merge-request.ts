@@ -6,16 +6,16 @@
 
 import { LanguageModel, Output } from 'ai';
 import z from 'zod';
-import { generateObject } from '@lukailun/dev-kit/ai/generate-object';
-import { getMergeRequestPrompt } from '@lukailun/dev-kit/ai/prompts/get-merge-request-prompt';
-import { commitTypes } from '@lukailun/dev-kit/git/commit-type';
-import { getRepositoryCompare } from '@lukailun/dev-kit-gitlab/get-repository-compare';
+import { generateObject } from '@cwkit/ai/generate-object';
+import { getMergeRequestPrompt } from '@cwkit/ai/prompts/get-merge-request-prompt';
+import { commitTypes } from '@cwkit/shared/git/commit-type';
+import { getRepositoryCompare } from '@cwkit/gitlab/get-repository-compare';
 import {
   ChangedFileStatus,
   MergeRequestContent,
-} from '@lukailun/dev-kit-gitlab/merge-request-content';
-import { getRelatedIssueFromBranch } from '@lukailun/dev-kit-linear/get-related-issue-from-branch';
-import { retry } from '@lukailun/dev-kit/utils/retry';
+} from '@cwkit/gitlab/merge-request-content';
+import { getRelatedIssueFromBranch } from '@cwkit/linear/get-related-issue-from-branch';
+import { retry } from '@cwkit/shared/utils/retry';
 
 interface GenerateMergeRequestParams {
   model: LanguageModel;

@@ -6,11 +6,11 @@
  */
 
 import { createInterface } from 'readline';
-import { createLinearIssue } from '@lukailun/dev-kit-linear/create-linear-issue';
-import { getLinearIssues } from '@lukailun/dev-kit-linear/get-linear-issues';
-import { getLinearUser } from '@lukailun/dev-kit-linear/get-linear-user';
-import { promptBranchName } from '@lukailun/dev-kit-linear/prompt-branch-name';
-import { updateLinearIssueState } from '@lukailun/dev-kit-linear/update-linear-issue-state';
+import { createLinearIssue } from '@cwkit/linear/create-linear-issue';
+import { getLinearIssues } from '@cwkit/linear/get-linear-issues';
+import { getLinearUser } from '@cwkit/linear/get-linear-user';
+import { promptBranchName } from '@cwkit/linear/prompt-branch-name';
+import { updateLinearIssueState } from '@cwkit/linear/update-linear-issue-state';
 
 interface CreateBranchConfig {
   emoji: string;

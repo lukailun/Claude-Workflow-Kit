@@ -11,12 +11,12 @@
  *   4. 删除远程 release 分支
  */
 
-import { $ } from 'bun';
-import { getCurrentBranch } from '@lukailun/dev-kit/git/get-current-branch';
-import { mainBranch } from '@lukailun/dev-kit/git/main-branch';
-import { gitMerge } from '@lukailun/dev-kit/git/merge';
-import { getCurrentProjectId } from '@lukailun/dev-kit-gitlab/get-current-project-id';
-import { gitlabClient } from '@lukailun/dev-kit-gitlab/gitlab-client';
+import { sh } from '@cwkit/shared/utils/sh';
+import { getCurrentBranch } from '@cwkit/shared/git/get-current-branch';
+import { mainBranch } from '@cwkit/shared/git/main-branch';
+import { gitMerge } from '@cwkit/shared/git/merge';
+import { getCurrentProjectId } from '@cwkit/gitlab/get-current-project-id';
+import { gitlabClient } from '@cwkit/gitlab/gitlab-client';
 
 async function publishReleaseWorkflow() {
   const currentBranch = await getCurrentBranch();
@@ -48,10 +48,10 @@ async function publishReleaseWorkflow() {
 
   // 2. 本地合并 release 到 main 并 force push
   console.log(`\n🔀 本地合并 ${currentBranch} 到 ${mainBranch.fullName}...`);
-  await $`git checkout ${mainBranch.fullName}`.quiet();
-  await $`git pull origin ${mainBranch.fullName}`.quiet();
+  await sh`git checkout ${mainBranch.fullName}`.quiet();
+  await sh`git pull origin ${mainBranch.fullName}`.quiet();
   await gitMerge(currentBranch);
-  await $`git push origin ${mainBranch.fullName} --force`.quiet();
+  await sh`git push origin ${mainBranch.fullName} --force`.quiet();
   console.log(`✅ 已合并并推送到 ${mainBranch.fullName}`);
 
   // 3. 打 tag
@@ -68,7 +68,7 @@ async function publishReleaseWorkflow() {
   console.log(`✅ 分支 ${currentBranch} 已删除`);
 
   // 本地删除 release 分支
-  await $`git branch -D ${currentBranch}`.quiet();
+  await sh`git branch -D ${currentBranch}`.quiet();
 
   console.log(`\n🎉 release/${segment} 发布完成！`);
 }

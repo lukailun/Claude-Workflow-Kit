@@ -3,7 +3,7 @@
  */
 
 import { ExpandedUserSchema } from '@gitbeaker/rest';
-import { gitlabClient } from '@/gitlab-client';
+import { gitlabClient } from './gitlab-client';
 
 let cachedUser: ExpandedUserSchema | undefined;
 

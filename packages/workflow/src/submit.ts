@@ -9,9 +9,9 @@
  */
 
 import { createInterface } from 'readline';
-import { AI, AI_PROVIDERS } from '@/get-language-model';
-import { commitAndPush } from '@/commit-and-push';
-import { createMergeRequestWorkflow } from '@/create-merge-request';
+import { AI, AI_PROVIDERS } from '@cwkit/ai/get-language-model';
+import { commitAndPush } from './commit-and-push';
+import { createMergeRequestWorkflow } from './create-merge-request';
 
 interface SubmitOptions {
   ai?: AI;

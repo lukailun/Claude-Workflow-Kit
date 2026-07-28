@@ -6,7 +6,7 @@
  */
 
 import type { Model } from '@openrouter/sdk/models';
-import { getOpenRouterClient } from '@/openrouter-client';
+import { getOpenRouterClient } from './openrouter-client';
 
 let _cachedModels: Model[] | null = null;
 
@@ -19,8 +19,8 @@ export async function getModels(): Promise<Model[]> {
   try {
     const client = getOpenRouterClient();
     const response = await client.models.list();
-    _cachedModels = (response as any).data ?? (response as unknown as Model[]);
-    return _cachedModels ?? [];
+    _cachedModels = response.result.data;
+    return _cachedModels;
   } catch {
     return [];
   }

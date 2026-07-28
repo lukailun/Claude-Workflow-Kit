@@ -6,10 +6,10 @@
  * - 如果当前不是 release/hotfix 分支，目标分支为最新的 release 分支
  */
 
-import { Branch, ReleaseBranch } from '@lukailun/dev-kit/git/branch';
-import { getCurrentBranch } from '@lukailun/dev-kit/git/get-current-branch';
-import { mainBranch } from '@lukailun/dev-kit/git/main-branch';
-import { getRemoteBranches } from '@/get-remote-branches';
+import { Branch, ReleaseBranch } from '@cwkit/shared/git/branch';
+import { getCurrentBranch } from '@cwkit/shared/git/get-current-branch';
+import { mainBranch } from '@cwkit/shared/git/main-branch';
+import { getRemoteBranches } from './get-remote-branches';
 
 /**
  * 获取 MR 目标分支

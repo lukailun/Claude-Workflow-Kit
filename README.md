@@ -4,32 +4,25 @@
 
 ## 技术栈
 
-- 运行时: [Bun](https://bun.sh/)
-- 包管理: [Bun Workspaces](https://bun.sh/docs/install/workspaces)
+- 运行时: [Node.js](https://nodejs.org/) >= 22
+- 包管理: [pnpm](https://pnpm.io/) + [catalogs](https://pnpm.io/catalogs) 统一版本
+- 构建编排: [Turborepo](https://turbo.build/) 2.x
+- 版本管理: [Changesets](https://github.com/changesets/changesets)
+- 语言: [TypeScript](https://www.typescriptlang.org/) (ESM)
 
-## 项目结构
+## Monorepo 结构
 
 ```
-Claude-Workflow-Kit/
-├── packages/
-│   ├── core/              # @lukailun/dev-kit — 基础工具（env、git、ai、utils）
-│   ├── gitlab/            # @lukailun/dev-kit-gitlab — GitLab API 集成
-│   ├── github/            # @lukailun/dev-kit-github — GitHub API 集成
-│   ├── linear/            # @lukailun/dev-kit-linear — Linear API 集成
-│   ├── openrouter/        # @lukailun/dev-kit-openrouter — OpenRouter 集成
-│   ├── language-models/   # @lukailun/dev-kit-language-models — AI 模型工厂
-│   ├── claudecode/        # @lukailun/dev-kit-claudecode — Claude Code 集成
-│   ├── codex/             # @lukailun/dev-kit-codex — Codex 集成
-│   ├── review/            # @lukailun/dev-kit-review — AI 代码审查
-│   ├── workflow/          # @lukailun/dev-kit-workflow — 工作流脚本
-│   ├── sentry/            # @lukailun/dev-kit-sentry — Sentry 集成（TODO）
-│   ├── figma/             # @lukailun/dev-kit-figma — Figma 集成（TODO）
-│   └── cli/               # @lukailun/dev-kit-cli — CLI 入口
-├── docs/                  # 项目文档
-├── .env.template          # 环境变量模板
-├── eslint.config.js       # ESLint 配置
-├── tsconfig.base.json     # TypeScript 基础配置
-└── package.json           # 根配置（workspaces）
+packages/
+  shared/       # 共享工具：环境变量、Git 操作、shell 工具、重试等
+  ai/           # AI Provider 抽象层（Anthropic、DeepSeek、Gemini、GLM 等）
+  openrouter/   # OpenRouter SDK 集成、模型定价
+  gitlab/       # GitLab API 客户端、分支管理、MR 操作
+  github/       # GitHub API 客户端
+  linear/       # Linear 集成
+  usage/        # Claude Code / Codex token 用量统计
+  review/       # AI 代码审查系统
+  workflow/     # 工作流入口：分支管理、提交、MR、发布
 ```
 
 ## 快速开始
@@ -37,8 +30,7 @@ Claude-Workflow-Kit/
 ### 1. 安装依赖
 
 ```bash
-# 在项目根目录执行，自动安装所有 workspace 包的依赖
-bun install
+pnpm install
 ```
 
 ### 2. 配置环境变量
@@ -53,77 +45,63 @@ cp .env.template .env
 
 ```bash
 # 创建 feature 分支（可从 Linear issue 中选择）
-bun run feature my-feature
+pnpm feature my-feature
 
 # 提交并推送（AI 自动生成 commit message）
-bun run commit
+pnpm commit
 
 # 创建 Merge Request（AI 自动生成标题和描述）
-bun run mr
+pnpm mr
 ```
 
 ## 可用命令
 
-所有命令均可在项目根目录通过 `bun run` 执行。
+所有命令在根目录执行，使用 `pnpm <command>`。
 
 ### 分支管理
 
 | 命令 | 说明 |
 |------|------|
-| `bun run feature <name>` | 创建 feature 分支，支持从 Linear 选择 issue |
-| `bun run release` | 创建 release 分支，自动建议版本号 |
-| `bun run hotfix` | 创建 hotfix 分支，自动建议补丁版本号 |
-| `bun run experimental <name>` | 创建 experimental 分支 |
+| `pnpm feature <name>` | 创建 feature 分支，支持从 Linear 选择 issue |
+| `pnpm release` | 创建 release 分支，自动建议版本号 |
+| `pnpm hotfix` | 创建 hotfix 分支，自动建议补丁版本号 |
+| `pnpm experimental <name>` | 创建 experimental 分支 |
 
 ### 代码提交
 
 | 命令 | 说明 |
 |------|------|
-| `bun run commit` | AI 生成 commit message，交互式确认后推送 |
-| `bun run submit` | 一键完成 commit + push + 创建 MR |
+| `pnpm commit` | AI 生成 commit message，交互式确认后推送 |
+| `pnpm submit` | 一键完成 commit + push + 创建 MR |
 
 ### Merge Request
 
 | 命令 | 说明 |
 |------|------|
-| `bun run mr` | AI 生成 MR 标题和描述，自动创建或更新 |
+| `pnpm mr` | AI 生成 MR 标题和描述，自动创建或更新 |
 
 ### 发布
 
 | 命令 | 说明 |
 |------|------|
-| `bun run publish-release` | 发布 release 到 main，创建 tag，清理远程分支 |
-| `bun run publish-hotfix` | 发布 hotfix 到 main，并同步回最新 release 分支 |
+| `pnpm publish-release` | 发布 release 到 main，创建 tag，清理远程分支 |
+| `pnpm publish-hotfix` | 发布 hotfix 到 main，并同步回最新 release 分支 |
 
 ### Token 用量报告
 
 | 命令 | 说明 |
 |------|------|
-| `bun run receipt` | 生成当前分支的 Claude Code / Codex Token 用量及费用报告 |
-
-### npm scripts 快捷方式
-
-```bash
-bun run commit          # commit-and-push
-bun run mr              # create-merge-request
-bun run release         # create-release
-bun run publish-release # publish-release
-bun run hotfix          # create-hotfix
-bun run publish-hotfix  # publish-hotfix
-bun run feature         # create-feature
-bun run feat            # create-feature (alias)
-bun run experimental    # create-experimental
-bun run exp             # create-experimental (alias)
-bun run receipt         # build-branch-receipt
-bun run yolo            # yolo mode
-```
+| `pnpm receipt` | 生成当前分支的 Claude Code / Codex Token 用量及费用报告 |
 
 ### 开发工具
 
 ```bash
-bun run typecheck       # TypeScript 类型检查（所有包）
-bun run lint            # ESLint 检查（所有包）
-bun run test            # 运行测试（所有包）
+pnpm typecheck       # TypeScript 类型检查（全部 9 个包）
+pnpm lint            # ESLint 检查
+pnpm lint:fix        # ESLint 自动修复
+pnpm test            # 运行测试
+pnpm changeset       # 创建 changeset
+pnpm version         # 应用 changeset，更新版本号
 ```
 
 ## AI 功能
@@ -133,8 +111,8 @@ bun run test            # 运行测试（所有包）
 通过 `--ai` 参数指定使用的 AI 服务，默认为 `mimo`：
 
 ```bash
-bun run commit --ai anthropic
-bun run mr --ai deepseek
+pnpm commit -- --ai anthropic
+pnpm mr -- --ai deepseek
 ```
 
 | Provider | 标识 | 默认模型 |
@@ -168,7 +146,7 @@ bun run mr --ai deepseek
 
 ## 环境变量
 
-从 `.env.template` 复制为 `.env` 并编辑。
+在项目根目录 `.env` 中配置（从 `.env.template` 复制）。
 
 ### 平台集成
 
@@ -202,7 +180,7 @@ bun run mr --ai deepseek
 | Qwen | `QWEN_BASE_URL`, `QWEN_API_KEY` |
 | OpenRouter | `OPENROUTER_BASE_URL`, `OPENROUTER_API_KEY` |
 
-## 线性 (Linear) 集成
+## Linear 集成
 
 工作流与 Linear 深度集成：
 
@@ -223,38 +201,8 @@ bun run mr --ai deepseek
 
 | 文档 | 说明 |
 |------|------|
-| [Git 工作流](docs/git-workflow.md) | 分支管理、代码提交、合并请求、发布流程 |
+| [Git 工作流](docs/workflow.md) | 分支管理、代码提交、合并请求、发布流程 |
 | [AI 集成](docs/ai.md) | AI Provider 配置、结构化输出、Prompt 模板 |
 | [AI 代码审查](docs/code-review.md) | 审查规则配置、CI/CD 集成、自定义规则 |
 | [Linear 集成](docs/linear.md) | Issue 管理、状态流转、分支关联 |
 | [环境变量配置](docs/environment.md) | 平台集成、AI Provider、CI 变量 |
-| [迁移指南](docs/MIGRATION.md) | Monorepo 架构设计与迁移说明 |
-
-## 依赖图
-
-```
-                    ┌─────────────┐
-                    │     cli     │
-                    └──────┬──────┘
-                           │
-                    ┌──────┴──────┐
-                    ▼             ▼
-              ┌──────────┐ ┌──────────┐
-              │ workflow │ │  review  │
-              └────┬─────┘ └────┬─────┘
-                   │            │
-         ┌─────────┼────────────┼─────────┐
-         ▼         ▼            ▼         ▼
-    ┌────────┐ ┌────────┐ ┌────────┐ ┌──────────┐
-    │ gitlab │ │ github │ │ linear │ │language- │
-    └───┬────┘ └───┬────┘ └───┬────┘ │ models   │
-        │          │          │       └────┬─────┘
-        ▼          ▼          ▼       ┌────┴────┐
-    ┌──────────────────────────────┐  │openrouter│
-    │              core            │  └────┬────┘
-    └──────────────────────────────┘       │
-                    ▲                      │
-                    └──────────────────────┘
-    独立叶子包（仅依赖 core）:
-    sentry, figma, claudecode, codex
-```

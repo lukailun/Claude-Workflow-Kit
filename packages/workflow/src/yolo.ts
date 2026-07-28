@@ -8,9 +8,9 @@
  * - 构建包含 issue 信息的 prompt
  */
 
-import { $ } from 'bun';
-import { getCurrentBranch } from '@lukailun/dev-kit/git/get-current-branch';
-import { getRelatedIssueFromBranch } from '@lukailun/dev-kit-linear/get-related-issue-from-branch';
+import { sh } from '@cwkit/shared/utils/sh';
+import { getCurrentBranch } from '@cwkit/shared/git/get-current-branch';
+import { getRelatedIssueFromBranch } from '@cwkit/linear/get-related-issue-from-branch';
 
 async function yoloWorkflow() {
   const branch = await getCurrentBranch();
@@ -35,7 +35,7 @@ async function yoloWorkflow() {
     .join('\n');
 
   console.log(`Prompt: \n${prompt}`);
-  await $`echo -n ${prompt} | pbcopy`.quiet();
+  await sh`echo -n ${prompt} | pbcopy`.quiet();
 }
 
 yoloWorkflow();

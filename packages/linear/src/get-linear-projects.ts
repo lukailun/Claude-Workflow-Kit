@@ -3,7 +3,7 @@
  */
 
 import { Project } from '@linear/sdk';
-import { linearClient } from '@/linear-client';
+import { linearClient } from './linear-client';
 
 /**
  * 获取所有 Linear 项目

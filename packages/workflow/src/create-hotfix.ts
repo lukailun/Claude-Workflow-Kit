@@ -10,10 +10,10 @@
  */
 
 import { createInterface } from 'readline';
-import { $ } from 'bun';
-import { createHotfixBranch } from '@lukailun/dev-kit-gitlab/create-hotfix-branch';
-import { getLatestTag } from '@lukailun/dev-kit-gitlab/get-latest-tag';
-import { getRemoteBranches } from '@lukailun/dev-kit-gitlab/get-remote-branches';
+import { sh } from '@cwkit/shared/utils/sh';
+import { createHotfixBranch } from '@cwkit/gitlab/create-hotfix-branch';
+import { getLatestTag } from '@cwkit/gitlab/get-latest-tag';
+import { getRemoteBranches } from '@cwkit/gitlab/get-remote-branches';
 
 async function promptVersion(suggested: string): Promise<string | null> {
   const readline = createInterface({
@@ -50,8 +50,8 @@ async function createHotfixWorkflow() {
 
   if (existingHotfix) {
     console.log(`📌 已存在 hotfix 分支: ${existingHotfix}`);
-    await $`git checkout ${existingHotfix}`.quiet();
-    await $`git pull origin ${existingHotfix}`.quiet();
+    await sh`git checkout ${existingHotfix}`.quiet();
+    await sh`git pull origin ${existingHotfix}`.quiet();
     console.log('\n✅ 已切换到最新 hotfix 分支');
     return;
   }

@@ -4,9 +4,9 @@
  * 功能：对比指定项目中两个分支之间的差异
  */
 
-import { getOwner } from '@lukailun/dev-kit/git/get-owner';
-import { getRepo } from '@lukailun/dev-kit/git/get-repo';
-import { githubClient } from '@/github-client';
+import { getOwner } from '@cwkit/shared/git/get-owner';
+import { getRepo } from '@cwkit/shared/git/get-repo';
+import { githubClient } from './github-client';
 
 interface Params {
   sourceBranch: string;

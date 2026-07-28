@@ -5,7 +5,7 @@
  */
 
 import { RepositoryCompareSchema } from '@gitbeaker/rest';
-import { gitlabClient } from '@/gitlab-client';
+import { gitlabClient } from './gitlab-client';
 
 interface Params {
   projectId: number;
@@ -21,10 +21,10 @@ export async function getRepositoryCompare(
   params: Params
 ): Promise<RepositoryCompareSchema> {
   const { projectId, sourceBranch, targetBranch } = params;
-  const compare = (await gitlabClient.Repositories.compare(
+  const compare = await gitlabClient.Repositories.compare(
     projectId,
     targetBranch,
     sourceBranch
-  )) as any;
+  );
   return compare;
 }

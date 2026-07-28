@@ -26,15 +26,15 @@ index abc1234..def5678 100644
 export const diffs2 = `
 --- .claude/scripts/ai/generate-merge-request.ts ---
 @@ -10,7 +10,10 @@ import z from 'zod';
-  10 |  import { getMergeRequestPrompt } from '@lukailun/dev-kit/ai/prompts/get-merge-request-prompt';
-  11 |  import { commitTypes } from '@lukailun/dev-kit/git/commit-type';
-  12 |  import { getRepositoryCompare } from '@lukailun/dev-kit-gitlab/get-repository-compare';
-  -  | -import { MergeRequestContent } from '@lukailun/dev-kit-gitlab/merge-request-content';
+  10 |  import { getMergeRequestPrompt } from '@cwkit/ai/prompts/get-merge-request-prompt';
+  11 |  import { commitTypes } from '@cwkit/shared/git/commit-type';
+  12 |  import { getRepositoryCompare } from '@cwkit/gitlab/get-repository-compare';
+  -  | -import { MergeRequestContent } from '@cwkit/gitlab/merge-request-content';
   13 | +import {
   14 | +  ChangedFileStatus,
   15 | +  MergeRequestContent,
-  16 | +} from '@lukailun/dev-kit-gitlab/merge-request-content';
-  17 |  import { getLinearIssue } from '@lukailun/dev-kit-linear/get-linear-issue';
+  16 | +} from '@cwkit/gitlab/merge-request-content';
+  17 |  import { getLinearIssue } from '@cwkit/linear/get-linear-issue';
   18 |
   19 |  interface GenerateMergeRequestParams {
 @@ -73,6 +76,14 @@ async function generateMergeRequest(

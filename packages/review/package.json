@@ -1,29 +1,29 @@
 {
-  "name": "@lukailun/dev-kit-review",
-  "version": "0.1.0",
+  "name": "@cwkit/review",
+  "version": "0.0.0",
   "private": true,
   "type": "module",
-  "main": "./src/index.ts",
-  "types": "./src/index.ts",
   "exports": {
-    "./*": "./src/*.ts",
-    ".": "./src/index.ts"
+    ".": "./src/index.ts",
+    "./*": "./src/*"
   },
   "scripts": {
-    "typecheck": "tsc --build",
-    "test": "bun test",
-    "lint": "eslint src/"
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint src/",
+    "lint:fix": "eslint src/ --fix",
+    "test": "tsx src/test/review.test.ts"
   },
   "dependencies": {
-    "@lukailun/dev-kit": "workspace:*",
-    "@lukailun/dev-kit-gitlab": "workspace:*",
-    "@lukailun/dev-kit-linear": "workspace:*",
-    "@lukailun/dev-kit-workflow": "workspace:*",
+    "@cwkit/ai": "workspace:*",
+    "@cwkit/gitlab": "workspace:*",
+    "@cwkit/shared": "workspace:*",
     "ai": "catalog:",
+    "minimatch": "catalog:",
     "zod": "catalog:"
   },
   "devDependencies": {
-    "bun-types": "catalog:",
+    "@types/node": "catalog:",
+    "tsx": "catalog:",
     "typescript": "catalog:"
   }
 }

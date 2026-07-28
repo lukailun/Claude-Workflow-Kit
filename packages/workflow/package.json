@@ -1,34 +1,49 @@
 {
-  "name": "@lukailun/dev-kit-workflow",
-  "version": "0.1.0",
+  "name": "@cwkit/workflow",
+  "version": "0.0.0",
   "private": true,
   "type": "module",
-  "main": "./src/index.ts",
-  "types": "./src/index.ts",
   "exports": {
-    "./*": "./src/*.ts",
-    ".": "./src/index.ts"
+    ".": "./src/index.ts",
+    "./*": "./src/*"
   },
   "scripts": {
-    "typecheck": "tsc --build",
-    "test": "bun test",
-    "lint": "eslint src/"
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint src/",
+    "lint:fix": "eslint src/ --fix",
+
+    "release": "tsx src/create-release.ts",
+    "hotfix": "tsx src/create-hotfix.ts",
+    "feature": "tsx src/create-feature.ts",
+    "feat": "tsx src/create-feature.ts",
+    "experimental": "tsx src/create-experimental.ts",
+    "exp": "tsx src/create-experimental.ts",
+
+    "commit": "tsx src/commit-and-push.ts",
+    "mr": "tsx src/create-merge-request.ts",
+    "submit": "tsx src/submit.ts",
+
+    "publish-hotfix": "tsx src/publish-hotfix.ts",
+    "publish-release": "tsx src/publish-release.ts",
+
+    "receipt": "tsx src/build-branch-receipt.ts",
+    "yolo": "tsx src/yolo.ts"
   },
   "dependencies": {
-    "@lukailun/dev-kit": "workspace:*",
-    "@lukailun/dev-kit-gitlab": "workspace:*",
-    "@lukailun/dev-kit-linear": "workspace:*",
-    "@lukailun/dev-kit-openrouter": "workspace:*",
-    "@lukailun/dev-kit-language-models": "workspace:*",
-    "@lukailun/dev-kit-claudecode": "workspace:*",
-    "@lukailun/dev-kit-codex": "workspace:*",
+    "@cwkit/ai": "workspace:*",
+    "@cwkit/gitlab": "workspace:*",
+    "@cwkit/linear": "workspace:*",
+    "@cwkit/openrouter": "workspace:*",
+    "@cwkit/shared": "workspace:*",
+    "@cwkit/usage": "workspace:*",
     "@gitbeaker/rest": "catalog:",
+    "@sentry/api": "catalog:",
     "ai": "catalog:",
-    "zod": "catalog:",
-    "dotenv": "catalog:"
+    "zod": "catalog:"
   },
   "devDependencies": {
-    "bun-types": "catalog:",
+    "@types/node": "catalog:",
+    "tsx": "catalog:",
     "typescript": "catalog:"
   }
 }

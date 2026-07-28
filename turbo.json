@@ -6,16 +6,10 @@
       "outputs": ["dist/**"]
     },
     "typecheck": {
-      "dependsOn": ["^typecheck"]
-    },
-    "lint": {
-      "dependsOn": []
+      "dependsOn": ["^build"]
     },
     "test": {
-      "dependsOn": []
-    },
-    "clean": {
-      "cache": false
+      "dependsOn": ["^build"]
     }
   }
 }

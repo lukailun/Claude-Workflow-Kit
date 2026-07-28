@@ -2,7 +2,7 @@
  * 发布 MR 代码审查评论（总结评论 + 行内评论）
  */
 
-import { gitlabClient } from '@/gitlab-client';
+import { gitlabClient } from './gitlab-client';
 
 interface InlineComment {
   filePath: string;

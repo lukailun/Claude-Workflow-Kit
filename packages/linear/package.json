@@ -1,25 +1,23 @@
 {
-  "name": "@lukailun/dev-kit-linear",
-  "version": "0.1.0",
+  "name": "@cwkit/linear",
+  "version": "0.0.0",
   "private": true,
   "type": "module",
-  "main": "./src/index.ts",
-  "types": "./src/index.ts",
   "exports": {
-    "./*": "./src/*.ts",
-    ".": "./src/index.ts"
+    ".": "./src/index.ts",
+    "./*": "./src/*"
   },
   "scripts": {
-    "typecheck": "tsc --build",
-    "test": "bun test",
-    "lint": "eslint src/"
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint src/",
+    "lint:fix": "eslint src/ --fix"
   },
   "dependencies": {
-    "@lukailun/dev-kit": "workspace:*",
+    "@cwkit/shared": "workspace:*",
     "@linear/sdk": "catalog:"
   },
   "devDependencies": {
-    "bun-types": "catalog:",
+    "@types/node": "catalog:",
     "typescript": "catalog:"
   }
 }

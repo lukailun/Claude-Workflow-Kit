@@ -2,8 +2,8 @@
  * 创建 Linear Issue
  */
 
-import { getLinearUser } from '@/get-linear-user';
-import { linearClient } from '@/linear-client';
+import { getLinearUser } from './get-linear-user';
+import { linearClient } from './linear-client';
 
 /**
  * 创建 Linear Issue

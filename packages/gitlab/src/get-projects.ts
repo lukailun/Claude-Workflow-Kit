@@ -5,13 +5,13 @@
  */
 
 import { ProjectSchema } from '@gitbeaker/rest';
-import { gitlabClient } from '@/gitlab-client';
+import { gitlabClient } from './gitlab-client';
 
 /**
  * 获取所有项目列表
  * @returns 项目列表
  */
 export async function getProjects(): Promise<ProjectSchema[]> {
-  const projects = await gitlabClient.Projects.all() as any;
+  const projects = await gitlabClient.Projects.all();
   return projects;
 }

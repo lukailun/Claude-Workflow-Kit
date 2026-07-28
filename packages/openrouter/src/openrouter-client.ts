@@ -6,7 +6,7 @@
  */
 
 import { OpenRouter } from '@openrouter/sdk';
-import { getOpenRouterFromEnv } from '@lukailun/dev-kit/env/get-openrouter-from-env';
+import { getOpenRouterFromEnv } from '@cwkit/shared/env/get-openrouter-from-env';
 
 let _client: OpenRouter | null = null;
 

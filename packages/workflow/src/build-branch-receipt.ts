@@ -7,23 +7,23 @@
  */
 
 import { dirname, join } from 'path';
-import { getClaudeCodeBranchUsage } from '@lukailun/dev-kit-claudecode/get-claude-code-branch-usage';
-import { getClaudeCodeVersion } from '@lukailun/dev-kit-claudecode/get-claude-code-version';
-import { getCodexBranchUsage } from '@lukailun/dev-kit-codex/get-codex-branch-usage';
-import { getCodexVersion } from '@lukailun/dev-kit-codex/get-codex-version';
-import { getRate } from '@lukailun/dev-kit/exchange-rate/get-exchange-rate';
-import { getCurrentBranch } from '@lukailun/dev-kit/git/get-current-branch';
-import { getUserName } from '@lukailun/dev-kit/git/get-user-name';
-import { getLatestModels } from '@lukailun/dev-kit-openrouter/get-latest-models';
+import { getClaudeCodeBranchUsage } from '@cwkit/usage/claudecode/get-claude-code-branch-usage';
+import { getClaudeCodeVersion } from '@cwkit/usage/claudecode/get-claude-code-version';
+import { getCodexBranchUsage } from '@cwkit/usage/codex/get-codex-branch-usage';
+import { getCodexVersion } from '@cwkit/usage/codex/get-codex-version';
+import { getRate } from '@cwkit/shared/exchange-rate/get-exchange-rate';
+import { getCurrentBranch } from '@cwkit/shared/git/get-current-branch';
+import { getUserName } from '@cwkit/shared/git/get-user-name';
+import { getLatestModels } from '@cwkit/openrouter/get-latest-models';
 import {
   getModelPricing,
   calculateModelCost,
   type ModelPricing,
-} from '@lukailun/dev-kit-openrouter/get-model-pricing';
-import { getPopularModels } from '@lukailun/dev-kit-openrouter/get-popular-models';
-import { BANNERS } from '@/build-branch-receipt-banners';
+} from '@cwkit/openrouter/get-model-pricing';
+import { getPopularModels } from '@cwkit/openrouter/get-popular-models';
+import { BANNERS } from './build-branch-receipt-banners';
 
-const projectRoot = join(dirname(dirname(dirname(import.meta.dir))));
+const projectRoot = join(dirname(dirname(dirname(import.meta.dirname))));
 
 const W = 70;
 

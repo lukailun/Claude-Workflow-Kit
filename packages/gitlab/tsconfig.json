@@ -1,11 +1,73 @@
 {
   "extends": "../../tsconfig.base.json",
   "compilerOptions": {
-    "rootDir": "src", "outDir": "dist",
-    "composite": true, "noEmit": false, "emitDeclarationOnly": true,
-    "resolveJsonModule": true, "isolatedModules": true,
-    "paths": { "@/*": ["./src/*"] }
+    "types": [
+      "node"
+    ],
+    "paths": {
+      "@/*": [
+        "./src/*"
+      ],
+      "@cwkit/shared": [
+        "../../packages/shared/src/index.ts"
+      ],
+      "@cwkit/shared/*": [
+        "../../packages/shared/src/*"
+      ],
+      "@cwkit/ai": [
+        "../../packages/ai/src/index.ts"
+      ],
+      "@cwkit/ai/*": [
+        "../../packages/ai/src/*"
+      ],
+      "@cwkit/openrouter": [
+        "../../packages/openrouter/src/index.ts"
+      ],
+      "@cwkit/openrouter/*": [
+        "../../packages/openrouter/src/*"
+      ],
+      "@cwkit/gitlab": [
+        "../../packages/gitlab/src/index.ts"
+      ],
+      "@cwkit/gitlab/*": [
+        "../../packages/gitlab/src/*"
+      ],
+      "@cwkit/github": [
+        "../../packages/github/src/index.ts"
+      ],
+      "@cwkit/github/*": [
+        "../../packages/github/src/*"
+      ],
+      "@cwkit/linear": [
+        "../../packages/linear/src/index.ts"
+      ],
+      "@cwkit/linear/*": [
+        "../../packages/linear/src/*"
+      ],
+      "@cwkit/usage": [
+        "../../packages/usage/src/index.ts"
+      ],
+      "@cwkit/usage/*": [
+        "../../packages/usage/src/*"
+      ],
+      "@cwkit/review": [
+        "../../packages/review/src/index.ts"
+      ],
+      "@cwkit/review/*": [
+        "../../packages/review/src/*"
+      ],
+      "@cwkit/workflow": [
+        "../../packages/workflow/src/index.ts"
+      ],
+      "@cwkit/workflow/*": [
+        "../../packages/workflow/src/*"
+      ]
+    }
   },
-  "include": ["src/**/*.ts"], "exclude": ["node_modules"],
-  "references": [{ "path": "../core" }]
+  "include": [
+    "src/**/*.ts"
+  ],
+  "exclude": [
+    "node_modules"
+  ]
 }

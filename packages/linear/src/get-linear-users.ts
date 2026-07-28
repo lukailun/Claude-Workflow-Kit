@@ -4,7 +4,7 @@
  */
 
 import { User } from '@linear/sdk';
-import { linearClient } from '@/linear-client';
+import { linearClient } from './linear-client';
 
 /**
  * 获取 Linear 所有用户

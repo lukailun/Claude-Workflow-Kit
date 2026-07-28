@@ -4,8 +4,8 @@
  * 通过解析 Git remote URL 提取项目路径，然后调用 GitLab API 获取项目的数字 ID
  */
 
-import { $ } from 'bun';
-import { getProjectDetails } from '@/get-project-details';
+import { sh } from '@cwkit/shared/utils/sh';
+import { getProjectDetails } from './get-project-details';
 
 let cachedProjectId: number | undefined;
 
@@ -20,7 +20,7 @@ export async function getCurrentProjectId(): Promise<number | undefined> {
     return cachedProjectId;
   }
 
-  const remoteUrl = await $`git remote get-url origin`.text();
+  const remoteUrl = await sh`git remote get-url origin`.text();
   const match = remoteUrl
     .trim()
     .match(/(?:git@[^:]+:|https?:\/\/[^/]+\/)(.+?)(?:\.git)?$/);

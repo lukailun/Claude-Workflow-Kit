@@ -9,8 +9,8 @@
  *   tsx create-experimental.ts 4t-9192
  */
 
-import { createExperimentalBranch } from '@lukailun/dev-kit-gitlab/create-experimental-branch';
-import { createBranchFromLinearWorkflow } from '@/create-branch-from-linear';
+import { createExperimentalBranch } from '@cwkit/gitlab/create-experimental-branch';
+import { createBranchFromLinearWorkflow } from './create-branch-from-linear';
 
 createBranchFromLinearWorkflow({
   emoji: '🧪',

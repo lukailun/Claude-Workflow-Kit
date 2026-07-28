@@ -10,10 +10,10 @@
  */
 
 import { createInterface } from 'readline';
-import { $ } from 'bun';
-import { createReleaseBranch } from '@lukailun/dev-kit-gitlab/create-release-branch';
-import { getLatestTag } from '@lukailun/dev-kit-gitlab/get-latest-tag';
-import { getRemoteBranches } from '@lukailun/dev-kit-gitlab/get-remote-branches';
+import { sh } from '@cwkit/shared/utils/sh';
+import { createReleaseBranch } from '@cwkit/gitlab/create-release-branch';
+import { getLatestTag } from '@cwkit/gitlab/get-latest-tag';
+import { getRemoteBranches } from '@cwkit/gitlab/get-remote-branches';
 
 async function promptVersion(
   suggested: string,
@@ -72,8 +72,8 @@ async function createReleaseWorkflow() {
   const existing = existingReleases.find((b) => b === `release/${version}`);
   if (existing) {
     console.log(`\n📌 release 分支 ${existing} 已存在，直接切换`);
-    await $`git checkout ${existing}`.quiet();
-    await $`git pull origin ${existing}`.quiet();
+    await sh`git checkout ${existing}`.quiet();
+    await sh`git pull origin ${existing}`.quiet();
     console.log('✅ 已切换到最新 release 分支');
     return;
   }

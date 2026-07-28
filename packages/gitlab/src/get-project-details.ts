@@ -3,7 +3,7 @@
  */
 
 import { ProjectSchema } from '@gitbeaker/rest';
-import { gitlabClient } from '@/gitlab-client';
+import { gitlabClient } from './gitlab-client';
 
 interface Params {
   projectId?: number;
@@ -19,11 +19,11 @@ export async function getProjectDetails(
 ): Promise<ProjectSchema | undefined> {
   const { projectId, projectPathWithNamespace } = params;
   if (projectId) {
-    const project = (await gitlabClient.Projects.show(projectId)) as any;
+    const project = await gitlabClient.Projects.show(projectId);
     return project;
   }
   if (projectPathWithNamespace) {
-    const project = (await gitlabClient.Projects.show(projectPathWithNamespace)) as any;
+    const project = await gitlabClient.Projects.show(projectPathWithNamespace);
     return project;
   }
   return undefined;

@@ -10,14 +10,14 @@
 import { readFileSync } from 'fs';
 import { Output } from 'ai';
 import z from 'zod';
-import { generateObject } from '@lukailun/dev-kit/ai/generate-object';
-import { getLanguageModel } from '@lukailun/dev-kit-workflow/get-language-model';
-import type { AI } from '@lukailun/dev-kit/ai/language-model-types';
-import { codingRules } from '@/coding-standards/rules';
-import type { CodingRule } from '@/coding-standards/rules';
-import { getReviewPrompt } from '@/prompt';
-import type { Violation, ReviewResult } from '@/types';
-import { retry } from '@lukailun/dev-kit/utils/retry';
+import { generateObject } from '@cwkit/ai/generate-object';
+import { getLanguageModel } from '@cwkit/ai/get-language-model';
+import type { AI } from '@cwkit/ai/get-language-model';
+import { codingRules } from './coding-standards/rules';
+import type { CodingRule } from './coding-standards/rules';
+import { getReviewPrompt } from './prompt';
+import type { Violation } from './types';
+import { retry } from '@cwkit/shared/utils/retry';
 
 const MAX_DIFF_LINES = 1000;
 
@@ -119,6 +119,11 @@ function showReviewTable(): void {
 export interface ReviewOptions {
   diffText: string;
   ai: AI;
+}
+
+export interface ReviewResult {
+  errors: Violation[];
+  warnings: Violation[];
 }
 
 export async function getReviewViolations(

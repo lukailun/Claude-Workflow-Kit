@@ -4,9 +4,9 @@
  * 功能：获取项目 tag，返回版本号最大的 vx.x.x tag
  */
 
-import { getOwner } from '@lukailun/dev-kit/git/get-owner';
-import { getRepo } from '@lukailun/dev-kit/git/get-repo';
-import { githubClient } from '@/github-client';
+import { getOwner } from '@cwkit/shared/git/get-owner';
+import { getRepo } from '@cwkit/shared/git/get-repo';
+import { githubClient } from './github-client';
 
 interface Tag {
   name: string;

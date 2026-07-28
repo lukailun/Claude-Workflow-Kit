@@ -4,13 +4,13 @@
  * 包含环境检查、代码审核、发布评论、退出码处理。
  */
 
-import { DEFAULT_AI, type AI } from '@lukailun/dev-kit/ai/language-model-types';
-import { getMergeRequestDiffText } from '@lukailun/dev-kit-gitlab/get-merge-request-diff-text';
-import { postMrReviewComments } from '@lukailun/dev-kit-gitlab/post-mr-review-comments';
-import { codingRules } from '@/coding-standards/rules';
-import { addReaction, removeReaction } from '@/reaction';
-import { getReviewViolations } from '@/review';
-import type { Violation, ViolationSeverity } from '@/types';
+import { DEFAULT_AI, type AI } from '@cwkit/ai/get-language-model';
+import { getMergeRequestDiffText } from '@cwkit/gitlab/get-merge-request-diff-text';
+import { postMrReviewComments } from '@cwkit/gitlab/post-mr-review-comments';
+import { codingRules } from './coding-standards/rules';
+import { addReaction, removeReaction } from './reaction';
+import { getReviewViolations } from './review';
+import type { Violation, ViolationSeverity } from './types';
 
 // ─── CI 环境变量 ───
 const PROJECT_ID = parseInt(process.env.CI_MERGE_REQUEST_PROJECT_ID || '0', 10);

@@ -5,12 +5,12 @@
  */
 
 import { ExpandedMergeRequestSchema } from '@gitbeaker/rest';
-import { gitlabClient } from '@/gitlab-client';
+import { gitlabClient } from './gitlab-client';
 import {
   formatDescription,
   formatTitle,
   MergeRequestContent,
-} from '@/merge-request-content';
+} from './merge-request-content';
 
 interface Params {
   projectId: number;

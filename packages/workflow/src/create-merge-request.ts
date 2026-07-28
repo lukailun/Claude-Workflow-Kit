@@ -9,26 +9,26 @@
  */
 
 import { ExpandedMergeRequestSchema } from '@gitbeaker/rest';
-import { generateMergeRequest } from '@/generate-merge-request';
+import { generateMergeRequest } from './generate-merge-request';
 import {
   getLanguageModel,
   AI,
   AI_PROVIDERS,
   getLanguageModelInfo,
-} from '@/get-language-model';
-import { formatTokenUsage } from '@/token-usage';
-import { getCurrentBranch } from '@lukailun/dev-kit/git/get-current-branch';
-import { mainBranch } from '@lukailun/dev-kit/git/main-branch';
-import { createMergeRequest } from '@lukailun/dev-kit-gitlab/create-merge-request';
-import { enableAutoMerge } from '@lukailun/dev-kit-gitlab/enable-auto-merge';
-import { getCurrentProjectId } from '@lukailun/dev-kit-gitlab/get-current-project-id';
-import { getMergeRequest } from '@lukailun/dev-kit-gitlab/get-merge-request';
-import { getMergeRequestTargetBranch } from '@lukailun/dev-kit-gitlab/get-merge-request-target-branch';
-import { formatTitle } from '@lukailun/dev-kit-gitlab/merge-request-content';
-import { updateMergeRequest } from '@lukailun/dev-kit-gitlab/update-merge-request';
-import { createLinearComment } from '@lukailun/dev-kit-linear/create-linear-comment';
-import { updateLinearIssueState } from '@lukailun/dev-kit-linear/update-linear-issue-state';
-import { buildBranchReceiptWorkflow } from '@/build-branch-receipt';
+} from '@cwkit/ai/get-language-model';
+import { formatTokenUsage } from '@cwkit/openrouter/format-token-usage';
+import { getCurrentBranch } from '@cwkit/shared/git/get-current-branch';
+import { mainBranch } from '@cwkit/shared/git/main-branch';
+import { createMergeRequest } from '@cwkit/gitlab/create-merge-request';
+import { enableAutoMerge } from '@cwkit/gitlab/enable-auto-merge';
+import { getCurrentProjectId } from '@cwkit/gitlab/get-current-project-id';
+import { getMergeRequest } from '@cwkit/gitlab/get-merge-request';
+import { getMergeRequestTargetBranch } from '@cwkit/gitlab/get-merge-request-target-branch';
+import { formatTitle } from '@cwkit/gitlab/merge-request-content';
+import { updateMergeRequest } from '@cwkit/gitlab/update-merge-request';
+import { createLinearComment } from '@cwkit/linear/create-linear-comment';
+import { updateLinearIssueState } from '@cwkit/linear/update-linear-issue-state';
+import { buildBranchReceiptWorkflow } from './build-branch-receipt';
 
 export interface MergeRequestOptions {
   ai?: AI;

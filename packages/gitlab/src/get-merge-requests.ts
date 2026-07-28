@@ -7,7 +7,7 @@
  */
 
 import { MergeRequestSchemaWithBasicLabels } from '@gitbeaker/rest';
-import { gitlabClient } from '@/gitlab-client';
+import { gitlabClient } from './gitlab-client';
 
 interface Params {
   projectId: number;
@@ -22,9 +22,9 @@ export async function getMergeRequests(
   params: Params
 ): Promise<MergeRequestSchemaWithBasicLabels[]> {
   const { projectId } = params;
-  const mergeRequests = (await gitlabClient.MergeRequests.all({
+  const mergeRequests = await gitlabClient.MergeRequests.all({
     projectId,
     state: 'opened',
-  })) as any;
+  });
   return mergeRequests;
 }

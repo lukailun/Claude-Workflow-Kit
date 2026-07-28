@@ -1,5 +1,5 @@
-import { getCurrentProjectId } from '@lukailun/dev-kit-gitlab/get-current-project-id';
-import { getMergeRequestDiffText } from '@lukailun/dev-kit-gitlab/get-merge-request-diff-text';
+import { getCurrentProjectId } from '@cwkit/gitlab/get-current-project-id';
+import { getMergeRequestDiffText } from '@cwkit/gitlab/get-merge-request-diff-text';
 
 const mergeId = 3186;
 

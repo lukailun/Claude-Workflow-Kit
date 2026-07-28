@@ -4,9 +4,9 @@
  * 功能：PR 在 CI 通过后自动合并
  */
 
-import { getOwner } from '@lukailun/dev-kit/git/get-owner';
-import { getRepo } from '@lukailun/dev-kit/git/get-repo';
-import { githubClient } from '@/github-client';
+import { getOwner } from '@cwkit/shared/git/get-owner';
+import { getRepo } from '@cwkit/shared/git/get-repo';
+import { githubClient } from './github-client';
 
 interface Params {
   pullNumber: number;

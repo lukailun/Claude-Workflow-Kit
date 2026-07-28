@@ -5,9 +5,9 @@
  */
 
 import { AcceptMergeRequestOptions } from '@gitbeaker/core';
-import { getVersion, compareVersion } from '@/get-version';
-import { gitlabClient } from '@/gitlab-client';
-import { retry } from '@lukailun/dev-kit/utils/retry';
+import { getVersion, compareVersion } from './get-version';
+import { gitlabClient } from './gitlab-client';
+import { retry } from '@cwkit/shared/utils/retry';
 
 interface Params {
   projectId: number;

@@ -1,36 +1,41 @@
 {
   "name": "claude-workflow-kit",
   "private": true,
-  "packageManager": "pnpm@10.0.0",
+  "type": "module",
   "scripts": {
-    "build": "turbo build",
-    "typecheck": "turbo typecheck",
-    "lint": "turbo lint",
-    "test": "turbo test",
-    "clean": "turbo clean",
+    "build": "turbo run build",
+    "typecheck": "turbo run typecheck",
+    "lint": "eslint packages/*/src/**/*.ts",
+    "lint:fix": "eslint packages/*/src/**/*.ts --fix",
+    "test": "turbo run test",
+    "changeset": "changeset",
+    "version": "changeset version",
+    "release": "turbo run build && changeset publish",
 
-    "release": "pnpm run --filter @lukailun/dev-kit-cli release",
-    "hotfix": "pnpm run --filter @lukailun/dev-kit-cli hotfix",
-    "feature": "pnpm run --filter @lukailun/dev-kit-cli feature",
-    "feat": "pnpm run --filter @lukailun/dev-kit-cli feat",
-    "experimental": "pnpm run --filter @lukailun/dev-kit-cli experimental",
-    "exp": "pnpm run --filter @lukailun/dev-kit-cli exp",
-    "commit": "pnpm run --filter @lukailun/dev-kit-cli commit",
-    "mr": "pnpm run --filter @lukailun/dev-kit-cli mr",
-    "submit": "pnpm run --filter @lukailun/dev-kit-cli submit",
-    "publish-hotfix": "pnpm run --filter @lukailun/dev-kit-cli publish-hotfix",
-    "publish-release": "pnpm run --filter @lukailun/dev-kit-cli publish-release",
-    "receipt": "pnpm run --filter @lukailun/dev-kit-cli receipt",
-    "yolo": "pnpm run --filter @lukailun/dev-kit-cli yolo",
-    "create-rule": "pnpm run --filter @lukailun/dev-kit-cli create-rule"
+    "feature": "pnpm --filter @cwkit/workflow feature",
+    "feat": "pnpm --filter @cwkit/workflow feat",
+    "experimental": "pnpm --filter @cwkit/workflow experimental",
+    "exp": "pnpm --filter @cwkit/workflow exp",
+    "commit": "pnpm --filter @cwkit/workflow commit",
+    "mr": "pnpm --filter @cwkit/workflow mr",
+    "submit": "pnpm --filter @cwkit/workflow submit",
+    "hotfix": "pnpm --filter @cwkit/workflow hotfix",
+    "publish-release": "pnpm --filter @cwkit/workflow publish-release",
+    "publish-hotfix": "pnpm --filter @cwkit/workflow publish-hotfix",
+    "receipt": "pnpm --filter @cwkit/workflow receipt",
+    "yolo": "pnpm --filter @cwkit/workflow yolo"
   },
   "devDependencies": {
-    "turbo": "^2",
-    "eslint": "catalog:",
+    "@changesets/cli": "catalog:",
     "@typescript-eslint/eslint-plugin": "catalog:",
     "@typescript-eslint/parser": "catalog:",
+    "eslint": "catalog:",
     "eslint-plugin-import-x": "catalog:",
-    "typescript": "catalog:",
-    "bun-types": "catalog:"
+    "turbo": "catalog:",
+    "typescript": "catalog:"
+  },
+  "packageManager": "pnpm@11.15.1",
+  "engines": {
+    "node": ">=22"
   }
 }

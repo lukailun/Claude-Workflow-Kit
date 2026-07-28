@@ -9,9 +9,6 @@ node_modules/
 dist/
 build/
 
-# Turbo
-.turbo/
-
 # Lock files (keep pnpm-lock.yaml)
 bun.lock
 
@@ -32,3 +29,10 @@ logs/
 # Temporary files
 tmp/
 temp/
+
+# Turbo
+.turbo/
+
+# Changesets
+.changeset/*.md
+!.changeset/README.md

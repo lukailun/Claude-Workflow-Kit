@@ -1,0 +1,27 @@
+{
+  "name": "@cwkit/shared",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts",
+    "./env/*": "./src/env/*",
+    "./git/*": "./src/git/*",
+    "./utils/*": "./src/utils/*",
+    "./exchange-rate/*": "./src/exchange-rate/*",
+    "./types": "./src/types.ts",
+    "./*": "./src/*"
+  },
+  "scripts": {
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint src/",
+    "lint:fix": "eslint src/ --fix"
+  },
+  "dependencies": {
+    "dotenv": "catalog:"
+  },
+  "devDependencies": {
+    "@types/node": "catalog:",
+    "typescript": "catalog:"
+  }
+}

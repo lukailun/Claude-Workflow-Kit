@@ -1,6 +1,6 @@
 import { existsSync, readdirSync, readFileSync } from 'fs';
 import { join, resolve } from 'path';
-import { ViolationSeverity } from '@/types';
+import { ViolationSeverity } from '../types';
 
 interface RuleMetadata {
   ruleId: string;

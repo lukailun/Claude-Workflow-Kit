@@ -7,7 +7,7 @@
  */
 
 import { Issue } from '@linear/sdk';
-import { linearClient } from '@/linear-client';
+import { linearClient } from './linear-client';
 
 /**
  * Linear Issues 查询参数

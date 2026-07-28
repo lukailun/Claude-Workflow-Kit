@@ -1,9 +1,9 @@
 /**
  * 获取远程分支列表
  */
-import { getOwner } from '@lukailun/dev-kit/git/get-owner';
-import { getRepo } from '@lukailun/dev-kit/git/get-repo';
-import {  githubClient } from '@/github-client';
+import { getOwner } from '@cwkit/shared/git/get-owner';
+import { getRepo } from '@cwkit/shared/git/get-repo';
+import {  githubClient } from './github-client';
 
 /**
  * 获取远程所有分支列表

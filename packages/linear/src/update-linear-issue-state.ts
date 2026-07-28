@@ -5,8 +5,8 @@
  *   updateLinearIssueState('4T-9192', 'Developing')
  */
 
-import { getLinearIssueTeamStates } from '@/get-linear-issue-team-states';
-import { linearClient } from '@/linear-client';
+import { getLinearIssueTeamStates } from './get-linear-issue-team-states';
+import { linearClient } from './linear-client';
 
 /**
  * 更新 Linear Issue 的状态

@@ -1,8 +1,8 @@
-import { addMergeRequestReaction } from '@lukailun/dev-kit-gitlab/add-merge-request-reaction';
-import { getCurrentUser } from '@lukailun/dev-kit-gitlab/get-current-user';
-import { getMergeRequestReactions } from '@lukailun/dev-kit-gitlab/get-merge-request-reactions';
-import { removeMergeRequestReaction } from '@lukailun/dev-kit-gitlab/remove-merge-request-reaction';
-import { ReactionType } from '@/types';
+import { addMergeRequestReaction } from '@cwkit/gitlab/add-merge-request-reaction';
+import { getCurrentUser } from '@cwkit/gitlab/get-current-user';
+import { getMergeRequestReactions } from '@cwkit/gitlab/get-merge-request-reactions';
+import { removeMergeRequestReaction } from '@cwkit/gitlab/remove-merge-request-reaction';
+import { ReactionType } from './types';
 
 interface Params {
   projectId: number;

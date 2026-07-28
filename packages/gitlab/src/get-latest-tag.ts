@@ -4,8 +4,8 @@
  * 功能：获取项目 tag，返回版本号最大的 vx.x.x tag
  */
 
-import { getCurrentProjectId } from '@/get-current-project-id';
-import { gitlabClient } from '@/gitlab-client';
+import { getCurrentProjectId } from './get-current-project-id';
+import { gitlabClient } from './gitlab-client';
 
 interface Tag {
   name: string;

@@ -9,8 +9,8 @@
  *   tsx create-feature.ts 4t-9192
  */
 
-import { createFeatureBranch } from '@lukailun/dev-kit-gitlab/create-feature-branch';
-import { createBranchFromLinearWorkflow } from '@/create-branch-from-linear';
+import { createFeatureBranch } from '@cwkit/gitlab/create-feature-branch';
+import { createBranchFromLinearWorkflow } from './create-branch-from-linear';
 
 createBranchFromLinearWorkflow({
   emoji: '🚀',

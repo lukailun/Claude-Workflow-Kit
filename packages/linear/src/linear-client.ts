@@ -1,5 +1,5 @@
 import { LinearClient } from '@linear/sdk';
-import { getLinearFromEnv } from '@lukailun/dev-kit/env/get-linear-from-env';
+import { getLinearFromEnv } from '@cwkit/shared/env/get-linear-from-env';
 
 const linearClient = new LinearClient({
   apiKey: getLinearFromEnv().apiKey,

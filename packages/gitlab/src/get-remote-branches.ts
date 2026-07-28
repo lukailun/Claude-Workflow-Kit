@@ -2,8 +2,8 @@
  * 获取远程分支列表
  */
 
-import { getCurrentProjectId } from '@/get-current-project-id';
-import { gitlabClient } from '@/gitlab-client';
+import { getCurrentProjectId } from './get-current-project-id';
+import { gitlabClient } from './gitlab-client';
 
 /**
  * 获取远程所有分支列表

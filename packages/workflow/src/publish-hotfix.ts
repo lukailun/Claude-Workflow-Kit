@@ -12,13 +12,13 @@
  *   5. 将 main 同步到最新的 release 分支
  */
 
-import { $ } from 'bun';
-import { getCurrentBranch } from '@lukailun/dev-kit/git/get-current-branch';
-import { mainBranch } from '@lukailun/dev-kit/git/main-branch';
-import { gitMerge } from '@lukailun/dev-kit/git/merge';
-import { getCurrentProjectId } from '@lukailun/dev-kit-gitlab/get-current-project-id';
-import { getLatestReleaseBranch } from '@lukailun/dev-kit-gitlab/get-latest-release-branch';
-import { gitlabClient } from '@lukailun/dev-kit-gitlab/gitlab-client';
+import { sh } from '@cwkit/shared/utils/sh';
+import { getCurrentBranch } from '@cwkit/shared/git/get-current-branch';
+import { mainBranch } from '@cwkit/shared/git/main-branch';
+import { gitMerge } from '@cwkit/shared/git/merge';
+import { getCurrentProjectId } from '@cwkit/gitlab/get-current-project-id';
+import { getLatestReleaseBranch } from '@cwkit/gitlab/get-latest-release-branch';
+import { gitlabClient } from '@cwkit/gitlab/gitlab-client';
 
 async function publishHotfixWorkflow() {
   const currentBranch = await getCurrentBranch();
@@ -50,10 +50,10 @@ async function publishHotfixWorkflow() {
 
   // 2. 本地合并 hotfix 到 main 并 force push
   console.log(`\n🔀 本地合并 ${currentBranch} 到 ${mainBranch.fullName}...`);
-  await $`git checkout ${mainBranch.fullName}`.quiet();
-  await $`git pull origin ${mainBranch.fullName}`.quiet();
+  await sh`git checkout ${mainBranch.fullName}`.quiet();
+  await sh`git pull origin ${mainBranch.fullName}`.quiet();
   await gitMerge(currentBranch);
-  await $`git push origin ${mainBranch.fullName} --force`.quiet();
+  await sh`git push origin ${mainBranch.fullName} --force`.quiet();
   console.log(`✅ 已合并并推送到 ${mainBranch.fullName}`);
 
   // 3. 打 tag
@@ -75,18 +75,18 @@ async function publishHotfixWorkflow() {
     console.log(
       `\n🔀 同步 ${mainBranch.fullName} 到 ${releaseBranch.fullName}...`
     );
-    await $`git checkout ${releaseBranch.fullName}`.quiet();
-    await $`git pull origin ${releaseBranch.fullName}`.quiet();
+    await sh`git checkout ${releaseBranch.fullName}`.quiet();
+    await sh`git pull origin ${releaseBranch.fullName}`.quiet();
     await gitMerge(mainBranch.fullName);
-    await $`git push origin ${releaseBranch.fullName} --force`.quiet();
+    await sh`git push origin ${releaseBranch.fullName} --force`.quiet();
     console.log(`✅ 已同步到 ${releaseBranch.fullName}`);
   } else {
     console.log('\n⚠️  未找到 release 分支，跳过同步');
   }
 
   // 本地切回 main 并删除 hotfix 分支
-  await $`git checkout ${mainBranch.fullName}`.quiet();
-  await $`git branch -D ${currentBranch}`.quiet();
+  await sh`git checkout ${mainBranch.fullName}`.quiet();
+  await sh`git branch -D ${currentBranch}`.quiet();
 
   console.log(`\n🎉 hotfix/${segment} 发布完成！`);
 }

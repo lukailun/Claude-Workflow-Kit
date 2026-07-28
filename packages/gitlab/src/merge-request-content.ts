@@ -1,10 +1,10 @@
 import { Issue } from '@linear/sdk';
 import { LanguageModel, LanguageModelUsage } from 'ai';
-import { getLanguageModelInfo } from '@lukailun/dev-kit/ai/language-model-types';
-import { CommitType } from '@lukailun/dev-kit/git/commit-type';
-import { getCurrentBranch } from '@lukailun/dev-kit/git/get-current-branch';
-import { getCurrentProjectId } from '@/get-current-project-id';
-import { getProjectDetails } from '@/get-project-details';
+import { getLanguageModelInfo } from '@cwkit/ai/get-language-model';
+import { CommitType } from '@cwkit/shared/git/commit-type';
+import { getCurrentBranch } from '@cwkit/shared/git/get-current-branch';
+import { getCurrentProjectId } from './get-current-project-id';
+import { getProjectDetails } from './get-project-details';
 
 export interface MergeRequestTitle {
   type: CommitType;

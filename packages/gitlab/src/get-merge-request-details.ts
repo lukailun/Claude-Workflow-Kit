@@ -3,7 +3,7 @@
  */
 
 import { ExpandedMergeRequestSchema } from '@gitbeaker/rest';
-import { gitlabClient } from '@/gitlab-client';
+import { gitlabClient } from './gitlab-client';
 
 interface Params {
   projectId: number;
@@ -20,9 +20,9 @@ export async function getMergeRequestDetails(
   params: Params
 ): Promise<ExpandedMergeRequestSchema> {
   const { projectId, mergeRequestIid } = params;
-  const mergeRequest = (await gitlabClient.MergeRequests.show(
+  const mergeRequest = await gitlabClient.MergeRequests.show(
     projectId,
     mergeRequestIid
-  )) as any;
+  );
   return mergeRequest;
 }

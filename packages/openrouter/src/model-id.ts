@@ -7,7 +7,7 @@
  * 转换规则：取 `/` 后面的部分，小写；匹配时 `.` 和 `-` 视为等价
  */
 
-import { getModels } from '@/get-models';
+import { getModels } from './get-models';
 
 /** 归一化：小写 + `.` 替换为 `-`（用于宽松匹配） */
 function normalize(id: string): string {
