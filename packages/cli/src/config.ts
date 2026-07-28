@@ -27,13 +27,13 @@ export async function configList(): Promise<void> {
   console.log(`  项目级文件: ${process.cwd()}/${cwkitProjectEnvPath}\n`);
 
   // 用户级
-  console.log('── 用户级（~/.cwkit/.env）──\n');
+  console.log('── 用户级（~/.dev-kit/.env）──\n');
   for (const key of USER_ENV_KEYS) {
     printDiagnostic(diagnostics.find((d) => d.key === key)!);
   }
 
   // 项目级
-  console.log('\n── 项目级（.claude/.env）──\n');
+  console.log('\n── 项目级（.dev-kit/.env）──\n');
   for (const key of PROJECT_ENV_KEYS) {
     printDiagnostic(diagnostics.find((d) => d.key === key)!);
   }
@@ -93,7 +93,7 @@ export async function configInit(): Promise<void> {
   // 2. 项目级模板
   const projectEnvExists = existsSync(cwkitProjectEnvPath);
   if (!projectEnvExists) {
-    await mkdir('.claude', { recursive: true });
+    await mkdir('.dev-kit', { recursive: true });
     const projectTemplate = generateProjectEnvTemplate();
     await writeFile(cwkitProjectEnvPath, projectTemplate, {
       encoding: 'utf8',

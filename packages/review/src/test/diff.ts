@@ -24,7 +24,7 @@ index abc1234..def5678 100644
 `;
 
 export const diffs2 = `
---- .claude/scripts/ai/generate-merge-request.ts ---
+--- .dev-kit/scripts/ai/generate-merge-request.ts ---
 @@ -10,7 +10,10 @@ import z from 'zod';
   10 |  import { getMergeRequestPrompt } from '@cwkit/ai/prompts/get-merge-request-prompt';
   11 |  import { commitTypes } from '@cwkit/shared/git/commit-type';
@@ -82,7 +82,7 @@ export const diffs2 = `
  154 |
  155 |
 
---- .claude/scripts/gitlab/merge-request-content.ts ---
+--- .dev-kit/scripts/gitlab/merge-request-content.ts ---
 @@ -9,11 +9,17 @@ export interface MergeRequestTitle {
    9 |    type: CommitType;
   10 |    subject: string;

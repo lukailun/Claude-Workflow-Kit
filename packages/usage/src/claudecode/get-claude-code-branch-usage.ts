@@ -32,7 +32,7 @@ interface TranscriptEntry {
 function getProjectDir(projectRoot?: string): string {
   const root = projectRoot ?? process.cwd();
   const dirName = root.replace(/\//g, '-');
-  return join(homedir(), '.claude', 'projects', dirName);
+  return join(homedir(), '.dev-kit', 'projects', dirName);
 }
 
 /**

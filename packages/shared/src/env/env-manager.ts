@@ -3,8 +3,8 @@
  *
  * 分层加载策略（优先级从高到低）：
  *   1. Shell export（process.env 中已有的值）
- *   2. 项目级 .claude/.env
- *   3. 用户级 ~/.cwkit/.env
+ *   2. 项目级 .dev-kit/.env
+ *   3. 用户级 ~/.dev-kit/.env
  *
  * 参考 openwiki 的 env.ts，但增加了用户级/项目级分层。
  */
@@ -141,7 +141,7 @@ function formatEnvValue(value: string): string {
 // ─── 文件读取 ───
 
 /**
- * 读取用户级环境变量文件（~/.cwkit/.env）
+ * 读取用户级环境变量文件（~/.dev-kit/.env）
  */
 async function readUserEnv(): Promise<EnvMap> {
   try {
@@ -152,7 +152,7 @@ async function readUserEnv(): Promise<EnvMap> {
 }
 
 /**
- * 读取项目级环境变量文件（.claude/.env）
+ * 读取项目级环境变量文件（.dev-kit/.env）
  */
 async function readProjectEnv(): Promise<EnvMap> {
   try {
@@ -167,7 +167,7 @@ async function readProjectEnv(): Promise<EnvMap> {
 /**
  * 分层加载环境变量到 process.env
  *
- * 优先级：Shell export > 项目级 .claude/.env > 用户级 ~/.cwkit/.env
+ * 优先级：Shell export > 项目级 .dev-kit/.env > 用户级 ~/.dev-kit/.env
  *
  * 只填充 process.env 中尚未设置的 key（Shell export 始终优先）。
  * 项目级值覆盖用户级值（因为项目级更具体）。
@@ -192,7 +192,7 @@ export async function loadEnv(): Promise<void> {
 // ─── 保存 ───
 
 /**
- * 保存用户级环境变量到 ~/.cwkit/.env
+ * 保存用户级环境变量到 ~/.dev-kit/.env
  *
  * 合并已有值和更新值，空值表示删除。
  * 文件权限 0o600，目录权限 0o700。
@@ -226,7 +226,7 @@ export async function saveUserEnv(updates: EnvMap): Promise<void> {
 }
 
 /**
- * 保存项目级环境变量到 .claude/.env
+ * 保存项目级环境变量到 .dev-kit/.env
  *
  * 合并已有值和更新值，空值表示删除。
  */
@@ -239,9 +239,9 @@ export async function saveProjectEnv(updates: EnvMap): Promise<void> {
     if (next[key] === '') delete next[key];
   }
 
-  // 确保 .claude/ 目录存在
+  // 确保 .dev-kit/ 目录存在
   const { mkdir } = await import('node:fs/promises');
-  await mkdir('.claude', { recursive: true });
+  await mkdir('.dev-kit', { recursive: true });
 
   await writeFile(cwkitProjectEnvPath, formatEnv(next, PROJECT_ENV_KEYS), {
     encoding: 'utf8',

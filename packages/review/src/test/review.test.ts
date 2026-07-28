@@ -1,7 +1,7 @@
 /**
  * review.ts 手动测试脚本
  *
- * 使用 bun 运行：bun run .claude/scripts/review/review.test.ts
+ * 使用 bun 运行：bun run .dev-kit/scripts/review/review.test.ts
  */
 
 import type { AI } from '@cwkit/ai/get-language-model';

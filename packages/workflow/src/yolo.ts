@@ -2,7 +2,7 @@
  * YOLO 一键开发流程
  *
  * 用法：
- *   bun .claude/scripts/workflow/yolo.ts
+ *   bun .dev-kit/scripts/workflow/yolo.ts
  *
  * - 从当前分支名解析关联的 Linear issue
  * - 构建包含 issue 信息的 prompt

@@ -2,15 +2,15 @@
  * 环境变量常量定义
  *
  * 将所有管理的环境变量分为两层：
- * - 用户级（~/.cwkit/.env）：个人凭据，跨项目共享
- * - 项目级（.claude/.env）：项目配置，因项目而异
+ * - 用户级（~/.dev-kit/.env）：个人凭据，跨项目共享
+ * - 项目级（.dev-kit/.env）：项目配置，因项目而异
  */
 
 /**
  * 用户级环境变量 key 列表
  *
  * 这些是个人凭据（API keys、tokens），在所有项目间共享。
- * 存储在 ~/.cwkit/.env，权限 0o600。
+ * 存储在 ~/.dev-kit/.env，权限 0o600。
  */
 export const USER_ENV_KEYS = [
   // ── 平台 Token ──
@@ -38,7 +38,7 @@ export const USER_ENV_KEYS = [
  * 项目级环境变量 key 列表
  *
  * 这些是项目级配置（base URL、project ID 等），因项目而异。
- * 存储在 .claude/.env，跟随项目仓库（但 .env 本身被 gitignore）。
+ * 存储在 .dev-kit/.env，跟随项目仓库（但 .env 本身被 gitignore）。
  */
 export const PROJECT_ENV_KEYS = [
   // ── GitLab ──

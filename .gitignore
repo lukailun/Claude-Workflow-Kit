@@ -3,7 +3,7 @@ node_modules/
 
 # Environment variables
 .env
-.claude/.env
+.dev-kit/.env
 
 # Build output
 dist/

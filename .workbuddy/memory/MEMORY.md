@@ -19,12 +19,12 @@
 
 ## 环境变量系统
 
-- 分层加载: Shell export > 项目级 `.claude/.env` > 用户级 `~/.cwkit/.env`
+- 分层加载: Shell export > 项目级 `.dev-kit/.env` > 用户级 `~/.dev-kit/.env`
 - 用户级: 个人凭据（API keys、tokens），跨项目共享
 - 项目级: 项目配置（base URLs、project IDs），因项目而异
 - 核心文件: `packages/shared/src/env/env-manager.ts`（加载/保存/解析）
 - 常量定义: `packages/shared/src/env/env-constants.ts`（USER_ENV_KEYS / PROJECT_ENV_KEYS）
-- 目录结构: `packages/shared/src/env/home-dir.ts`（~/.cwkit/ 定义）
+- 目录结构: `packages/shared/src/env/home-dir.ts`（~/.dev-kit/ 定义）
 - 加载入口: `packages/shared/src/env/env-path.ts`（模块加载时自动执行 loadEnv）
 
 ## CLI
