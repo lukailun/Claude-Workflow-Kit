@@ -1,0 +1,40 @@
+{
+  "name": "@lukailun/dev-kit-language-models",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "main": "./src/index.ts",
+  "types": "./src/index.ts",
+  "exports": {
+    "./*": "./src/*.ts",
+    ".": "./src/index.ts",
+    "./anthropic-language-model": "./src/anthropic-language-model.ts",
+    "./deepseek-language-model": "./src/deepseek-language-model.ts",
+    "./gemini-language-model": "./src/gemini-language-model.ts",
+    "./glm-language-model": "./src/glm-language-model.ts",
+    "./hy-language-model": "./src/hy-language-model.ts",
+    "./longcat-language-model": "./src/longcat-language-model.ts",
+    "./mimo-language-model": "./src/mimo-language-model.ts",
+    "./minimax-language-model": "./src/minimax-language-model.ts",
+    "./openrouter-language-model": "./src/openrouter-language-model.ts",
+    "./qwen-language-model": "./src/qwen-language-model.ts"
+  },
+  "scripts": {
+    "typecheck": "tsc --build",
+    "test": "bun test",
+    "lint": "eslint src/"
+  },
+  "dependencies": {
+    "@lukailun/dev-kit": "workspace:*",
+    "@lukailun/dev-kit-openrouter": "workspace:*",
+    "ai": "catalog:",
+    "@ai-sdk/anthropic": "catalog:",
+    "@ai-sdk/google": "catalog:",
+    "@ai-sdk/openai": "catalog:",
+    "@openrouter/ai-sdk-provider": "catalog:"
+  },
+  "devDependencies": {
+    "bun-types": "catalog:",
+    "typescript": "catalog:"
+  }
+}

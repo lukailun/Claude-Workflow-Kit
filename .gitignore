@@ -9,7 +9,10 @@ node_modules/
 dist/
 build/
 
-# Bun
+# Turbo
+.turbo/
+
+# Lock files (keep pnpm-lock.yaml)
 bun.lock
 
 # IDE

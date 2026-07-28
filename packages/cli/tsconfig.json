@@ -1,0 +1,9 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "composite": true, "noEmit": false, "emitDeclarationOnly": true,
+    "resolveJsonModule": true, "isolatedModules": true
+  },
+  "exclude": ["node_modules"],
+  "references": [{ "path": "../workflow" }, { "path": "../review" }]
+}

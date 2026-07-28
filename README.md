@@ -5,13 +5,39 @@
 ## 技术栈
 
 - 运行时: [Bun](https://bun.sh/)
+- 包管理: [Bun Workspaces](https://bun.sh/docs/install/workspaces)
+
+## 项目结构
+
+```
+Claude-Workflow-Kit/
+├── packages/
+│   ├── core/              # @lukailun/dev-kit — 基础工具（env、git、ai、utils）
+│   ├── gitlab/            # @lukailun/dev-kit-gitlab — GitLab API 集成
+│   ├── github/            # @lukailun/dev-kit-github — GitHub API 集成
+│   ├── linear/            # @lukailun/dev-kit-linear — Linear API 集成
+│   ├── openrouter/        # @lukailun/dev-kit-openrouter — OpenRouter 集成
+│   ├── language-models/   # @lukailun/dev-kit-language-models — AI 模型工厂
+│   ├── claudecode/        # @lukailun/dev-kit-claudecode — Claude Code 集成
+│   ├── codex/             # @lukailun/dev-kit-codex — Codex 集成
+│   ├── review/            # @lukailun/dev-kit-review — AI 代码审查
+│   ├── workflow/          # @lukailun/dev-kit-workflow — 工作流脚本
+│   ├── sentry/            # @lukailun/dev-kit-sentry — Sentry 集成（TODO）
+│   ├── figma/             # @lukailun/dev-kit-figma — Figma 集成（TODO）
+│   └── cli/               # @lukailun/dev-kit-cli — CLI 入口
+├── docs/                  # 项目文档
+├── .env.template          # 环境变量模板
+├── eslint.config.js       # ESLint 配置
+├── tsconfig.base.json     # TypeScript 基础配置
+└── package.json           # 根配置（workspaces）
+```
 
 ## 快速开始
 
 ### 1. 安装依赖
 
 ```bash
-cd claude
+# 在项目根目录执行，自动安装所有 workspace 包的依赖
 bun install
 ```
 
@@ -27,75 +53,77 @@ cp .env.template .env
 
 ```bash
 # 创建 feature 分支（可从 Linear issue 中选择）
-bun run scripts/workflow/create-feature.ts my-feature
+bun run feature my-feature
 
 # 提交并推送（AI 自动生成 commit message）
-bun run scripts/workflow/commit-and-push.ts
+bun run commit
 
 # 创建 Merge Request（AI 自动生成标题和描述）
-bun run scripts/workflow/create-merge-request.ts
+bun run mr
 ```
 
 ## 可用命令
 
-所有命令均在 `claude/` 目录下执行，使用 `bun run`。
+所有命令均可在项目根目录通过 `bun run` 执行。
 
 ### 分支管理
 
 | 命令 | 说明 |
 |------|------|
-| `bun run scripts/workflow/create-feature.ts <name>` | 创建 feature 分支，支持从 Linear 选择 issue |
-| `bun run scripts/workflow/create-release.ts` | 创建 release 分支，自动建议版本号 |
-| `bun run scripts/workflow/create-hotfix.ts` | 创建 hotfix 分支，自动建议补丁版本号 |
-| `bun run scripts/workflow/create-experimental.ts <name>` | 创建 experimental 分支 |
+| `bun run feature <name>` | 创建 feature 分支，支持从 Linear 选择 issue |
+| `bun run release` | 创建 release 分支，自动建议版本号 |
+| `bun run hotfix` | 创建 hotfix 分支，自动建议补丁版本号 |
+| `bun run experimental <name>` | 创建 experimental 分支 |
 
 ### 代码提交
 
 | 命令 | 说明 |
 |------|------|
-| `bun run scripts/workflow/commit-and-push.ts` | AI 生成 commit message，交互式确认后推送 |
-| `bun run scripts/workflow/submit.ts` | 一键完成 commit + push + 创建 MR |
+| `bun run commit` | AI 生成 commit message，交互式确认后推送 |
+| `bun run submit` | 一键完成 commit + push + 创建 MR |
 
 ### Merge Request
 
 | 命令 | 说明 |
 |------|------|
-| `bun run scripts/workflow/create-merge-request.ts` | AI 生成 MR 标题和描述，自动创建或更新 |
+| `bun run mr` | AI 生成 MR 标题和描述，自动创建或更新 |
 
 ### 发布
 
 | 命令 | 说明 |
 |------|------|
-| `bun run scripts/workflow/publish-release.ts` | 发布 release 到 main，创建 tag，清理远程分支 |
-| `bun run scripts/workflow/publish-hotfix.ts` | 发布 hotfix 到 main，并同步回最新 release 分支 |
+| `bun run publish-release` | 发布 release 到 main，创建 tag，清理远程分支 |
+| `bun run publish-hotfix` | 发布 hotfix 到 main，并同步回最新 release 分支 |
 
 ### Token 用量报告
 
 | 命令 | 说明 |
 |------|------|
-| `bun run scripts/workflow/build-branch-receipt.ts` | 生成当前分支的 Claude Code / Codex Token 用量及费用报告 |
+| `bun run receipt` | 生成当前分支的 Claude Code / Codex Token 用量及费用报告 |
 
 ### npm scripts 快捷方式
 
 ```bash
 bun run commit          # commit-and-push
-bun run pr              # create-merge-request
+bun run mr              # create-merge-request
 bun run release         # create-release
 bun run publish-release # publish-release
 bun run hotfix          # create-hotfix
 bun run publish-hotfix  # publish-hotfix
 bun run feature         # create-feature
+bun run feat            # create-feature (alias)
 bun run experimental    # create-experimental
+bun run exp             # create-experimental (alias)
 bun run receipt         # build-branch-receipt
+bun run yolo            # yolo mode
 ```
 
 ### 开发工具
 
 ```bash
-bun run typecheck       # TypeScript 类型检查
-bun run lint            # ESLint 检查
-bun run lint:fix        # ESLint 自动修复
-bun test                # 运行测试
+bun run typecheck       # TypeScript 类型检查（所有包）
+bun run lint            # ESLint 检查（所有包）
+bun run test            # 运行测试（所有包）
 ```
 
 ## AI 功能
@@ -105,8 +133,8 @@ bun test                # 运行测试
 通过 `--ai` 参数指定使用的 AI 服务，默认为 `mimo`：
 
 ```bash
-bun run scripts/workflow/commit-and-push.ts --ai anthropic
-bun run scripts/workflow/create-merge-request.ts --ai deepseek
+bun run commit --ai anthropic
+bun run mr --ai deepseek
 ```
 
 | Provider | 标识 | 默认模型 |
@@ -126,7 +154,7 @@ bun run scripts/workflow/create-merge-request.ts --ai deepseek
 
 - **Commit Message 生成**: 分析 `git diff`，生成符合 Conventional Commits 规范的提交信息
 - **Merge Request 生成**: 分析分支差异，生成包含概览、变更说明、影响分析、测试说明的 MR 描述
-- **代码审查**: 基于可配置的编码规则，对 MR diff 进行 AI 审查并行评论（详见 `scripts/review/`）
+- **代码审查**: 基于可配置的编码规则，对 MR diff 进行 AI 审查并行评论（详见 `packages/review/`）
 - **结构化输出**: 使用 Zod schema 确保 AI 输出格式可靠，内置重试机制
 
 ## 分支命名规范
@@ -140,7 +168,7 @@ bun run scripts/workflow/create-merge-request.ts --ai deepseek
 
 ## 环境变量
 
-在 `claude/.env` 中配置（从 `.env.template` 复制）。
+从 `.env.template` 复制为 `.env` 并编辑。
 
 ### 平台集成
 
@@ -184,7 +212,7 @@ bun run scripts/workflow/create-merge-request.ts --ai deepseek
 
 ## 代码审查系统
 
-`scripts/review/` 提供基于 AI 的 MR 代码审查能力：
+`packages/review/` 提供基于 AI 的 MR 代码审查能力：
 
 - 规则以 Markdown 文件定义，支持 error / warning 两个级别
 - 每条规则独立运行 AI 审查，结果以评论形式发布到 MR
@@ -195,8 +223,38 @@ bun run scripts/workflow/create-merge-request.ts --ai deepseek
 
 | 文档 | 说明 |
 |------|------|
-| [Git 工作流](docs/workflow.md) | 分支管理、代码提交、合并请求、发布流程 |
+| [Git 工作流](docs/git-workflow.md) | 分支管理、代码提交、合并请求、发布流程 |
 | [AI 集成](docs/ai.md) | AI Provider 配置、结构化输出、Prompt 模板 |
 | [AI 代码审查](docs/code-review.md) | 审查规则配置、CI/CD 集成、自定义规则 |
 | [Linear 集成](docs/linear.md) | Issue 管理、状态流转、分支关联 |
 | [环境变量配置](docs/environment.md) | 平台集成、AI Provider、CI 变量 |
+| [迁移指南](docs/MIGRATION.md) | Monorepo 架构设计与迁移说明 |
+
+## 依赖图
+
+```
+                    ┌─────────────┐
+                    │     cli     │
+                    └──────┬──────┘
+                           │
+                    ┌──────┴──────┐
+                    ▼             ▼
+              ┌──────────┐ ┌──────────┐
+              │ workflow │ │  review  │
+              └────┬─────┘ └────┬─────┘
+                   │            │
+         ┌─────────┼────────────┼─────────┐
+         ▼         ▼            ▼         ▼
+    ┌────────┐ ┌────────┐ ┌────────┐ ┌──────────┐
+    │ gitlab │ │ github │ │ linear │ │language- │
+    └───┬────┘ └───┬────┘ └───┬────┘ │ models   │
+        │          │          │       └────┬─────┘
+        ▼          ▼          ▼       ┌────┴────┐
+    ┌──────────────────────────────┐  │openrouter│
+    │              core            │  └────┬────┘
+    └──────────────────────────────┘       │
+                    ▲                      │
+                    └──────────────────────┘
+    独立叶子包（仅依赖 core）:
+    sentry, figma, claudecode, codex
+```

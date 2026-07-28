@@ -1,0 +1,18 @@
+{
+  "files": [],
+  "references": [
+    { "path": "packages/core" },
+    { "path": "packages/gitlab" },
+    { "path": "packages/github" },
+    { "path": "packages/linear" },
+    { "path": "packages/openrouter" },
+    { "path": "packages/language-models" },
+    { "path": "packages/claudecode" },
+    { "path": "packages/codex" },
+    { "path": "packages/review" },
+    { "path": "packages/workflow" },
+    { "path": "packages/sentry" },
+    { "path": "packages/figma" },
+    { "path": "packages/cli" }
+  ]
+}

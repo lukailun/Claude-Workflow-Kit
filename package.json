@@ -1,0 +1,36 @@
+{
+  "name": "claude-workflow-kit",
+  "private": true,
+  "packageManager": "pnpm@10.0.0",
+  "scripts": {
+    "build": "turbo build",
+    "typecheck": "turbo typecheck",
+    "lint": "turbo lint",
+    "test": "turbo test",
+    "clean": "turbo clean",
+
+    "release": "pnpm run --filter @lukailun/dev-kit-cli release",
+    "hotfix": "pnpm run --filter @lukailun/dev-kit-cli hotfix",
+    "feature": "pnpm run --filter @lukailun/dev-kit-cli feature",
+    "feat": "pnpm run --filter @lukailun/dev-kit-cli feat",
+    "experimental": "pnpm run --filter @lukailun/dev-kit-cli experimental",
+    "exp": "pnpm run --filter @lukailun/dev-kit-cli exp",
+    "commit": "pnpm run --filter @lukailun/dev-kit-cli commit",
+    "mr": "pnpm run --filter @lukailun/dev-kit-cli mr",
+    "submit": "pnpm run --filter @lukailun/dev-kit-cli submit",
+    "publish-hotfix": "pnpm run --filter @lukailun/dev-kit-cli publish-hotfix",
+    "publish-release": "pnpm run --filter @lukailun/dev-kit-cli publish-release",
+    "receipt": "pnpm run --filter @lukailun/dev-kit-cli receipt",
+    "yolo": "pnpm run --filter @lukailun/dev-kit-cli yolo",
+    "create-rule": "pnpm run --filter @lukailun/dev-kit-cli create-rule"
+  },
+  "devDependencies": {
+    "turbo": "^2",
+    "eslint": "catalog:",
+    "@typescript-eslint/eslint-plugin": "catalog:",
+    "@typescript-eslint/parser": "catalog:",
+    "eslint-plugin-import-x": "catalog:",
+    "typescript": "catalog:",
+    "bun-types": "catalog:"
+  }
+}
